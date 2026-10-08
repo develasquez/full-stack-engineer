@@ -167,7 +167,7 @@ npx -y @develasquez/material-design
 
 ### 🤖 Prompt para Antigravity: Verificación de Skills
 ```text
-Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-design' estén disponibles en el workspace. Confirma que podemos ejecutar comandos /sdd-specify para generar la arquitectura paso a paso.
+Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-design' estén disponibles en el workspace. Confirma que podemos ejecutar comandos /sdd-skill sdd-specify para generar la arquitectura paso a paso.
 ```
 
 ---
@@ -184,7 +184,7 @@ Construir de forma ágil y asistida por IA primero el microservicio de inventari
 
 ### ☕ Sprint A (10 min): Backend Microservicio (Clean Architecture, TS & Chaos)
 
-#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend & Contratos API)
+#### 1️⃣ Paso 1: `/sdd-skill sdd-specify` (Especificación del Backend & Contratos API)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -195,21 +195,21 @@ Pega el siguiente prompt en Antigravity:
 
 ```
 
-#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Excepciones y Trazas)
+#### 2️⃣ Paso 2: `/sdd-skill sdd-clarify` (Aclaración de Excepciones y Trazas)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-skill sdd-clarify
 ```
 
-#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Clean Architecture)
+#### 3️⃣ Paso 3: `/sdd-skill sdd-plan` (Blueprint de Clean Architecture)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-skill sdd-plan Node.js 20 + TypeScript + Clean Architecture
 ```
 
-#### 4️⃣ Paso 4: `tasks, analyze y checklist` (Checklist TDD)
+#### 4️⃣ Paso 4: `/sdd-skill sdd-tasks`, `/sdd-skill sdd-analyze` y `/sdd-skill sdd-checklist` (Checklist TDD)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -225,7 +225,7 @@ Pega el siguiente prompt en Antigravity:
 ```
 
 
-#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código & Tests)
+#### 5️⃣ Paso 5: `/sdd-skill sdd-implement` (Generación de Código & Tests)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -253,7 +253,7 @@ Test Files  2 passed (2)
 
 ### 🎨 Sprint B (10 min): Frontend SPA (Vanilla-Core UI + Material Design 3)
 
-#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend basada en Contratos Backend)
+#### 1️⃣ Paso 1: `/sdd-skill sdd-specify` (Especificación del Frontend basada en Contratos Backend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -262,28 +262,28 @@ Pega el siguiente prompt en Antigravity:
 - Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que invoca POST /api/v1/chaos/crash y gestiona la notificación visual de desconexión.
 ```
 
-#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado y Renderizado Quirúrgico)
+#### 2️⃣ Paso 2: `/sdd-skill sdd-clarify` (Aclaración de Fronteras de Estado y Renderizado Quirúrgico)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-skill sdd-clarify
 ```
 
-#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
+#### 3️⃣ Paso 3: `/sdd-skill sdd-plan` (Blueprint Arquitectónico del Frontend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-skill sdd-plan Vanilla-Core UI, Material Design
 ```
 
-#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
+#### 4️⃣ Paso 4: `/sdd-skill sdd-tasks` (Checklist de Implementación)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-skill sdd-tasks
 ```
 
-#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
+#### 5️⃣ Paso 5: `/sdd-skill sdd-implement` (Generación de Código)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -310,7 +310,7 @@ Generar los Dockerfiles multi-stage con usuario no root, el pipeline de Google C
 
 ---
 
-### 1️⃣ Paso 1: `/sdd-specify` (Especificación de DevSecOps & K8s)
+### 1️⃣ Paso 1: `/sdd-skill sdd-specify` (Especificación de DevSecOps & K8s)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -322,7 +322,7 @@ Pega el siguiente prompt en Antigravity:
 
 ---
 
-### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Variables de Sustitución)
+### 2️⃣ Paso 2: `/sdd-skill sdd-clarify` (Aclaración de Variables de Sustitución)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -331,7 +331,7 @@ Pega el siguiente prompt en Antigravity:
 
 ---
 
-### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Manifiestos y Pipeline)
+### 3️⃣ Paso 3: `/sdd-skill sdd-plan` (Blueprint de Manifiestos y Pipeline)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -340,16 +340,16 @@ Pega el siguiente prompt en Antigravity:
 
 ---
 
-### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Infraestructura)
+### 4️⃣ Paso 4: `/sdd-skill sdd-tasks` (Checklist de Infraestructura)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-tasks
+/sdd-skill sdd-tasks
 ```
 
 ---
 
-### 5️⃣ Paso 5: `/sdd-implement` (Generación de Artefactos de Infraestructura)
+### 5️⃣ Paso 5: `/sdd-skill sdd-implement` (Generación de Artefactos de Infraestructura)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -384,7 +384,7 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
    - `_REPO_NAME`: `retail-docker-repo`
    - `_REGION`: `us-east1`
    - `_TAG`: `$(SHORT_SHA)`
-7. En **Cuenta de Servicio del Activador**, selecciona la Service Account configurada para el build (ej. `d1-516@wakanda-01.iam.gserviceaccount.com`).
+7. En **Cuenta de Servicio del Activador**, selecciona la Service Account configurada para el build (ej. `name@project.iam.gserviceaccount.com`).
 8. Guarda el activador.
 
 > 🔒 **Gobernanza de Service Account & Menor Privilegio (PoLP):**  

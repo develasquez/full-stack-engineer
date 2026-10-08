@@ -23,7 +23,7 @@
 | Skill | Ejecución / Paquete | Rol en el Proyecto |
 | :--- | :--- | :--- |
 | **RTK (Rust Token Killer)** | Instalación de sistema (`brew install rtk` / Cargo / binario según OS) | Proxy CLI obligatorio para filtrar salidas de consola y reducir consumo de tokens en prompts y subagentes (60% a 90% de ahorro en la ventana de contexto). |
-| **SDD Skill** | `github.com/develasquez/sdd-skill` | Orquestador del ciclo de vida de especificaciones formales (`/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`). |
+| **SDD Skill** | `github.com/develasquez/sdd-skill` | Orquestador del ciclo de vida de especificaciones formales (`/sdd-skill sdd-specify`, `/sdd-skill sdd-clarify`, `/sdd-skill sdd-plan`, `/sdd-skill sdd-tasks`, `/sdd-skill sdd-implement`). |
 | **Vanilla-Core UI** | `npx vanilla-core-ui` | Arquitectura frontend reactiva sin frameworks pesados basada en Single Source of Truth (`store.js`), Pub/Sub desacoplado y renderizado quirúrgico anti-thrashing. |
 | **Material Design 3** | `npx @develasquez/material-design` | Tokens de diseño, sistema de color HCT, elevación, tipografía y componentes accesibles bajo lineamientos de Material You 2026. |
 
@@ -35,18 +35,18 @@ Para cada componente del sistema (Backend, Frontend, Infraestructura/DevSecOps),
 
 ```mermaid
 flowchart LR
-    Specify["1. /sdd-specify<br/>Requerimientos de Negocio"] --> Clarify["2. /sdd-clarify<br/>Resolución de Ambigüedades"]
-    Clarify --> Plan["3. /sdd-plan<br/>Blueprint Arquitectónico"]
-    Plan --> Tasks["4. /sdd-tasks<br/>Checklist TDD Granular"]
-    Tasks --> Implement["5. /sdd-implement<br/>Generación de Código & Tests"]
+    Specify["1. /sdd-skill sdd-specify<br/>Requerimientos de Negocio"] --> Clarify["2. /sdd-skill sdd-clarify<br/>Resolución de Ambigüedades"]
+    Clarify --> Plan["3. /sdd-skill sdd-plan<br/>Blueprint Arquitectónico"]
+    Plan --> Tasks["4. /sdd-skill sdd-tasks<br/>Checklist TDD Granular"]
+    Tasks --> Implement["5. /sdd-skill sdd-implement<br/>Generación de Código & Tests"]
 ```
 
-### Reglas de Ejecución SDD:
-- `/sdd-specify`: Genera o actualiza el archivo en `specs/<dominio>.spec.md`. Contiene: Requerimientos funcionales y no funcionales del dominio, entidades, contratos HTTP/JSON, severidades de observabilidad y criterios de aceptación.
-- `/sdd-clarify`: Identifica supuestos ocultos, límites de concurrencia y validaciones de borde.
-- `/sdd-plan`: Define la estructura exacta de carpetas, interfaces y dependencias mínimas requeridas.
-- `/sdd-tasks`: Lista de tareas ordenadas por prioridad de pruebas (TDD).
-- `/sdd-implement`: Escribe el código asegurando que todos los tests unitarios pasen al 100%.
+### Reglas de Ejecución SDD (Sintaxis `/<nombre skill> <comando>`):
+- `/sdd-skill sdd-specify`: Genera o actualiza el archivo en `specs/<dominio>.spec.md`. Contiene: Requerimientos funcionales y no funcionales del dominio, entidades, contratos HTTP/JSON, severidades de observabilidad y criterios de aceptación.
+- `/sdd-skill sdd-clarify`: Identifica supuestos ocultos, límites de concurrencia y validaciones de borde.
+- `/sdd-skill sdd-plan`: Define la estructura exacta de carpetas, interfaces y dependencias mínimas requeridas.
+- `/sdd-skill sdd-tasks`: Lista de tareas ordenadas por prioridad de pruebas (TDD).
+- `/sdd-skill sdd-implement`: Escribe el código asegurando que todos los tests unitarios pasen al 100%.
 
 ---
 
@@ -177,7 +177,7 @@ Al interactuar con el usuario o recibir instrucciones:
 
 | Situación | Acción Requerida del Agente |
 | :--- | :--- |
-| El usuario pide crear una nueva funcionalidad | Ejecutar el ciclo SDD: `/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`. |
+| El usuario pide crear una nueva funcionalidad | Ejecutar el ciclo SDD: `/sdd-skill sdd-specify`, `/sdd-skill sdd-clarify`, `/sdd-skill sdd-plan`, `/sdd-skill sdd-tasks`, `/sdd-skill sdd-implement`. |
 | El usuario solicita ejecutar un comando en consola | Usar SIEMPRE el prefijo `rtk` (`rtk git status`, `rtk npm test`, etc.). |
 | El usuario pide modificar el frontend | Respetar la arquitectura Vanilla-Core UI: actualizar `store.js`, mantener renderizado quirúrgico en `ui/renderer.js`, usar clases Tailwind y tokens Material 3 (`npx @develasquez/material-design`). NUNCA introducir frameworks como React/Angular/Vue. |
 | El usuario solicita desplegar a GCP | NO sugerir `gcloud app deploy` ni `gcloud run deploy`. Redactar el commit en Git y explicar que Cloud Build ejecutará el pipeline GitOps hacia GKE automáticamente tras el `rtk git push`. |

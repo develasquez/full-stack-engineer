@@ -39,7 +39,7 @@ full-stack-engineer/
 
 > 💡 **Componentes Generados Dinámicamente Durante el Workshop:**  
 > A medida que avances en [`workshop.md`](./workshop.md), Antigravity generará de forma asistida:
-> - `specs/`: Especificaciones formales contractuales generadas por `/sdd-specify`.
+> - `specs/`: Especificaciones formales contractuales generadas por `/sdd-skill sdd-specify`.
 > - `backend/`: Microservicio Node.js 20 / TypeScript con Clean Architecture, `StructuredLogger` para GCP y endpoint de Caos (`POST /api/v1/chaos/crash`), validado con Vitest.
 > - `frontend/`: Single Page Application reactiva creada con Vanilla-Core UI y Material Design 3 (`store.js`, componentes, renderizado quirúrgico y servidor Express en puerto 80).
 > - `cloudbuild.yaml`: Pipeline CI/CD DevSecOps con ordenamiento DAG (`waitFor`) y escaneo Aqua Trivy.
@@ -55,7 +55,7 @@ Para ejecutar la capacitación siguiendo la metodología **Cloud Skills Boost / 
 
 Cada ciclo SDD y laboratorio incluye:
 - 🎯 **Objetivo específico del laboratorio.**
-- 🤖 **Secuencia SDD con Antigravity (`/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`).**
+- 🤖 **Secuencia SDD con Antigravity (`/sdd-skill sdd-specify`, `/sdd-skill sdd-clarify`, `/sdd-skill sdd-plan`, `/sdd-skill sdd-tasks`, `/sdd-skill sdd-implement`).**
 - 💻 **Comando de consola optimizado con RTK (`rtk ...`).**
 - 🔍 **Validación y salida esperada.**
 - 💥 **Inyección de fallas en vivo (Chaos Engineering) y resolución forense en Google Cloud Trace & Logging.**

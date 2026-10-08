@@ -15,7 +15,7 @@
 
 Al finalizar la primera hora del workshop, el equipo técnico de Retail Enterprise será capaz de:
 1. **Diferenciar el desarrollo asistido por IA reactivo ("vibe coding") del desarrollo determinista guiado por especificaciones (SDD - Specification-Driven Development).**
-2. **Dominar el ciclo de vida de especificación formal en Antigravity:** `/sdd-specify` $\to$ `/sdd-clarify` $\to$ `/sdd-plan` $\to$ `/sdd-tasks` $\to$ `/sdd-implement`.
+2. **Dominar el ciclo de vida de especificación formal en Antigravity:** `/sdd-skill sdd-specify` $\to$ `/sdd-skill sdd-clarify` $\to$ `/sdd-skill sdd-plan` $\to$ `/sdd-skill sdd-tasks` $\to$ `/sdd-skill sdd-implement`.
 3. **Estructurar la gobernanza de agentes con `AGENTS.md` y `SKILL.md`**, garantizando que Antigravity actúe como un Tech Lead autónomo que no inventa requisitos ni rompe contratos de API.
 4. **Configurar servidores MCP (Model Context Protocol) en modo sólo lectura** (PostgreSQL, Jira, GitHub) para enriquecer el contexto del agente sin comprometer datos de producción.
 5. **Generar pruebas unitarias y de integración automáticas** derivadas matemáticamente de la especificación antes de escribir una sola línea de código de negocio.
@@ -26,11 +26,11 @@ Al finalizar la primera hora del workshop, el equipo técnico de Retail Enterpri
 
 ```mermaid
 flowchart LR
-    A["Idea de Negocio Retail\n(Ticket/Requerimiento)"] --> B["1. /sdd-specify\n(Spec Formal & Criterios)"]
-    B --> C["2. /sdd-clarify\n(Resolución de Ambigüedades)"]
-    C --> D["3. /sdd-plan\n(Diseño Arquitectónico)"]
-    D --> E["4. /sdd-tasks\n(Tareas Atómicas y TDD)"]
-    E --> F["5. /sdd-implement\n(Ejecución Determinista)"]
+    A["Idea de Negocio Retail\n(Ticket/Requerimiento)"] --> B["1. /sdd-skill sdd-specify\n(Spec Formal & Criterios)"]
+    B --> C["2. /sdd-skill sdd-clarify\n(Resolución de Ambigüedades)"]
+    C --> D["3. /sdd-skill sdd-plan\n(Diseño Arquitectónico)"]
+    D --> E["4. /sdd-skill sdd-tasks\n(Tareas Atómicas y TDD)"]
+    E --> F["5. /sdd-skill sdd-implement\n(Ejecución Determinista)"]
     F --> G["Código + Tests + Docs\n(Listo para CI/CD)"]
 ```
 
@@ -96,15 +96,15 @@ npx -y skills add https://github.com/develasquez/sdd-skill
 /sdd-skill sdd-help
 ```
 
-*Salida esperada:* Lista de los 10 comandos de ciclo de vida (`/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`, `/sdd-analyze`, etc.).
+*Salida esperada:* Lista de los 10 comandos de ciclo de vida (`/sdd-skill sdd-specify`, `/sdd-skill sdd-clarify`, `/sdd-skill sdd-plan`, `/sdd-skill sdd-tasks`, `/sdd-skill sdd-implement`, `/sdd-skill sdd-analyze`, etc.).
 
 ---
 
-### Paso 2: Ejecución de `/sdd-specify` (Especificación Formal)
+### Paso 2: Ejecución de `/sdd-skill sdd-specify` (Especificación Formal)
 El desarrollador introduce el requerimiento preliminar:
 
 ```markdown
-/sdd-specify Diseñar el microservicio de consulta y reserva de inventario para Retail Enterprise.
+/sdd-skill sdd-specify Diseñar el microservicio de consulta y reserva de inventario para Retail Enterprise.
 Requisitos:
 - Buscar disponibilidad de producto por SKU/EAN y StoreID.
 - Soporte para transacciones concurrentes de reserva sin sobreventa.
@@ -119,7 +119,7 @@ Requisitos:
 
 ---
 
-### Paso 3: Resolución de Ambigüedades con `/sdd-clarify`
+### Paso 3: Resolución de Ambigüedades con `/sdd-skill sdd-clarify`
 El agente interroga activamente al ingeniero de Retail sobre decisiones críticas de arquitectura:
 - *¿Qué estrategia de concurrencia se debe emplear en Cloud SQL? (Optimistic Locking con versión vs. SELECT FOR UPDATE)*
 - *¿Cuál es la política de caché para productos de alta rotación (leche, pan, huevos)?*
@@ -132,7 +132,7 @@ Para consultas de sólo lectura, admitir réplicas de lectura de Cloud SQL con T
 
 ---
 
-### Paso 4: Generación del Plan y Tareas (`/sdd-plan` & `/sdd-tasks`)
+### Paso 4: Generación del Plan y Tareas (`/sdd-skill sdd-plan` & `/sdd-skill sdd-tasks`)
 Antigravity genera:
 1. `plan.md`: Diagrama de componentes, contratos de interfaces de Clean Architecture.
 2. `tasks.md`: Lista jerárquica de tareas atómicas numeradas, priorizando TDD (Test-Driven Development):
@@ -144,7 +144,7 @@ Antigravity genera:
 
 ---
 
-### Paso 5: Implementación Determinista con `/sdd-implement`
+### Paso 5: Implementación Determinista con `/sdd-skill sdd-implement`
 Antigravity ejecuta las tareas secuencialmente, escribiendo primero los tests unitarios:
 
 ```typescript

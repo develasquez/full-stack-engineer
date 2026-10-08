@@ -58,7 +58,7 @@ Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Re
 
 #### Prompt Canónico Full-Stack SDD (Backend + Frontend Desacoplado)
 ```text
-/sdd-specify Diseña la plataforma de inventario para Retail Enterprise en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
+/sdd-skill sdd-specify Diseña la plataforma de inventario para Retail Enterprise en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
 
 1. backend/: Microservicio Node.js 20 con TypeScript y Clean Architecture.
    - Entidad e inventario de productos (SKU, nombre, categoría, precio, stock).
@@ -75,7 +75,7 @@ Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Re
 
 #### Prompt para Especificación Específica de Casos de Uso
 ```text
-/sdd-specify Crear la especificación formal del microservicio de "Descuentos y Promociones Dinámicas" para Retail Enterprise.
+/sdd-skill sdd-specify Crear la especificación formal del microservicio de "Descuentos y Promociones Dinámicas" para Retail Enterprise.
 Contexto:
 - Cada tienda física puede tener promociones regionales según su StoreID.
 - Se debe validar el carrito completo de compras (array de SKUs y cantidades).
@@ -94,7 +94,7 @@ Genera el archivo spec.md con:
 > **Objetivo:** Obligar al agente a desafiar los casos de borde (Edge Cases).
 
 ```text
-/sdd-clarify Revisa la especificación actual de Descuentos Dinámicos y hazme 3 preguntas críticas sobre:
+/sdd-skill sdd-clarify Revisa la especificación actual de Descuentos Dinámicos y hazme 3 preguntas críticas sobre:
 1. Manejo de concurrencia y consistencia eventual cuando se publica un cambio de precios en pleno horario comercial.
 2. Comportamiento del POS si la caché de promociones no responde o expira.
 3. Estrategia de redondeo de centavos de pesos colombianos (COP).
@@ -107,7 +107,7 @@ No generes código hasta que hayamos consensuado las respuestas.
 > **Objetivo:** Crear la suite de pruebas unitarias que define el éxito antes de implementar la solución.
 
 ```text
-/sdd-tasks A partir de spec.md, genera la lista de tareas atómicas y escribe primero la suite completa de pruebas unitarias en Vitest/Jest para el caso de uso "CalculateCartDiscountsUseCase".
+/sdd-skill sdd-tasks A partir de spec.md, genera la lista de tareas atómicas y escribe primero la suite completa de pruebas unitarias en Vitest/Jest para el caso de uso "CalculateCartDiscountsUseCase".
 Cobertura requerida:
 - Caso 1: Carrito sin productos en promoción (devuelve total sin descuento).
 - Caso 2: Promoción 2x1 en productos lácteos (aplica descuento sobre el producto de menor valor).

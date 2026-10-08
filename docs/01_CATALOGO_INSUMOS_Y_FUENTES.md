@@ -46,15 +46,15 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
 * **Fuente:** GitHub — [`https://github.com/develasquez/sdd-skill/`](https://github.com/develasquez/sdd-skill/)
 * **Tecnología:** Skill universal para agentes de IA (Antigravity IDE/CLI, Claude Code, Cursor, Codex).
 * **Filosofía Fundamental:** **Power Inversion (Inversión de Poder)**. El código deja de ser la fuente primaria de verdad y pasa a ser una expresión generada y descartable de la especificación técnica ejecutable.
-* **Comandos y Ciclo de Vida Implementados:**
-  - `/sdd-baseline`: Ingeniería inversa de bases de código legadas hacia artefactos de especificación (`specs/000-baseline/`).
-  - `/sdd-constitution`: Reglas y principios de gobernanza inviolables del proyecto.
-  - `/sdd-specify`: Creación de especificaciones funcionales a partir de requerimientos en lenguaje natural con historias de usuario (`Given/When/Then`), requerimientos funcionales (`FR-001`), criterios de éxito (`SC-001`) y marcadores de ambigüedad (`[NEEDS CLARIFICATION]`).
-  - `/sdd-clarify`: Protocolo interactivo de desambiguación guiado por una taxonomía de 9 categorías (una pregunta a la vez).
-  - `/sdd-plan`: Diseño de arquitectura técnica, mapa de componentes, decisiones tecnológicas y contratos de API.
-  - `/sdd-tasks`: Descomposición en tareas atómicas priorizadas según historias de usuario (MVP P1 first).
-  - `/sdd-checklist`: Listas de control de calidad para inglés y requisitos funcionales ("Unit Tests for English").
-  - `/sdd-implement` & `/sdd-converge`: Ejecución secuencial y reconciliación continua entre especificación y código.
+* **Comandos y Ciclo de Vida Implementados (Invocación `/<nombre skill> <comando>`):**
+  - `/sdd-skill sdd-baseline`: Ingeniería inversa de bases de código legadas hacia artefactos de especificación (`specs/000-baseline/`).
+  - `/sdd-skill sdd-constitution`: Reglas y principios de gobernanza inviolables del proyecto.
+  - `/sdd-skill sdd-specify`: Creación de especificaciones funcionales a partir de requerimientos en lenguaje natural con historias de usuario (`Given/When/Then`), requerimientos funcionales (`FR-001`), criterios de éxito (`SC-001`) y marcadores de ambigüedad (`[NEEDS CLARIFICATION]`).
+  - `/sdd-skill sdd-clarify`: Protocolo interactivo de desambiguación guiado por una taxonomía de 9 categorías (una pregunta a la vez).
+  - `/sdd-skill sdd-plan`: Diseño de arquitectura técnica, mapa de componentes, decisiones tecnológicas y contratos de API.
+  - `/sdd-skill sdd-tasks`: Descomposición en tareas atómicas priorizadas según historias de usuario (MVP P1 first).
+  - `/sdd-skill sdd-checklist`: Listas de control de calidad para inglés y requisitos funcionales ("Unit Tests for English").
+  - `/sdd-skill sdd-implement` & `/sdd-skill sdd-converge`: Ejecución secuencial y reconciliación continua entre especificación y código.
 * **Alineación con la Agenda:** Es el motor práctico de la **Sesión 1**, enseñando a Retail a no generar código "a ciegas" sino a gobernar a la IA mediante contratos formales.
 
 ---
