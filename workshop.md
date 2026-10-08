@@ -376,8 +376,9 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
 5. En **Configuración**, selecciona **Archivo de configuración de Cloud Build** y apunta a `/cloudbuild.yaml`.
 6. Verifica las sustituciones:
    - `_CLUSTER_NAME`: `retail-private-cluster`
-   - `_CLUSTER_LOCATION`: `us-central1-a`
+   - `_CLUSTER_LOCATION`: `us-east1-b`
    - `_REPO_NAME`: `retail-docker-repo`
+   - `_REGION`: `us-east1`
 7. Guarda el activador.
 
 ### 💻 Disparo del Despliegue con Git

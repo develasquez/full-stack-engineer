@@ -3,9 +3,9 @@
 
 substitutions:
   _CLUSTER_NAME: "retail-private-cluster"
-  _CLUSTER_LOCATION: "us-central1-a"
+  _CLUSTER_LOCATION: "us-east1-b"
   _REPO_NAME: "retail-docker-repo"
-  _REGION: "us-central1"
+  _REGION: "us-east1"
 
 steps:
   # =========================================================================
@@ -105,6 +105,7 @@ steps:
         echo "🔄 Inyectando tag ${SHORT_SHA} en manifiestos de Kubernetes..."
         sed -i 's|image: .*/retail-backend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-backend:${SHORT_SHA}|g' k8s/backend-deployment.yaml
         sed -i 's|image: .*/retail-frontend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-frontend:${SHORT_SHA}|g' k8s/frontend-deployment.yaml
+        sed -i 's|GCP_PROJECT_ID: ".*"|GCP_PROJECT_ID: "'$PROJECT_ID'"|g' k8s/configmap.yaml
 
         echo "🚀 Conectando y aplicando manifiestos a GKE (${_CLUSTER_NAME})..."
         gcloud container clusters get-credentials ${_CLUSTER_NAME} --zone ${_CLUSTER_LOCATION} --project $PROJECT_ID
