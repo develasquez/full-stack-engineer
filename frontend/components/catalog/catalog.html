@@ -1,0 +1,37 @@
+<div class="space-y-4">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h2 class="text-lg sm:text-xl font-bold text-[#181C20] flex items-center gap-2">
+        <span>📦</span>
+        <span>Catálogo de Inventario en Tiempo Real</span>
+      </h2>
+      <p class="text-xs text-[#535A61]">
+        Consulta atómica de existencias y reserva transaccional por tienda.
+      </p>
+    </div>
+
+    <button
+      id="btn-refresh-catalog"
+      type="button"
+      class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#E9EEF4] text-[#181C20] hover:bg-[#DEE4EB] text-xs font-semibold transition-all">
+      <span id="refresh-icon">🔄</span>
+      <span>Actualizar Inventario</span>
+    </button>
+  </div>
+
+  <!-- Loading State Indicator -->
+  <div id="catalog-loading" class="hidden py-12 text-center">
+    <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#2B638B] border-t-transparent"></div>
+    <p class="mt-2 text-xs text-[#535A61]">Sincronizando inventario con el microservicio...</p>
+  </div>
+
+  <!-- Empty State Indicator -->
+  <div id="catalog-empty" class="hidden py-12 text-center m3-card p-6">
+    <p class="text-sm font-semibold text-[#535A61]">No se encontraron productos disponibles para esta tienda.</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <!-- Rendered dynamically by ui/renderer.js -->
+  </div>
+</div>

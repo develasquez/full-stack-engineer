@@ -1,0 +1,35 @@
+<div class="m3-card p-4 sm:p-6 border-l-4 border-l-[#BA1A1A] bg-white">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🧪</span>
+        <h2 class="text-base sm:text-lg font-bold text-[#181C20]">
+          Chaos Engineering Panel & Resiliencia GKE
+        </h2>
+        <span class="m3-badge-warning text-[10px]">Demostración en Vivo</span>
+      </div>
+      <p class="text-xs sm:text-sm text-[#535A61] max-w-2xl">
+        Induce una falla crítica en el microservicio backend enviando un comando de terminación forzada (exit 1) y emitiendo un log con severidad <code class="bg-[#FFDAD6] text-[#410002] px-1.5 py-0.5 rounded font-mono text-xs font-bold">EMERGENCY</code> a Google Cloud Logging. GKE Kubelet detectará la pérdida del contenedor y recreará un Pod sano en segundos.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button
+        id="btn-trigger-chaos"
+        type="button"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#BA1A1A] text-white text-sm font-semibold hover:bg-[#93000A] active:scale-95 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-[#BA1A1A] focus:ring-offset-2">
+        <span>💥</span>
+        <span id="chaos-btn-text">Simular Caída de Pod (Crash)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Real-time Chaos Telemetry Banner -->
+  <div id="chaos-telemetry-banner" class="hidden mt-4 p-3 rounded-lg bg-[#FFDAD6] text-[#410002] text-xs sm:text-sm flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#BA1A1A] chaos-pulsing"></span>
+      <span id="chaos-telemetry-message" class="font-medium">Iniciando protocolo de caos...</span>
+    </div>
+    <span id="chaos-telemetry-counter" class="font-mono text-xs font-bold">Reintentos: 0</span>
+  </div>
+</div>

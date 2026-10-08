@@ -1,0 +1,106 @@
+:root {
+  /* Material Design 3: Oceanic Slate Palette */
+  --md-sys-color-primary: #2B638B;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #CDE5F7;
+  --md-sys-color-on-primary-container: #001E30;
+  --md-sys-color-secondary-container: #D5E4EF;
+  --md-sys-color-on-secondary-container: #181C20;
+  --md-sys-color-surface: #F4F7FA;
+  --md-sys-color-surface-container-low: #EBF1F7;
+  --md-sys-color-surface-container: #E9EEF4;
+  --md-sys-color-surface-container-high: #F8FAFC;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-on-surface: #181C20;
+  --md-sys-color-on-surface-variant: #535A61;
+  --md-sys-color-outline: #71787E;
+  --md-sys-color-outline-variant: #DEE4EB;
+  --md-sys-color-error: #BA1A1A;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+
+  /* WCAG AAA Badges (Contrast >= 7:1) */
+  --md-badge-success-bg: #D7E8CD;
+  --md-badge-success-text: #0A3E10;
+  --md-badge-warning-bg: #FFECB3;
+  --md-badge-warning-text: #502D00;
+  --md-badge-error-bg: #FFDAD6;
+  --md-badge-error-text: #410002;
+
+  /* Shapes */
+  --md-shape-sm: 8px;
+  --md-shape-md: 12px;
+  --md-shape-lg: 16px;
+  --md-shape-full: 9999px;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Material 3 Card */
+.m3-card {
+  background-color: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-shape-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.m3-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 99, 139, 0.08);
+}
+
+/* Material 3 Badges WCAG AAA */
+.m3-badge-success {
+  background-color: var(--md-badge-success-bg);
+  color: var(--md-badge-success-text);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--md-shape-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.m3-badge-warning {
+  background-color: var(--md-badge-warning-bg);
+  color: var(--md-badge-warning-text);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--md-shape-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.m3-badge-error {
+  background-color: var(--md-badge-error-bg);
+  color: var(--md-badge-error-text);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--md-shape-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Chaos indicator pulse */
+@keyframes chaos-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.chaos-pulsing {
+  animation: chaos-pulse 1.2s infinite ease-in-out;
+}

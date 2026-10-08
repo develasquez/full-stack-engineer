@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "sdd-skill": {
+      "source": "develasquez/sdd-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "af50892debce515370dcb16ec01809dcfaf96289182ab884b4df578987e8f8f6"
+    }
+  }
+}

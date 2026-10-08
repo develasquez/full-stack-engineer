@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: retail-config
+  namespace: retail-store
+  labels:
+    app.kubernetes.io/part-of: retail-platform-2026
+data:
+  NODE_ENV: "production"
+  PORT: "8080"
+  FRONTEND_PORT: "80"
+  GCP_PROJECT_ID: "retail-enterprise-2026"
+  SERVICE_NAME: "retail-inventory-service"
+  LOG_LEVEL: "INFO"

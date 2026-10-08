@@ -1,0 +1,128 @@
+# Google Cloud Build — Pipeline GitOps CI/CD & DevSecOps (GCP 2026)
+# Caso de Uso: Retail Enterprise Platform
+
+substitutions:
+  _CLUSTER_NAME: "retail-private-cluster"
+  _CLUSTER_LOCATION: "us-central1-a"
+  _REPO_NAME: "retail-docker-repo"
+  _REGION: "us-central1"
+
+steps:
+  # =========================================================================
+  # FASE 1: Pruebas Unitarias Backend (Vitest) & Build Paralelo Frontend
+  # =========================================================================
+  - name: 'node:20-alpine'
+    id: 'test-backend'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd backend
+        npm ci
+        npm test
+    waitFor: ['-']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-frontend'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:latest'
+      - './frontend'
+    waitFor: ['-']
+
+  # =========================================================================
+  # FASE 2: Build Docker Backend (Solo si pasaron los tests unitarios)
+  # =========================================================================
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-backend'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:latest'
+      - './backend'
+    waitFor: ['test-backend']
+
+  # =========================================================================
+  # FASE 3: Análisis de Vulnerabilidades Shift-Left (Trivy)
+  # =========================================================================
+  - name: 'aquasec/trivy:latest'
+    id: 'scan-backend'
+    args:
+      - 'image'
+      - '--no-progress'
+      - '--severity'
+      - 'HIGH,CRITICAL'
+      - '--exit-code'
+      - '0'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${SHORT_SHA}'
+    waitFor: ['build-backend']
+
+  - name: 'aquasec/trivy:latest'
+    id: 'scan-frontend'
+    args:
+      - 'image'
+      - '--no-progress'
+      - '--severity'
+      - 'HIGH,CRITICAL'
+      - '--exit-code'
+      - '0'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${SHORT_SHA}'
+    waitFor: ['build-frontend']
+
+  # =========================================================================
+  # FASE 4: Publicación en Google Artifact Registry
+  # =========================================================================
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-backend'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend'
+    waitFor: ['scan-backend']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-frontend'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend'
+    waitFor: ['scan-frontend']
+
+  # =========================================================================
+  # FASE 5: Inyección Declarativa de Versión & Despliegue GitOps a GKE
+  # =========================================================================
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'deploy-k8s'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "🔄 Inyectando tag ${SHORT_SHA} en manifiestos de Kubernetes..."
+        sed -i 's|image: .*/retail-backend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-backend:${SHORT_SHA}|g' k8s/backend-deployment.yaml
+        sed -i 's|image: .*/retail-frontend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-frontend:${SHORT_SHA}|g' k8s/frontend-deployment.yaml
+
+        echo "🚀 Conectando y aplicando manifiestos a GKE (${_CLUSTER_NAME})..."
+        gcloud container clusters get-credentials ${_CLUSTER_NAME} --zone ${_CLUSTER_LOCATION} --project $PROJECT_ID
+        kubectl apply -f k8s/namespace.yaml
+        kubectl apply -f k8s/configmap.yaml
+        kubectl apply -f k8s/secret.yaml
+        kubectl apply -f k8s/backend-deployment.yaml
+        kubectl apply -f k8s/backend-service.yaml
+        kubectl apply -f k8s/frontend-deployment.yaml
+        kubectl apply -f k8s/frontend-service.yaml
+        kubectl apply -f k8s/ingress.yaml
+        kubectl apply -f k8s/hpa.yaml
+
+        echo "⏳ Validando rollout de despliegues..."
+        kubectl rollout status deployment/retail-backend -n retail-store --timeout=120s
+        kubectl rollout status deployment/retail-frontend -n retail-store --timeout=120s
+        echo "✅ Despliegue GitOps completado con éxito."
+    waitFor: ['push-backend', 'push-frontend']
+
+options:
+  logging: CLOUD_LOGGING_ONLY

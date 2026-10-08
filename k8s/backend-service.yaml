@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: retail-store
+  labels:
+    app: retail-backend
+    app.kubernetes.io/name: retail-backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: retail-platform-2026
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  type: ClusterIP
+  selector:
+    app: retail-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP

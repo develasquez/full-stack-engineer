@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="oceanic-slate">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retail Cloud Platform 2026</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Material Symbols & Icons -->
+  <link rel="stylesheet" href="/public/vendor/material-web/material-symbols.css">
+  <link rel="stylesheet" href="/public/vendor/material/material-icons.css">
+  <!-- Material Design 3 Styles -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="bg-[#F4F7FA] text-[#181C20] min-h-screen">
+  <div id="app-container" class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+    <!-- Header Component -->
+    <header id="header-container" class="mb-6"></header>
+
+    <!-- Notification Toast / Banner -->
+    <div id="notification-container" class="mb-4 transition-all duration-300"></div>
+
+    <!-- Main Grid: Chaos Testing Panel + Inventory Catalog -->
+    <main class="space-y-6">
+      <!-- Chaos Panel Component -->
+      <section id="chaos-panel-container"></section>
+
+      <!-- Catalog Component -->
+      <section id="catalog-container"></section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 border-t border-[#DEE4EB] text-center text-xs text-[#535A61]">
+      <p>Retail Enterprise Platform 2026 • GKE Autopilot & Cloud Build GitOps • Clean Architecture</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/load.js"></script>
+</body>
+</html>

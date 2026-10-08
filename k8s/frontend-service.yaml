@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: retail-store
+  labels:
+    app: retail-frontend
+    app.kubernetes.io/name: retail-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: retail-platform-2026
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  type: ClusterIP
+  selector:
+    app: retail-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP

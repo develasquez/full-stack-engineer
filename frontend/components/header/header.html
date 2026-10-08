@@ -1,0 +1,36 @@
+<div class="m3-card p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-[#CDE5F7] text-[#001E30] flex items-center justify-center font-bold text-xl shadow-sm">
+      🏪
+    </div>
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-[#181C20] tracking-tight" id="app-title-display">
+        Retail Cloud Platform 2026
+      </h1>
+      <p class="text-xs text-[#535A61] flex items-center gap-2">
+        <span>GCP Cloud Native Architecture</span>
+        <span class="inline-block w-1 h-1 rounded-full bg-[#71787E]"></span>
+        <span>GKE Autopilot</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <!-- Store Selector -->
+    <div class="flex items-center gap-2">
+      <label for="store-selector" class="text-xs font-semibold text-[#535A61]">Tienda:</label>
+      <select id="store-selector" class="bg-[#E9EEF4] border border-[#DEE4EB] text-[#181C20] text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#2B638B]">
+        <option value="TIENDA-CENTRAL-01">Tienda Central 01 (Santiago)</option>
+        <option value="TIENDA-NORTE-02">Tienda Norte 02 (Antofagasta)</option>
+      </select>
+    </div>
+
+    <!-- Backend Status Badge -->
+    <div id="backend-status-container">
+      <span id="backend-status-badge" class="m3-badge-success">
+        <span class="inline-block w-2 h-2 rounded-full bg-[#0A3E10]"></span>
+        Online
+      </span>
+    </div>
+  </div>
+</div>

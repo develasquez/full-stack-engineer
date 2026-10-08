@@ -1,0 +1,13 @@
+{
+  "name": "retail-frontend-spa",
+  "version": "1.0.0",
+  "description": "Retail Frontend SPA - Vanilla-Core UI + Material Design 3 (GCP 2026)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
