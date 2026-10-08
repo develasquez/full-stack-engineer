@@ -52,7 +52,7 @@ flowchart TD
     Dev -->|"Prompts Técnicos Concisos (SDD)"| AGY
     AGENTS_MD -.->|"Contexto y Arquitectura"| AGY
     AGY -->|"Genera Dinámicamente Frontend, Backend y K8s"| GitRepo
-    GitRepo -->|"rtk git push origin main"| RemoteGit
+    GitRepo -->|"git push origin main"| RemoteGit
 
     %% Pipeline CI/CD
     RemoteGit -->|"Webhook Push"| Trigger
@@ -186,48 +186,55 @@ Construir de forma ágil y asistida por IA primero el microservicio de inventari
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-specify Diseña el microservicio de inventario de Retail en backend/ bajo Node.js 20 y TypeScript formalizando los contratos de API:
+/sdd-skill sdd-specify Diseña el microservicio de inventario de Retail los contratos de API:
 - Modelo de dominio Product (SKU, nombre, categoría, precio, stock disponible, storeId).
 - Endpoints REST: GET /api/v1/products para consultar el inventario, POST /api/v1/products/:sku/reserve para descontar stock de forma atómica; si el pedido supera las existencias lanza InsufficientStockError (HTTP 400); si el SKU no existe lanza ProductNotFoundError (HTTP 404).
 - Endpoint de Caos POST /api/v1/chaos/crash: registra log estructurado con severidad EMERGENCY y stack trace en formato Google Cloud Logging, y ejecuta process.exit(1) para forzar la muerte del contenedor.
-- StructuredLogger nativo de GCP con severidades INFO, WARNING, EMERGENCY y correlación en logging.googleapis.com/trace.
-- Suite de pruebas unitarias con Vitest.
-Aplica los estándares de Clean Architecture estipulados en AGENTS.md.
+
 ```
 
 #### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Excepciones y Trazas)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-clarify Resuelve la estructura de excepciones de dominio para mapear códigos HTTP 400 y 404 en Express, y el formato de inyección del Trace ID para Google Cloud Trace.
+/sdd-skill sdd-clarify
 ```
 
 #### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Clean Architecture)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-plan Diseña el blueprint de carpetas en backend/ (src/domain/entities, src/domain/errors, src/domain/use-cases, src/infrastructure/logger, src/infrastructure/http) y tests/ con Vitest.
+/sdd-skill sdd-plan Node.js 20 + TypeScript + Clean Architecture
 ```
 
-#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist TDD)
+#### 4️⃣ Paso 4: `tasks, analyze y checklist` (Checklist TDD)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-tasks Genera la lista de tareas ordenada por desarrollo guiado por pruebas (TDD) para validar reserva exitosa, inventario insuficiente, producto inexistente y disparo de caos.
+/sdd-skill sdd-tasks 
 ```
+
+```text
+/sdd-skill sdd-analyze 
+```
+
+```text
+/sdd-skill sdd-checklist security
+```
+
 
 #### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código & Tests)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-implement Implementa el microservicio backend en backend/ con todas sus entidades, casos de uso, logger de Google Cloud, servidor Express y la suite de tests en tests/.
+/sdd-skill sdd-implement
 ```
 
 #### 💻 Verificación del Backend & Pruebas Unitarias en Terminal
 ```bash
 cd backend
-rtk npm install
-rtk npm test
+npm install
+npm test
 cd ..
 ```
 
@@ -248,45 +255,44 @@ Test Files  2 passed (2)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise consumiendo los contratos del microservicio backend:
+/sdd-skill sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise consumiendo los contratos del microservicio backend:
 - Catálogo de productos que consume GET /api/v1/products con visualización en tiempo real de stock disponible, precios y botón reactivo para invocar la reserva en POST /api/v1/products/:sku/reserve.
 - Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que invoca POST /api/v1/chaos/crash y gestiona la notificación visual de desconexión.
-Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
 ```
 
 #### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado y Renderizado Quirúrgico)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-clarify Valida los contratos de estado del catálogo en store.js, asegurando la sincronización reactiva del stock con el backend y que la actualización utilice renderizado quirúrgico anti-thrashing sin destruir el foco del usuario.
+/sdd-skill sdd-clarify
 ```
 
 #### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-plan Genera el blueprint arquitectónico de frontend/ con sus componentes modulares (header, catalog, chaos-panel), store.js, dom-elements.js, ui/renderer.js y server.js en Express.
+/sdd-skill sdd-plan Vanilla-Core UI, Material Design
 ```
 
 #### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-tasks Genera la lista de tareas ordenadas para la implementación de la aplicación frontend.
+/sdd-skill sdd-tasks
 ```
 
 #### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-implement Construye el frontend completo en frontend/ según el blueprint y las directivas de AGENTS.md conectando los endpoints del backend.
+/sdd-skill sdd-implement
 ```
 
 #### 💻 Verificación del Frontend en Terminal
 ```bash
 # Navegar a frontend, instalar dependencias y verificar
 cd frontend
-rtk npm install
+npm install
 cd ..
 ```
 
@@ -303,23 +309,10 @@ Generar los Dockerfiles multi-stage con usuario no root, el pipeline de Google C
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-specify Diseña la infraestructura declarativa y el pipeline de entrega continua para la plataforma de Retail:
-- Dockerfiles multi-stage con base node:20-alpine y USER node para backend/ y frontend/.
-- cloudbuild.yaml con ordenamiento DAG (waitFor):
-  * Paso test-backend (waitFor: -)
-  * Paso build-frontend (waitFor: -)
-  * Paso build-backend (waitFor: test-backend)
-  * Pasos de escaneo con aquasec/trivy:latest para ambas imágenes
-  * Paso de push a Artifact Registry (retail-docker-repo)
-  * Paso de sustitución de variables y despliegue declarativo a GKE con kubectl apply.
-- Manifiestos en k8s/ bajo namespace retail-store:
-  * namespace.yaml, configmap.yaml, secret.yaml.
-  * backend-deployment.yaml con livenessProbe y readinessProbe.
-  * backend-service.yaml con anotación Container-Native NEG cloud.google.com/neg: '{"ingress": true}'.
-  * frontend-deployment.yaml y frontend-service.yaml (NEG).
-  * ingress.yaml enrutando /api/* al backend y /* al frontend.
-  * hpa.yaml (autoscaling/v2 de 2 a 10 réplicas al 70% CPU).
-Aplica los estándares de AGENTS.md.
+/sdd-skill sdd-specify Diseña la infraestructura declarativa y el pipeline de entrega continua para la plataforma de Retail:
+- Dockerfiles multi-stage
+- cloudbuild.yaml
+- Manifiestos en k8s/ bajo namespace retail-store
 ```
 
 ---
@@ -328,7 +321,7 @@ Aplica los estándares de AGENTS.md.
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-clarify Valida las variables de sustitución de Cloud Build (_CLUSTER_NAME, _CLUSTER_LOCATION, _REPO_NAME) y los umbrales de severidad de Trivy (HIGH,CRITICAL).
+/sdd-skill sdd-clarify
 ```
 
 ---
@@ -337,7 +330,7 @@ Pega el siguiente prompt en Antigravity:
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-plan Diseña el blueprint de los archivos de contenerización (backend/Dockerfile, frontend/Dockerfile), el archivo cloudbuild.yaml y la suite de manifiestos en k8s/.
+/sdd-skill sdd-plan Dockerfile Google Cloud Build, k8s, GKE.
 ```
 
 ---
@@ -346,7 +339,7 @@ Pega el siguiente prompt en Antigravity:
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-tasks Genera la lista de tareas para la creación de los Dockerfiles, el pipeline de Cloud Build y los manifiestos de Kubernetes.
+/sdd-tasks
 ```
 
 ---
@@ -355,7 +348,7 @@ Pega el siguiente prompt en Antigravity:
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-implement Genera backend/Dockerfile, frontend/Dockerfile, cloudbuild.yaml y todos los manifiestos en k8s/ respetando estrictamente las directivas de AGENTS.md.
+/sdd-skill sdd-implement
 ```
 
 ---
@@ -363,8 +356,8 @@ Pega el siguiente prompt en Antigravity:
 ### 💻 Verificación de Manifiestos en Terminal
 ```bash
 # Validar los archivos generados
-rtk ls -la k8s/
-rtk cat cloudbuild.yaml
+ls -la k8s/
+cat cloudbuild.yaml
 ```
 
 ---
@@ -386,17 +379,17 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
    - `_REPO_NAME`: `retail-docker-repo`
 7. Guarda el activador.
 
-### 💻 Disparo del Despliegue con Git y RTK
+### 💻 Disparo del Despliegue con Git
 ```bash
 # 1. Verificar estado del árbol de trabajo
-rtk git status
+git status
 
 # 2. Agregar los componentes generados dinámicamente y hacer commit
-rtk git add .
-rtk git commit -m "feat: plataforma completa de retail con frontend, backend, trivy y manifiestos GKE"
+git add .
+git commit -m "feat: plataforma completa de retail con frontend, backend, trivy y manifiestos GKE"
 
 # 3. Empujar cambios a GitHub para iniciar el build automático
-rtk git push origin main
+git push origin main
 ```
 
 ---
@@ -409,7 +402,7 @@ Validar que el **Cloud HTTP(S) Load Balancer** enrute el tráfico correctamente 
 ### 💻 Comandos en Terminal
 ```bash
 # Obtener la IP pública asignada por Google Cloud Ingress
-rtk kubectl get ingress retail-ingress -n retail-store
+kubectl get ingress retail-ingress -n retail-store
 ```
 
 ### 🖱️ Validación en el Navegador
@@ -448,7 +441,7 @@ Tienes dos opciones:
 En una ventana de terminal con acceso a `kubectl`, ejecuta:
 
 ```bash
-rtk kubectl get pods -n retail-store -w
+kubectl get pods -n retail-store -w
 ```
 
 #### 🔍 Secuencia de Eventos Observada:
@@ -507,4 +500,4 @@ Al completar este workshop de 4 horas, el equipo técnico domina:
 6. **Resiliencia & Observabilidad:** Diagnóstico forense en menos de dos minutos con Google Cloud Logging y Google Cloud Trace ante fallos críticos de pods.
 
 ---
-*Material preparado para el Workshop Técnico Cloud Native & AI-Assisted Engineering — Google Cloud Colombia 2026.*
+
