@@ -63,7 +63,133 @@ flowchart TD
 
 ---
 
-## 3. Patrón Maestro 1: Seguridad Absoluta con Workload Identity
+## 3. Aprovisionamiento de Red y Clúster Privado GKE (Paso a Paso)
+
+Antes de orquestar despliegues automatizados con Cloud Build, la infraestructura base de red y cómputo debe estar aprovisionada bajo los estándares de seguridad de GCP (cero IPs públicas en nodos y aislamiento de red).
+
+### 🌐 A. Configuración de VPC, Rangos Secundarios y Cloud NAT
+
+Para cumplir con políticas organizacionales restrictivas (`constraints/compute.vmExternalIpAccess` y `constraints/gcp.resourceLocations`), se configura una red VPC dedicada con rangos secundarios para Pods y Servicios, habilitando **Cloud NAT** para que los nodos privados puedan descargar imágenes públicas y resolver dependencias sin exponerse a internet:
+
+```bash
+# 1. Crear la red VPC en caso de no existir
+rtk gcloud compute networks create wakanda-vpc --subnet-mode=custom --project=$PROJECT_ID
+
+# 2. Crear la subred con rangos secundarios dedicados para GKE en la región permitida (us-east1)
+rtk gcloud compute networks subnets create wakanda-subnet \
+    --network=wakanda-vpc \
+    --region=us-east1 \
+    --range=10.0.0.0/20 \
+    --secondary-range=gke-pods=10.4.0.0/14,gke-services=10.8.0.0/20 \
+    --enable-private-ip-google-access \
+    --project=$PROJECT_ID
+
+# 3. Crear Cloud Router y Cloud NAT para salida segura a internet de nodos privados
+rtk gcloud compute routers create wakanda-router \
+    --network=wakanda-vpc \
+    --region=us-east1 \
+    --project=$PROJECT_ID
+
+rtk gcloud compute routers nats create wakanda-nat \
+    --router=wakanda-router \
+    --region=us-east1 \
+    --auto-allocate-nat-external-ips \
+    --nat-all-subnet-ip-ranges \
+    --project=$PROJECT_ID
+```
+
+---
+
+### ☸️ B. Creación del Clúster Privado GKE
+
+El comando de creación define nodos privados, rangos alias IP para VPC nativa y asignación del bloque CIDR del plano de control (`master-ipv4-cidr`):
+
+```bash
+rtk gcloud container clusters create retail-private-cluster \
+    --zone=us-east1-b \
+    --network=wakanda-vpc \
+    --subnetwork=wakanda-subnet \
+    --enable-ip-alias \
+    --cluster-secondary-range-name=gke-pods \
+    --services-secondary-range-name=gke-services \
+    --enable-private-nodes \
+    --master-ipv4-cidr=172.16.0.0/28 \
+    --num-nodes=2 \
+    --machine-type=e2-standard-2 \
+    --project=$PROJECT_ID
+```
+
+> [!WARNING] **Gobernanza de Conectividad al API Server (Master Authorized Networks)**  
+> Al crear un clúster privado, GKE activa por defecto *Master Authorized Networks* con una lista blanca vacía (`cidrBlocks: []`). Esto bloquea a los runners de Cloud Build y a la CLI arrojando:  
+> `error validating data: failed to download openapi: Get "https://<MASTER_IP>/openapi/v2": dial tcp <MASTER_IP>:443: i/o timeout`  
+> **Comando de Solución Obligatorio:**
+> ```bash
+> rtk gcloud container clusters update retail-private-cluster \
+>     --zone=us-east1-b \
+>     --no-enable-master-authorized-networks \
+>     --project=$PROJECT_ID
+> ```
+
+---
+
+## 4. Gobernanza de Cloud Build: Triggers, Service Accounts y Principio de Menor Privilegio
+
+Para habilitar la integración continua GitOps (Push a GitHub -> Cloud Build -> GKE), se requiere un disparador (*Trigger*) en la región `us-east1` y una Cuenta de Servicio (*Service Account*) que ejecute el pipeline.
+
+### 🔑 A. Roles Asignados para la Demo vs. Producción Enterprise (PoLP)
+
+En el marco del workshop y con el objetivo de agilizar la sesión práctica sin fricción de permisos interactivos, se configuró una Cuenta de Servicio dedicada (`d1-516@wakanda-01.iam.gserviceaccount.com`) con los siguientes roles:
+
+| Rol Asignado en Demo | Propósito en el Workshop | Alternativa Estricta en Producción (Least Privilege) |
+| :--- | :--- | :--- |
+| `Cloud Build Service Account` (`roles/cloudbuild.builds.builder`) | Ejecución base de pasos del build y escritura de logs. | Se mantiene idéntico. |
+| `Kubernetes Engine Admin` (`roles/container.admin`) | Conexión a GKE (`get-credentials`) y aplicación de todos los manifiestos (`kubectl apply`). | **`roles/container.developer`** acotado al namespace `retail-store` mediante RBAC de Kubernetes (evita permisos de borrar o alterar el clúster o los nodos). |
+| `Storage Admin` (`roles/storage.admin`) | Subida y lectura del código fuente comprimido en el bucket de staging (`gs://wakanda-01-cloudbuild-staging/`). | **`roles/storage.objectViewer`** y **`roles/storage.objectCreator`** limitados exclusivamente al bucket de staging mediante condiciones IAM. |
+| `Service Account User` (`roles/iam.serviceAccountUser`) | Permite a Cloud Build actuar como la identidad asignada durante la orquestación. | Limitar la delegación (`iam.serviceAccounts.actAs`) únicamente a la SA del trigger en lugar de nivel proyecto. |
+| *Artifact Registry Writer* (`roles/artifactregistry.writer`) | Publicación de imágenes Docker en `retail-docker-repo`. | Se mantiene acotado al repositorio específico en Artifact Registry. |
+
+```bash
+# Ejemplo: Asignación de roles mínimos para la SA de Cloud Build en Producción
+export BUILD_SA="d1-516@$PROJECT_ID.iam.gserviceaccount.com"
+
+# Permiso para interactuar con pods, servicios y deployments en GKE
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${BUILD_SA}" \
+    --role="roles/container.developer"
+
+# Permiso para subir imágenes a Artifact Registry
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${BUILD_SA}" \
+    --role="roles/artifactregistry.writer"
+
+# Permiso para escribir logs en Cloud Logging
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${BUILD_SA}" \
+    --role="roles/logging.logWriter"
+```
+
+---
+
+### 🐙 B. Configuración del Trigger de Cloud Build en Consola
+
+1. En **Google Cloud Console**, navegar a **Cloud Build** > **Triggers**.
+2. Crear un nuevo Trigger con:
+   - **Nombre:** `d1` (o `retail-gitops-trigger`)
+   - **Región:** `us-east1` (cumpliendo con `constraints/gcp.resourceLocations`)
+   - **Repositorio:** Conectado a `develasquez/full-stack-engineer`
+   - **Evento:** `Push to a branch` sobre `^main$`
+   - **Configuración de compilación:** `Cloud Build configuration file (yaml)` apuntando a `/cloudbuild.yaml`
+   - **Service Account:** Seleccionar la SA configurada (`d1-516@wakanda-01.iam.gserviceaccount.com`)
+   - **Sustituciones:**
+     - `_CLUSTER_NAME`: `retail-private-cluster`
+     - `_CLUSTER_LOCATION`: `us-east1-b`
+     - `_REPO_NAME`: `retail-docker-repo`
+     - `_REGION`: `us-east1`
+     - `_TAG`: `$(SHORT_SHA)`
+
+---
+
+## 5. Patrón Maestro: Seguridad Absoluta con Workload Identity
 
 En arquitecturas tradicionales obsoletas, los desarrolladores descargaban llaves privadas JSON (`credentials.json`) y las montaban como secretos en Kubernetes. Esto representaba el riesgo #1 de exfiltración de datos.
 

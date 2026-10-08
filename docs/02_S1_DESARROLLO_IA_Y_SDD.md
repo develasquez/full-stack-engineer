@@ -89,11 +89,11 @@ Desde la terminal, el desarrollador activa el skill:
 
 ```bash
 # 1. Clonar e inicializar el skill en el workspace
-git clone https://github.com/develasquez/sdd-skill.git .gemini/skills/sdd-skill
+npx -y skills add https://github.com/develasquez/sdd-skill
 
 # 2. Verificar la disponibilidad de comandos SDD
 # En Antigravity CLI ejecutar:
-/sdd-help
+/sdd-skill sdd-help
 ```
 
 *Salida esperada:* Lista de los 10 comandos de ciclo de vida (`/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`, `/sdd-analyze`, etc.).

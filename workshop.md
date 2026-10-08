@@ -5,7 +5,8 @@
 > **Nivel:** Intermedio - Avanzado  
 > **Audiencia:** Desarrolladores Full-Stack, Arquitectos Cloud, Tech Leads, DevOps/SRE  
 > **Filosofía de Despliegue:** **GitOps Puro**. Queda prohibido el despliegue manual mediante Cloud SDK local (`gcloud run deploy` / `gcloud compute`). Todo cambio de código o infraestructura se define declarativamente y se despliega automáticamente mediante **Git -> Google Cloud Build -> GKE**.  
-> **Contrato de Gobernanza:** Antes de comenzar, revisa [`AGENTS.md`](./AGENTS.md). Como todas las directivas técnicas ya están consolidadas allí, **los prompts para Antigravity no necesitan repetir especificaciones técnicas ni boilerplate**, sino únicamente la intención y requerimientos de negocio de cada ciclo.
+> **Contrato de Gobernanza:** Antes de comenzar, revisa [`AGENTS.md`](./AGENTS.md). Como todas las directivas técnicas ya están consolidadas allí, **los prompts para Antigravity no necesitan repetir especificaciones técnicas ni boilerplate**, sino únicamente la intención y requerimientos de negocio de cada ciclo.  
+> **Infraestructura Base de GKE & Cloud Build:** Para el aprovisionamiento previo del clúster privado GKE, VPC, Cloud NAT y la configuración del disparador/Service Account en Cloud Build, consulta la guía técnica detallada en [`docs/05_S4_KUBERNETES_EN_PRODUCCION.md`](./docs/05_S4_KUBERNETES_EN_PRODUCCION.md).
 
 ---
 
@@ -304,6 +305,9 @@ cd ..
 ### 🎯 Objetivo
 Generar los Dockerfiles multi-stage con usuario no root, el pipeline de Google Cloud Build con ordenamiento DAG (`waitFor`) y escaneo de vulnerabilidades con Aqua Trivy, y los manifiestos declarativos para Google Kubernetes Engine (GKE) bajo el namespace `retail-store`.
 
+> 💡 **Guía de Infraestructura y Clúster:**  
+> Para la guía paso a paso de aprovisionamiento de la VPC, subredes secundarias, Cloud NAT y el clúster privado en GKE con `gcloud`, consulta la [Sección 3 de docs/05_S4_KUBERNETES_EN_PRODUCCION.md](./docs/05_S4_KUBERNETES_EN_PRODUCCION.md#3-aprovisionamiento-de-red-y-clúster-privado-gke-paso-a-paso).
+
 ---
 
 ### 1️⃣ Paso 1: `/sdd-specify` (Especificación de DevSecOps & K8s)
@@ -380,7 +384,11 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
    - `_REPO_NAME`: `retail-docker-repo`
    - `_REGION`: `us-east1`
    - `_TAG`: `$(SHORT_SHA)`
-7. Guarda el activador.
+7. En **Cuenta de Servicio del Activador**, selecciona la Service Account configurada para el build (ej. `d1-516@wakanda-01.iam.gserviceaccount.com`).
+8. Guarda el activador.
+
+> 🔒 **Gobernanza de Service Account & Menor Privilegio (PoLP):**  
+> Para revisar el detalle de los roles asignados a la Service Account en este entorno de demo frente a los roles requeridos bajo el Principio de Menor Privilegio en producción enterprise, consulta la [Sección 4 de docs/05_S4_KUBERNETES_EN_PRODUCCION.md](./docs/05_S4_KUBERNETES_EN_PRODUCCION.md#4-gobernanza-de-cloud-build-triggers-service-accounts-y-principio-de-menor-privilegio).
 
 > [!IMPORTANT] **Gobernanza de Conectividad a GKE (Master Authorized Networks & i/o timeout)**  
 > En clústeres privados (`--enable-private-nodes`), si el plano de control tiene activadas las restricciones de redes autorizadas sin incluir los rangos de Cloud Build o de la estación de trabajo, el intento de conexión `kubectl apply` arrojará:  
