@@ -56,6 +56,24 @@ Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Ti
 ### Fase 1: Especificación Formal de Requerimiento (SDD)
 > **Objetivo:** Convertir una historia de usuario de Jira en una especificación ejecutable antes de tirar código.
 
+#### Prompt Canónico Full-Stack SDD (Backend + Frontend Desacoplado)
+```text
+/sdd-specify Diseña la plataforma de inventario para Tiendas D1 en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
+
+1. backend/: Microservicio Node.js 20 con TypeScript y Clean Architecture.
+   - Entidad e inventario de productos (SKU, nombre, categoría, precio, stock).
+   - Caso de uso ReserveStock que valide existencias y bloquee sobreventas con error 400.
+   - Logger estructurado para Google Cloud Logging con severidades INFO, WARNING, EMERGENCY y traza en logging.googleapis.com/trace.
+   - Endpoint de Caos POST /api/v1/chaos/crash que emita log EMERGENCY con stack trace y ejecute process.exit(1) para probar la auto-recuperación del Pod en GKE.
+   - Tests unitarios completos con Vitest.
+
+2. frontend/: Single Page Application con Vanilla-Core UI y Material Design 3 (@develasquez/material-design).
+   - Store central reactivo en store.js (SSoT + Pub/Sub) con renderizado quirúrgico anti-thrashing en ui/renderer.js.
+   - Header con branding D1 y badge de tienda, tabla de inventario en vivo con botones de reserva, y panel interactivo para detonar el fallo fatal de Caos.
+   - Servidor estático Express sobre el puerto 80 con health check en /health.
+```
+
+#### Prompt para Especificación Específica de Casos de Uso
 ```text
 /sdd-specify Crear la especificación formal del microservicio de "Descuentos y Promociones Dinámicas" para tiendas D1.
 Contexto:

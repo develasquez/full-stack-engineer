@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+# ==============================================================================
+# RTK Shim & Fallback (Tiendas D1 - Workshop GCP 2026)
+# Si el binario oficial 'rtk' está instalado, lo ejecuta con optimización de tokens.
+# Si no está instalado, ejecuta transparentemente el comando nativo sin fallar.
+# ==============================================================================
+
+# 1. Verificar si existe el binario oficial en el sistema (evitando recursión)
+SYSTEM_RTK=""
+if [ -x "/opt/homebrew/bin/rtk" ]; then
+  SYSTEM_RTK="/opt/homebrew/bin/rtk"
+elif [ -x "/usr/local/bin/rtk" ]; then
+  SYSTEM_RTK="/usr/local/bin/rtk"
+elif [ -x "$HOME/.cargo/bin/rtk" ]; then
+  SYSTEM_RTK="$HOME/.cargo/bin/rtk"
+elif command -v rtk >/dev/null 2>&1; then
+  CANDIDATE="$(command -v rtk)"
+  # Asegurar que no sea este mismo script
+  if [ "$CANDIDATE" != "$0" ] && [ "$(basename "$CANDIDATE")" = "rtk" ]; then
+    SYSTEM_RTK="$CANDIDATE"
+  fi
+fi
+
+# 2. Si RTK está instalado, delegar a él
+if [ -n "$SYSTEM_RTK" ]; then
+  exec "$SYSTEM_RTK" "$@"
+fi
+
+# 3. Fallback transparente: ejecutar directamente el comando sin prefijo
+if [ $# -eq 0 ]; then
+  echo "⚡ RTK Shim activo (Modo Passthrough). Para instalar el optimizador oficial de tokens:"
+  echo "   - macOS:  brew install rtk"
+  echo "   - Linux:  curl -fsSL https://www.rtk-ai.app/install.sh | sh"
+  exit 0
+fi
+
+CMD="$1"
+shift
+exec "$CMD" "$@"

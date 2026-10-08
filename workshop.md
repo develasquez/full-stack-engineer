@@ -96,13 +96,32 @@ flowchart TD
 
 ---
 
-## 🛠️ Lab 01: Setup del Asistente Autónomo (Antigravity CLI & Skills 2026)
+## 🛠️ Lab 01: Setup del Asistente Autónomo (Antigravity CLI, RTK & Skills 2026)
 
 ### 🎯 Objetivo
-Configurar el entorno de desarrollo con la herramienta oficial de pair programming asistido por IA de Google: **Antigravity CLI (`agy`)**, e instalar las habilidades especializadas de desarrollo guiado por especificaciones y frontend ultra ligero.
+Configurar el entorno de desarrollo con la herramienta oficial de pair programming asistido por IA de Google: **Antigravity CLI (`agy`)**, el optimizador de tokens **RTK (Rust Token Killer)**, e instalar las habilidades especializadas de desarrollo guiado por especificaciones (**SDD**) y frontend ultra ligero (**Vanilla-Core UI & Material Design 3**).
+
+### ⚡ RTK (Rust Token Killer): Optimización Obligatoria de Terminal
+Para garantizar que los comandos con prefijo `rtk` funcionen inmediatamente en cualquier máquina que clone este repositorio sin arrojar `command not found`, el repositorio incluye:
+1. **Reglas de Agente:** [`.agents/rules/antigravity-rtk-rules.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/.agents/rules/antigravity-rtk-rules.md)
+2. **Skill de Proyecto:** [`.agents/skills/rtk/SKILL.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/.agents/skills/rtk/SKILL.md)
+3. **Shim Transparente de Fallback:** [`bin/rtk`](file:///Users/felipe/Desarrollo/full-stack-engineer/bin/rtk) (si `rtk` no está instalado en el sistema operativo, ejecuta el comando nativo de forma transparente sin fallar).
+
+#### Instalación del Binario Oficial RTK (60-90% de Ahorro de Tokens):
+```bash
+# Opción 1: macOS con Homebrew (Recomendada)
+brew install rtk
+
+# Opción 2: Linux / macOS con script oficial
+curl -fsSL https://www.rtk-ai.app/install.sh | sh
+
+# Opción 3: Fallback sin instalación (usar el shim local del repositorio o alias)
+export PATH="./bin:$PATH"
+# O bien: alias rtk=''
+```
 
 ### 📦 Paquetes y Skills Oficiales a Instalar
-1. **Google Antigravity CLI:** Herramienta de línea de comandos para orquestar agentes y pair-programming.
+1. **Google Antigravity CLI:** Orquestador de agentes y pair-programming de Google.
 2. **SDD Skill (Spec-Driven Development):** [`github.com/develasquez/sdd-skill`](https://github.com/develasquez/sdd-skill)
 3. **Vanilla-Core UI:** [`vanilla-core-ui`](https://www.npmjs.com/package/vanilla-core-ui)
 4. **Material Design 3:** [`@develasquez/material-design`](https://www.npmjs.com/package/@develasquez/material-design)
@@ -112,45 +131,58 @@ Configurar el entorno de desarrollo con la herramienta oficial de pair programmi
 # 1. Instalar Antigravity CLI globalmente
 rtk npm install -g @google/antigravity-cli
 
-# 2. Verificar versión instalada
+# 2. Verificar versión instalada y estado de RTK
 rtk agy --version
+rtk gain
 
-# 3. Instalar los skills especializados de desarrollo en tu entorno
+# 3. Instalar los skills especializados en tu entorno
 rtk agy skill install https://github.com/develasquez/sdd-skill.git
 rtk npm install vanilla-core-ui @develasquez/material-design
 ```
 
 ### 🤖 Prompt para Antigravity
-> *"Actúa como Tech Lead en Tiendas D1. Valida que el entorno de desarrollo tenga activos los skills de Spec-Driven Development (SDD) y Vanilla-Core UI con Material Design 3. Configura el workspace para trabajar con arquitectura desacoplada frontend/backend sin dependencias innecesarias."*
+> *"Actúa como Tech Lead en Tiendas D1. Valida que el entorno de desarrollo tenga activos los skills de Spec-Driven Development (SDD), RTK para optimización de tokens en CLI, y Vanilla-Core UI con Material Design 3. Configura el workspace para trabajar con arquitectura desacoplada frontend/backend sin dependencias innecesarias."*
 
 ---
 
-## 🧩 Lab 02: Creación de Microservicios Desacoplados
+## 🧩 Lab 02: Creación Full-Stack con SDD (Specification-Driven Development)
 
 ### 🎯 Objetivo
-Generar dos aplicaciones completamente aisladas:
-- `backend/`: API REST en TypeScript bajo Clean Architecture (Dominio, Casos de Uso, Infraestructura y Rutas HTTP).
-- `frontend/`: Single Page Application pura usando **Vanilla-Core UI** (Single Source of Truth en `store.js`, bus Pub/Sub reactivo, componentes desacoplados y tokens de diseño Material 3).
+En el 2026 superamos la etapa del *"vibe coding"* reactivo. En Tiendas D1 el desarrollo es **determinista y guiado por especificaciones formales (SDD)**:
+1. Se define la especificación contractual y los criterios de aceptación en un documento formal (`specs/d1-retail-platform.spec.md`).
+2. Antigravity genera la arquitectura, las interfaces y los tests automáticamente a partir de dicha especificación.
 
-### 🤖 Prompt para Antigravity (Generación de Backend)
-> *"Crea un microservicio en la carpeta `backend/` para Tiendas D1 utilizando Node.js y TypeScript con Clean Architecture. Debe incluir:
-> 1. Entidad `InventoryItem` (sku, name, quantity, unitPrice, storeId).
-> 2. Caso de uso `ReserveStockUseCase` que valide disponibilidad y bloquee sobreventa.
-> 3. Logger estructurado para Google Cloud Logging con severidades estándar (INFO, WARNING, EMERGENCY) y contexto de `logging.googleapis.com/trace`.
-> 4. Endpoints HTTP Express: `GET /health`, `GET /ready`, `GET /api/v1/inventory` y `POST /api/v1/inventory/reserve`."*
+### 🤖 Prompt Simple y Claro para SDD (`/sdd-specify`)
+Copia y pega este único prompt en Antigravity CLI para generar el sistema completo con todas sus capacidades:
 
-### 🤖 Prompt para Antigravity (Generación de Frontend)
-> *"Crea una interfaz web en `frontend/` usando el dogma de Vanilla-Core UI y estilos de Material Design 3 (@develasquez/material-design):
-> 1. Store central en `store.js` como SSoT y función `setState()`.
-> 2. Componentes en `components/header/`, `components/catalog/` y `components/chaos-panel/`.
-> 3. Renderizador quirúrgico en `ui/renderer.js` que evite innerHTML destructivo y preserve el foco.
-> 4. Servidor estático en Express sobre el puerto 80 con endpoint `/health`."*
+```text
+/sdd-specify Diseña la plataforma de inventario para Tiendas D1 en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
+
+1. backend/: Microservicio Node.js 20 con TypeScript y Clean Architecture.
+   - Entidad e inventario de productos (SKU, nombre, categoría, precio, stock).
+   - Caso de uso ReserveStock que valide existencias y bloquee sobreventas con error 400.
+   - Logger estructurado para Google Cloud Logging con severidades INFO, WARNING, EMERGENCY y traza en logging.googleapis.com/trace.
+   - Endpoint de Caos POST /api/v1/chaos/crash que emita log EMERGENCY con stack trace y ejecute process.exit(1) para probar la auto-recuperación del Pod en GKE.
+   - Tests unitarios completos con Vitest.
+
+2. frontend/: Single Page Application con Vanilla-Core UI y Material Design 3 (@develasquez/material-design).
+   - Store central reactivo en store.js (SSoT + Pub/Sub) con renderizado quirúrgico anti-thrashing en ui/renderer.js.
+   - Header con branding D1 y badge de tienda, tabla de inventario en vivo con botones de reserva, y panel interactivo para detonar el fallo fatal de Caos.
+   - Servidor estático Express sobre el puerto 80 con health check en /health.
+```
+
+### 🔍 Resultado del Flujo SDD
+Antigravity procesará la especificación y generará de forma determinista:
+- La especificación formal en [`specs/d1-retail-platform.spec.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/specs/d1-retail-platform.spec.md).
+- El microservicio backend estructurado en [`backend/`](file:///Users/felipe/Desarrollo/full-stack-engineer/backend/).
+- La aplicación web sin frameworks pesados en [`frontend/`](file:///Users/felipe/Desarrollo/full-stack-engineer/frontend/).
 
 ### 💻 Comandos en Terminal
 ```bash
 # Inspeccionar la estructura creada
 rtk ls -la backend
 rtk ls -la frontend
+rtk ls -la specs
 ```
 
 ---
