@@ -13,71 +13,72 @@
 
 ```mermaid
 flowchart TD
-    subgraph Local["💻 Entorno de Desarrollo Local"]
+    subgraph Local ["💻 Entorno de Desarrollo Local"]
         Dev["Ingeniero / Tech Lead"]
         AGENTS_MD["📜 AGENTS.md (Reglas de Gobernanza)"]
         AGY["🤖 Antigravity CLI (agy)<br/>Skills: SDD + Vanilla-Core + Material + RTK"]
         GitRepo["Git Repository (Local)"]
-        
-        Dev -->|"Prompts Técnicos Concisos (SDD)"| AGY
-        AGENTS_MD -.->|"Contexto & Arquitectura"| AGY
-        AGY -->|"Genera Dinámicamente Frontend, Backend & K8s"| GitRepo
     end
 
-    subgraph GitHub["🐙 Control de Versiones"]
+    subgraph GitHub ["🐙 Control de Versiones"]
         RemoteGit["GitHub Repo (main branch)"]
-        GitRepo -->|"rtk git push origin main"| RemoteGit
     end
 
-    subgraph GCP_CI_CD["⚡ Google Cloud Build (DevSecOps)"]
+    subgraph GCP_CI_CD ["⚡ Google Cloud Build (DevSecOps)"]
         Trigger["Cloud Build Trigger (Push to main)"]
-        TestStep["Step 1: Vitest Backend Tests (waitFor: -)"]
-        BuildFront["Step 2: Build Frontend Docker (waitFor: -)"]
-        BuildBack["Step 3: Build Backend Docker (waitFor: test-backend)"]
-        TrivyStep["Step 4 & 5: Aqua Trivy Security Scan"]
+        TestStep["Step 1: Vitest Backend Tests"]
+        BuildFront["Step 2: Build Frontend Docker"]
+        BuildBack["Step 3: Build Backend Docker"]
+        TrivyStep["Step 4 y 5: Aqua Trivy Security Scan"]
         PushStep["Step 6: Push a Artifact Registry (retail-docker-repo)"]
-        DeployStep["Step 7 & 8: Deploy Declarativo a GKE (kubectl apply)"]
-        
-        RemoteGit -->|"Webhook Push"| Trigger
-        Trigger --> TestStep
-        Trigger --> BuildFront
-        TestStep --> BuildBack
-        BuildFront --> TrivyStep
-        BuildBack --> TrivyStep
-        TrivyStep --> PushStep
-        PushStep --> DeployStep
+        DeployStep["Step 7 y 8: Deploy Declarativo a GKE (kubectl apply)"]
     end
 
-    subgraph GCP_Runtime["☸️ GKE Private Cluster (VPC Nativa)"]
-        subgraph IngressLayer["Enrutamiento Externo L7"]
-            GKE_Ingress["Google Cloud Ingress (HTTP/S LB)<br/>Container-Native (NEG)"]
-        end
-        
-        subgraph Namespace["Namespace: retail-store"]
-            FrontendSvc["retail-frontend-svc (Port 80)"]
-            BackendSvc["retail-backend-svc (Port 8080)"]
-            
-            FrontendPods["Pods Frontend (Vanilla-Core UI)<br/>Replicas: 2"]
-            BackendPods["Pods Backend (Node.js/TS Clean Arch)<br/>Replicas: 2 a 10 (HPA)"]
-            
-            ConfigSecrets["ConfigMaps & Secrets"]
-        end
-
-        GKE_Ingress -->|"Path: /*"| FrontendSvc
-        GKE_Ingress -->|"Path: /api/*"| BackendSvc
-        FrontendSvc --> FrontendPods
-        BackendSvc --> BackendPods
-        ConfigSecrets -.-> BackendPods
+    subgraph GCP_Runtime ["☸️ GKE Private Cluster (Namespace: retail-store)"]
+        GKE_Ingress["Google Cloud Ingress (HTTP/S LB)<br/>Container-Native NEG"]
+        FrontendSvc["retail-frontend-svc (Port 80)"]
+        BackendSvc["retail-backend-svc (Port 8080)"]
+        FrontendPods["Pods Frontend (Vanilla-Core UI)<br/>Replicas: 2"]
+        BackendPods["Pods Backend (Clean Arch TS)<br/>Replicas: 2 a 10 (HPA)"]
+        ConfigSecrets["ConfigMaps y Secrets"]
     end
 
-    subgraph GCP_Observability["📊 Google Cloud Observability Suite"]
-        CloudLogging["Google Cloud Logging<br/>(Severity EMERGENCY / INFO / WARNING)"]
-        CloudTrace["Google Cloud Trace<br/>(End-to-End Latency & Fatal Crashes)"]
-        BackendPods -->|"Structured Logs con TraceID"| CloudLogging
-        BackendPods -->|"Distributed Traces"| CloudTrace
+    subgraph GCP_Observability ["📊 Google Cloud Observability Suite"]
+        CloudLogging["Google Cloud Logging<br/>Severity: EMERGENCY / INFO / WARNING"]
+        CloudTrace["Google Cloud Trace<br/>Distributed Traces y Fatal Crashes"]
     end
 
+    %% Flujo Local y Git
+    Dev -->|"Prompts Técnicos Concisos (SDD)"| AGY
+    AGENTS_MD -.->|"Contexto y Arquitectura"| AGY
+    AGY -->|"Genera Dinámicamente Frontend, Backend y K8s"| GitRepo
+    GitRepo -->|"rtk git push origin main"| RemoteGit
+
+    %% Pipeline CI/CD
+    RemoteGit -->|"Webhook Push"| Trigger
+    Trigger --> TestStep
+    Trigger --> BuildFront
+    TestStep --> BuildBack
+    BuildFront --> TrivyStep
+    BuildBack --> TrivyStep
+    TrivyStep --> PushStep
+    PushStep --> DeployStep
+
+    %% Runtime y Servicios GKE
+    DeployStep -.->|"kubectl apply"| GCP_Runtime
+    GKE_Ingress -->|"Path: /"| FrontendSvc
+    GKE_Ingress -->|"Path: /api"| BackendSvc
+    FrontendSvc --> FrontendPods
+    BackendSvc --> BackendPods
+    ConfigSecrets -.-> BackendPods
+
+    %% Telemetria
+    BackendPods -->|"Structured Logs con TraceID"| CloudLogging
+    BackendPods -->|"Distributed Traces"| CloudTrace
+
+    %% Estilos de Subgrafos
     style Local fill:#f8fafc,stroke:#334155,stroke-width:2px
+    style GitHub fill:#f8fafc,stroke:#334155,stroke-width:2px
     style GCP_CI_CD fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px
     style GCP_Runtime fill:#ecfdf5,stroke:#047857,stroke-width:2px
     style GCP_Observability fill:#fef2f2,stroke:#b91c1c,stroke-width:2px
