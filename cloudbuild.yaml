@@ -1,5 +1,5 @@
 # Google Cloud Build — Pipeline GitOps CI/CD & DevSecOps (GCP 2026)
-# Caso de Uso: Retail Enterprise Platform
+# Caso de Uso: Retail Enterprise Platform.
 
 substitutions:
   _CLUSTER_NAME: "retail-private-cluster"
