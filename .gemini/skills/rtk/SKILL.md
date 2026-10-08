@@ -8,7 +8,7 @@ description: >-
 
 # ⚡ RTK (Rust Token Killer) Skill
 
-Este skill habilita y documenta el uso del proxy de alta velocidad **RTK (Rust Token Killer)** en sesiones de desarrollo y ejecución de terminal para Google Antigravity y desarrolladores de Tiendas D1.
+Este skill habilita y documenta el uso del proxy de alta velocidad **RTK (Rust Token Killer)** en sesiones de desarrollo y ejecución de terminal para Google Antigravity y desarrolladores de Retail Enterprise.
 
 ---
 

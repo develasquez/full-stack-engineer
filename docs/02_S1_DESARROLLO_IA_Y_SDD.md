@@ -1,7 +1,7 @@
 # Guía Práctica de Sesión 1: Desarrollo con IA & SDD (Specification-Driven Development)
 
 **Duración:** 60 Minutos (09:00 - 10:00)  
-**Audiencia:** Tech Leads, Desarrolladores Backend/Frontend, Arquitectos de Software de Tiendas D1  
+**Audiencia:** Tech Leads, Desarrolladores Backend/Frontend, Arquitectos de Software de Retail Enterprise  
 **Instructor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 **Insumos Base:**
 - Repositorio SDD Skill: [github.com/develasquez/sdd-skill](https://github.com/develasquez/sdd-skill)
@@ -13,7 +13,7 @@
 
 ## 1. Objetivos de Aprendizaje
 
-Al finalizar la primera hora del workshop, el equipo técnico de Tiendas D1 será capaz de:
+Al finalizar la primera hora del workshop, el equipo técnico de Retail Enterprise será capaz de:
 1. **Diferenciar el desarrollo asistido por IA reactivo ("vibe coding") del desarrollo determinista guiado por especificaciones (SDD - Specification-Driven Development).**
 2. **Dominar el ciclo de vida de especificación formal en Antigravity:** `/sdd-specify` $\to$ `/sdd-clarify` $\to$ `/sdd-plan` $\to$ `/sdd-tasks` $\to$ `/sdd-implement`.
 3. **Estructurar la gobernanza de agentes con `AGENTS.md` y `SKILL.md`**, garantizando que Antigravity actúe como un Tech Lead autónomo que no inventa requisitos ni rompe contratos de API.
@@ -26,7 +26,7 @@ Al finalizar la primera hora del workshop, el equipo técnico de Tiendas D1 ser�
 
 ```mermaid
 flowchart LR
-    A["Idea de Negocio D1\n(Ticket/Requerimiento)"] --> B["1. /sdd-specify\n(Spec Formal & Criterios)"]
+    A["Idea de Negocio Retail\n(Ticket/Requerimiento)"] --> B["1. /sdd-specify\n(Spec Formal & Criterios)"]
     B --> C["2. /sdd-clarify\n(Resolución de Ambigüedades)"]
     C --> D["3. /sdd-plan\n(Diseño Arquitectónico)"]
     D --> E["4. /sdd-tasks\n(Tareas Atómicas y TDD)"]
@@ -35,7 +35,7 @@ flowchart LR
 ```
 
 ### La Trampa del "Prompt Caótico" vs. SDD
-En 2026, los LLMs son capaces de generar miles de líneas de código en segundos. Sin embargo, en arquitecturas empresariales como las de Tiendas D1 (con cientos de tiendas, alta concurrencia y tolerancia cero a fallas de inventario), programar a base de prompts libres introduce:
+En 2026, los LLMs son capaces de generar miles de líneas de código en segundos. Sin embargo, en arquitecturas empresariales como las de Retail Enterprise (con cientos de tiendas, alta concurrencia y tolerancia cero a fallas de inventario), programar a base de prompts libres introduce:
 - **Alucinaciones arquitectónicas:** Métodos inventados, librerías deprecadas, contratos de datos rotos.
 - **Deuda técnica oculta:** Código que "parece funcionar" pero carece de validaciones de frontera o manejo de errores de concurrencia.
 - **Falta de trazabilidad:** Ningún miembro del equipo sabe qué criterios de negocio exactos rigen la lógica generada.
@@ -56,9 +56,9 @@ Basado en la experiencia documentada en la presentación *¡Bienvenido, Gravi!*:
 | **Gravi Tech Lead (Autónomo)** | Orquestación multi-agente, `AGENTS.md` estricto, MCPs conectados, validación CI local | Revisión de Pull Requests y Especificaciones | Mínimo (determinismo guiado por reglas) |
 
 ### Gobernanza con `AGENTS.md`
-En la raíz de cada proyecto de D1 debe residir un archivo `AGENTS.md` que impone las restricciones inviolables para Antigravity:
+En la raíz de cada proyecto de Retail debe residir un archivo `AGENTS.md` que impone las restricciones inviolables para Antigravity:
 ```markdown
-# AGENTS.md - Reglas para Tiendas D1
+# AGENTS.md - Reglas para Retail Enterprise
 
 ## 1. Convenciones de Código
 - Lenguaje: TypeScript 5.x estricto (strict: true, noImplicitAny: true).
@@ -77,7 +77,7 @@ En la raíz de cada proyecto de D1 debe residir un archivo `AGENTS.md` que impon
 ## 4. Laboratorio Hands-on Paso a Paso (40 minutos)
 
 ### Contexto de Negocio
-Vamos a construir y especificar el microservicio **`d1-inventory-service`**:
+Vamos a construir y especificar el microservicio **`retail-inventory-service`**:
 - Consulta de existencias por código EAN y ID de tienda.
 - Validación de stock crítico (< 10 unidades emite alerta estructurada).
 - Endpoint REST seguro documentado en OpenAPI 3.0.
@@ -104,7 +104,7 @@ git clone https://github.com/develasquez/sdd-skill.git .gemini/skills/sdd-skill
 El desarrollador introduce el requerimiento preliminar:
 
 ```markdown
-/sdd-specify Diseñar el microservicio de consulta y reserva de inventario para Tiendas D1.
+/sdd-specify Diseñar el microservicio de consulta y reserva de inventario para Retail Enterprise.
 Requisitos:
 - Buscar disponibilidad de producto por SKU/EAN y StoreID.
 - Soporte para transacciones concurrentes de reserva sin sobreventa.
@@ -120,7 +120,7 @@ Requisitos:
 ---
 
 ### Paso 3: Resolución de Ambigüedades con `/sdd-clarify`
-El agente interroga activamente al ingeniero de D1 sobre decisiones críticas de arquitectura:
+El agente interroga activamente al ingeniero de Retail sobre decisiones críticas de arquitectura:
 - *¿Qué estrategia de concurrencia se debe emplear en Cloud SQL? (Optimistic Locking con versión vs. SELECT FOR UPDATE)*
 - *¿Cuál es la política de caché para productos de alta rotación (leche, pan, huevos)?*
 
@@ -153,7 +153,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { ReserveStockUseCase } from '../../src/domain/use-cases/reserve-stock.use-case';
 import { InventoryRepository } from '../../src/domain/repositories/inventory.repository';
 
-describe('ReserveStockUseCase (Tiendas D1)', () => {
+describe('ReserveStockUseCase (Retail Enterprise)', () => {
   it('debe rechazar la reserva con 409 Conflict si la cantidad solicitada supera el stock disponible', async () => {
     const mockRepo: InventoryRepository = {
       findBySkuAndStore: vi.fn().mockResolvedValue({ sku: 'EAN7701234', storeId: 'TIENDA_BOG_102', stock: 5 }),
@@ -173,10 +173,10 @@ Una vez que los tests fallan de forma controlada (fase Roja de TDD), Antigravity
 
 ## 5. Front-end Moderno con Vanilla-Core y Material Design
 
-Para los portales administrativos y dashboards de operadores en tiendas D1, exploramos el paquete `vanilla-core-ui`:
+Para los portales administrativos y dashboards de operadores en Retail Enterprise, exploramos el paquete `vanilla-core-ui`:
 - **Single Source of Truth (`store.js`):** El estado de la tienda (sesión del cajero, productos escaneados, total) vive en un solo objeto inmutable.
 - **Renderizado Quirúrgico (Anti-Thrashing):** La interfaz nunca hace `innerHTML = ...` sobre contenedores con inputs activos, evitando perder el foco mientras el operador digita el código de barras.
-- **Tokens Material You (M3):** Integración nativa con la paleta de colores de D1 (rojo institucional, superficies neutras, contraste WCAG AAA).
+- **Tokens Material You (M3):** Integración nativa con la paleta de colores de Retail (rojo institucional, superficies neutras, contraste WCAG AAA).
 
 ---
 

@@ -1,7 +1,7 @@
 # Encuesta de Adopción, Madurez y Evaluación del Workshop
 
 **Evento:** Workshop Técnico: De la Especificación a Producción en GCP  
-**Cliente:** Tiendas D1  
+**Cliente:** Retail Enterprise  
 **Lugar:** Google Cloud Bogotá  
 **Instructor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 
@@ -9,7 +9,7 @@
 
 ## 1. Evaluación de Madurez Pre-Workshop vs. Post-Workshop
 
-Esta matriz permite al liderazgo técnico de Tiendas D1 medir el salto cualitativo del equipo antes y después de la capacitación de 4 horas:
+Esta matriz permite al liderazgo técnico de Retail Enterprise medir el salto cualitativo del equipo antes y después de la capacitación de 4 horas:
 
 | Dominio Técnico | Nivel Inicial (Típico) | Nivel Objetivo Post-Workshop | Métrica de Éxito |
 | :--- | :--- | :--- | :--- |
@@ -24,7 +24,7 @@ Esta matriz permite al liderazgo técnico de Tiendas D1 medir el salto cualitati
 ## 2. Formulario de Evaluación para Participantes (Google Forms / Tipo Likert)
 
 ### Sección 1: Perfil del Asistente
-- **Rol en Tiendas D1:**
+- **Rol en Retail Enterprise:**
   - [ ] Tech Lead / Arquitecto de Software
   - [ ] Desarrollador Backend
   - [ ] Desarrollador Frontend
@@ -40,7 +40,7 @@ Esta matriz permite al liderazgo técnico de Tiendas D1 medir el salto cualitati
 ### Sección 2: Calidad Técnica del Contenido (Escala 1 a 5)
 *(1: Totalmente en desacuerdo | 5: Totalmente de acuerdo)*
 
-1. **Relevancia para los desafíos reales de Tiendas D1:**
+1. **Relevancia para los desafíos reales de Retail Enterprise:**
    - *¿El caso práctico del microservicio de inventario y catálogo reflejó la complejidad que enfrentamos en tiendas físicas y comercio digital?*  
    `[ 1 ] [ 2 ] [ 3 ] [ 4 ] [ 5 ]`
 
@@ -67,7 +67,7 @@ Esta matriz permite al liderazgo técnico de Tiendas D1 medir el salto cualitati
 1. **¿Cuál fue el concepto o herramienta más valiosa que aprendiste hoy y que implementarás primero?**  
    *(Espacio libre para respuesta abierta)*
 
-2. **¿Qué iniciativa o microservicio de Tiendas D1 consideras el candidato ideal para un piloto de desarrollo con Antigravity y SDD durante las próximas 2 semanas?**  
+2. **¿Qué iniciativa o microservicio de Retail Enterprise consideras el candidato ideal para un piloto de desarrollo con Antigravity y SDD durante las próximas 2 semanas?**  
    *(Espacio libre para respuesta abierta)*
 
 3. **Sugerencias de profundización para futuros workshops técnicos de Axmos & Google Cloud:**  
@@ -82,7 +82,7 @@ Esta matriz permite al liderazgo técnico de Tiendas D1 medir el salto cualitati
 
 ```mermaid
 flowchart TD
-    Semana1["Semana 1: Estandarización\n- Publicar AGENTS.md en repositorios base de D1\n- Instalar Antigravity CLI y sdd-skill en máquinas de desarrollo"]
+    Semana1["Semana 1: Estandarización\n- Publicar AGENTS.md en repositorios base de Retail\n- Instalar Antigravity CLI y sdd-skill en máquinas de desarrollo"]
     Semana2["Semana 2: Piloto de Microservicio\n- Ejecutar ciclo SDD completo para 1 servicio real\n- Implementar logging estructurado con correlación Cloud Trace"]
     Semana3["Semana 3: Securización CI/CD y GKE\n- Migrar Dockerfiles existentes a Multi-stage Alpine\n- Configurar triggers de Cloud Build con escaneo de vulnerabilidades"]
     Semana4["Semana 4: Auditoría Zero-Trust\n- Eliminar todas las llaves de Service Accounts JSON\n- Habilitar Workload Identity y HPA en el clúster productivo"]

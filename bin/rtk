@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ==============================================================================
-# RTK Shim & Fallback (Tiendas D1 - Workshop GCP 2026)
+# RTK Shim & Fallback (Retail Enterprise - Workshop GCP 2026)
 # Si el binario oficial 'rtk' está instalado, lo ejecuta con optimización de tokens.
 # Si no está instalado, ejecuta transparentemente el comando nativo sin fallar.
 # ==============================================================================

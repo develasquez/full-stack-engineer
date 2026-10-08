@@ -1,7 +1,7 @@
 # Guía Práctica de Sesión 4: Kubernetes en Producción en Google Kubernetes Engine (GKE)
 
 **Duración:** 60 Minutos (12:00 - 13:00)  
-**Audiencia:** Tech Leads, Ingenieros DevOps/SRE, Desarrolladores Backend, Arquitectos Cloud de Tiendas D1  
+**Audiencia:** Tech Leads, Ingenieros DevOps/SRE, Desarrolladores Backend, Arquitectos Cloud de Retail Enterprise  
 **Instructor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 **Insumos Base:**
 - Repositorio Workload Identity: [github.com/develasquez/workload-identity-gke](https://github.com/develasquez/workload-identity-gke)
@@ -15,12 +15,12 @@
 
 ## 1. Objetivos de Aprendizaje
 
-Al finalizar la última hora del workshop, el equipo técnico de Tiendas D1 será capaz de:
+Al finalizar la última hora del workshop, el equipo técnico de Retail Enterprise será capaz de:
 1. **Comprender la evolución arquitectónica desde servidores físicos y VMs hasta la orquestación distribuida con Kubernetes en GKE.**
 2. **Diseñar manifiestos declarativos de producción con resiliencia de grado industrial:** `Deployment` con sondas *liveness* y *readiness*, límites y reservas estrictas de CPU/Memoria (`requests` y `limits`), y estrategias de *RollingUpdate* con cero tiempo fuera de servicio (*Zero-Downtime*).
 3. **Erradicar de raíz las llaves de cuentas de servicio en formato JSON mediante GKE Workload Identity**, vinculando de forma criptográfica un *Kubernetes Service Account* (KSA) con un *Google Cloud Service Account* (GSA).
 4. **Exponer servicios de forma segura y global mediante GKE Ingress**, configurando certificados SSL administrados automáticamente por Google (`ManagedCertificate`) y políticas de seguridad perimetral.
-5. **Implementar autoscaling dinámico y predecible mediante Horizontal Pod Autoscaler (HPA)**, definiendo ventanas de estabilización para absorber los picos de ventas de Tiendas D1 sin saturar la infraestructura ni incurrir en sobrecostos.
+5. **Implementar autoscaling dinámico y predecible mediante Horizontal Pod Autoscaler (HPA)**, definiendo ventanas de estabilización para absorber los picos de ventas de Retail Enterprise sin saturar la infraestructura ni incurrir en sobrecostos.
 
 ---
 
@@ -28,14 +28,14 @@ Al finalizar la última hora del workshop, el equipo técnico de Tiendas D1 ser�
 
 ```mermaid
 flowchart TD
-    Internet["Clientes POS Tiendas D1\n& App Móvil"] -->|HTTPS :443| LB["Google Cloud External HTTP(S) Load Balancer\n(IP Anycast Global)"]
+    Internet["Clientes POS Retail Enterprise\n& App Móvil"] -->|HTTPS :443| LB["Google Cloud External HTTP(S) Load Balancer\n(IP Anycast Global)"]
     
     subgraph GKECluster ["Google Kubernetes Engine (GKE Private Cluster)"]
-        Ingress["GKE Ingress Controller\n(ManagedCertificate SSL)"] -->|ClusterIP| Svc["Kubernetes Service\n(d1-inventory-svc:8080)"]
+        Ingress["GKE Ingress Controller\n(ManagedCertificate SSL)"] -->|ClusterIP| Svc["Kubernetes Service\n(retail-inventory-svc:8080)"]
         
         subgraph PodGroup ["ReplicaSet: Pods de Microservicio"]
-            Pod1["Pod 1: Inventory Container\n(KSA: ksa-d1-inventory)"]
-            Pod2["Pod 2: Inventory Container\n(KSA: ksa-d1-inventory)"]
+            Pod1["Pod 1: Inventory Container\n(KSA: ksa-retail-inventory)"]
+            Pod2["Pod 2: Inventory Container\n(KSA: ksa-retail-inventory)"]
             Pod3["Pod N: Inventory Container\n(Autoescalado por HPA)"]
         end
         
@@ -49,7 +49,7 @@ flowchart TD
     LB --> Ingress
 
     subgraph GCPCloud ["Servicios Nativos GCP (Zero-Trust)"]
-        GSA["Google Service Account (GSA)\ngsa-d1-inventory@project.iam..."]
+        GSA["Google Service Account (GSA)\ngsa-retail-inventory@project.iam..."]
         SecretMgr["Cloud Secret Manager"]
         CloudSQL["Cloud SQL (PostgreSQL)\n(Private IP VPC)"]
         GCS["Cloud Storage\n(Backups / Documentos)"]
@@ -75,19 +75,19 @@ Con **Workload Identity** (demostrado en el repositorio de Felipe Velásquez `wo
 ### Vinculación de Cuentas de Servicio (Comandos Reales):
 ```bash
 # 1. Crear el Service Account en Google Cloud (GSA)
-gcloud iam service-accounts create gsa-d1-inventory \
-    --display-name="GSA para microservicio de inventario D1"
+gcloud iam service-accounts create gsa-retail-inventory \
+    --display-name="GSA para microservicio de inventario Retail"
 
 # 2. Asignar roles mínimos necesarios a la GSA
 gcloud projects add-iam-policy-binding $(gcloud config get-value project) \
-    --member="serviceAccount:gsa-d1-inventory@$(gcloud config get-value project).iam.gserviceaccount.com" \
+    --member="serviceAccount:gsa-retail-inventory@$(gcloud config get-value project).iam.gserviceaccount.com" \
     --role="roles/secretmanager.secretAccessor"
 
 # 3. Vincular la Kubernetes Service Account (KSA) con la GSA (Workload Identity User)
 gcloud iam service-accounts add-iam-policy-binding \
-    gsa-d1-inventory@$(gcloud config get-value project).iam.gserviceaccount.com \
+    gsa-retail-inventory@$(gcloud config get-value project).iam.gserviceaccount.com \
     --role="roles/iam.workloadIdentityUser" \
-    --member="serviceAccount:$(gcloud config get-value project).svc.id.goog[default/ksa-d1-inventory]"
+    --member="serviceAccount:$(gcloud config get-value project).svc.id.goog[default/ksa-retail-inventory]"
 ```
 
 ---
@@ -99,10 +99,10 @@ gcloud iam service-accounts add-iam-policy-binding \
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ksa-d1-inventory
+  name: ksa-retail-inventory
   namespace: default
   annotations:
-    iam.gke.io/gcp-service-account: gsa-d1-inventory@PROJECT_ID.iam.gserviceaccount.com
+    iam.gke.io/gcp-service-account: gsa-retail-inventory@PROJECT_ID.iam.gserviceaccount.com
 ```
 
 ---
@@ -112,10 +112,10 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: d1-inventory-deployment
+  name: retail-inventory-deployment
   namespace: default
   labels:
-    app: d1-inventory
+    app: retail-inventory
     tier: backend
 spec:
   replicas: 2
@@ -126,16 +126,16 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: d1-inventory
+      app: retail-inventory
   template:
     metadata:
       labels:
-        app: d1-inventory
+        app: retail-inventory
     spec:
-      serviceAccountName: ksa-d1-inventory
+      serviceAccountName: ksa-retail-inventory
       containers:
         - name: inventory-api
-          image: us-east1-docker.pkg.dev/PROJECT_ID/d1-apps/inventory-service:latest
+          image: us-east1-docker.pkg.dev/PROJECT_ID/retail-apps/inventory-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -173,7 +173,7 @@ spec:
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: d1-inventory-cert
+  name: retail-inventory-cert
   namespace: default
 spec:
   domains:
@@ -182,12 +182,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: d1-inventory-svc
+  name: retail-inventory-svc
   namespace: default
 spec:
   type: ClusterIP
   selector:
-    app: d1-inventory
+    app: retail-inventory
   ports:
     - port: 8080
       targetPort: 8080
@@ -195,11 +195,11 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: d1-inventory-ingress
+  name: retail-inventory-ingress
   namespace: default
   annotations:
     kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: "d1-inventory-cert"
+    networking.gke.io/managed-certificates: "retail-inventory-cert"
 spec:
   rules:
     - host: api-inventario.tiendasd1.com
@@ -209,7 +209,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: d1-inventory-svc
+                name: retail-inventory-svc
                 port:
                   number: 8080
 ```
@@ -221,13 +221,13 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: d1-inventory-hpa
+  name: retail-inventory-hpa
   namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: d1-inventory-deployment
+    name: retail-inventory-deployment
   minReplicas: 2
   maxReplicas: 10
   metrics:
@@ -278,13 +278,13 @@ kubectl apply -f hpa.yaml
 Entramos a una shell interactiva en el Pod en ejecución para comprobar que accede a Google Cloud Storage o Secret Manager sin llaves montadas:
 ```bash
 # Ejecutar comando en el Pod
-kubectl exec -it $(kubectl get pods -l app=d1-inventory -o jsonpath='{.items[0].metadata.name}') -- \
+kubectl exec -it $(kubectl get pods -l app=retail-inventory -o jsonpath='{.items[0].metadata.name}') -- \
     node -e "
       const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
       const client = new SecretManagerServiceClient();
       async function test() {
         console.log('✅ Conectando a Secret Manager mediante Workload Identity...');
-        const [version] = await client.accessSecretVersion({ name: 'projects/PROJECT_ID/secrets/d1-db-credentials/versions/latest' });
+        const [version] = await client.accessSecretVersion({ name: 'projects/PROJECT_ID/secrets/retail-db-credentials/versions/latest' });
         console.log('🔒 Acceso exitoso sin llaves JSON!');
       }
       test().catch(console.error);
@@ -297,12 +297,12 @@ Utilizamos un generador de tráfico ligero para estresar el servicio:
 # Ejecutar un generador de peticiones masivas
 kubectl run -i --tty load-generator --rm --image=busybox:1.36 --restart=Never -- /bin/sh -c "
   while true; do 
-    wget -q -O- http://d1-inventory-svc:8080/health; 
+    wget -q -O- http://retail-inventory-svc:8080/health; 
   done
 "
 
 # Monitorear la reacción del HPA en otra terminal
-kubectl get hpa d1-inventory-hpa --watch
+kubectl get hpa retail-inventory-hpa --watch
 ```
 *Salida observada:* El HPA detecta el incremento de CPU (> 70%) y escala automáticamente las réplicas de 2 a 4, luego a 8 Pods en menos de 90 segundos.
 

@@ -1,7 +1,7 @@
 # Guía Práctica de Sesión 2: Gestión y Seguridad de APIs en GCP
 
 **Duración:** 60 Minutos (10:00 - 11:00)  
-**Audiencia:** Tech Leads, Desarrolladores Backend, Arquitectos de Seguridad de Tiendas D1  
+**Audiencia:** Tech Leads, Desarrolladores Backend, Arquitectos de Seguridad de Retail Enterprise  
 **Instructor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 **Insumos Base:**
 - Repositorio Backend GCP: [github.com/develasquez/gcp-back-end-example](https://github.com/develasquez/gcp-back-end-example)
@@ -12,11 +12,11 @@
 
 ## 1. Objetivos de Aprendizaje
 
-Al finalizar esta sesión, el equipo de Tiendas D1 dominará:
-1. **Diferenciar con precisión arquitectónica un simple API Gateway (como Kong) de una plataforma de API Management empresarial (como Google Cloud Apigee)**, entendiendo por qué el crecimiento de Tiendas D1 requiere gobernanza de ciclo de vida completo, Developer Portal, analítica de negocio y seguridad basada en Machine Learning.
+Al finalizar esta sesión, el equipo de Retail Enterprise dominará:
+1. **Diferenciar con precisión arquitectónica un simple API Gateway (como Kong) de una plataforma de API Management empresarial (como Google Cloud Apigee)**, entendiendo por qué el crecimiento de Retail Enterprise requiere gobernanza de ciclo de vida completo, Developer Portal, analítica de negocio y seguridad basada en Machine Learning.
 2. **Publicar APIs autodocumentadas bajo el estándar OpenAPI 3.0 (Swagger)** integradas de forma nativa en Clean Architecture con TypeScript.
 3. **Implementar autenticación y autorización Zero-Trust mediante Google Identity Platform y Apigee**, validando tokens JWT Bearer y decodificando claims de rol (`store_supervisor`, `cashier`, `inventory_admin`).
-4. **Diseñar e implementar políticas avanzadas de tráfico en Apigee (Spike Arrest vs. Quota Management)** y rate limiting a nivel de backend para blindar los microservicios de D1 contra saturación y DDoS.
+4. **Diseñar e implementar políticas avanzadas de tráfico en Apigee (Spike Arrest vs. Quota Management)** y rate limiting a nivel de backend para blindar los microservicios de Retail contra saturación y DDoS.
 5. **Implementar Observabilidad de Nivel Empresarial con Cloud Logging y Cloud Trace**, utilizando el formato JSON nativo de GCP para rastrear la latencia de cada transacción y correlacionar peticiones distribuidas.
 6. **Gestionar secretos de forma segura con Google Secret Manager**, eliminando credenciales en plano o en variables de entorno de build.
 
@@ -27,7 +27,7 @@ Al finalizar esta sesión, el equipo de Tiendas D1 dominará:
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Cliente as App D1 / POS / Proveedores B2B
+    actor Cliente as App Retail / POS / Proveedores B2B
     participant Apigee as Google Cloud Apigee (API Management)
     participant Auth as Google Identity Platform
     participant PSC as Private Service Connect (VPC Peering)
@@ -53,7 +53,7 @@ sequenceDiagram
 
 ## 3. Arquitectura Estratégica: Google Cloud Apigee vs. Kong API Gateway
 
-Para una cadena de retail de escala nacional como **Tiendas D1** (con miles de puntos de venta físicos, terminales POS, aplicaciones de domicilios, proveedores logísticos y banca aliada), la decisión entre un **API Gateway** y una **Plataforma Integral de API Management** define la estabilidad y escalabilidad del negocio.
+Para una cadena de retail de escala nacional como **Retail Enterprise** (con miles de puntos de venta físicos, terminales POS, aplicaciones de domicilios, proveedores logísticos y banca aliada), la decisión entre un **API Gateway** y una **Plataforma Integral de API Management** define la estabilidad y escalabilidad del negocio.
 
 ### A. La Brecha Conceptual: Gateway Técnico vs. API Management Empresarial
 
@@ -79,26 +79,26 @@ flowchart TD
 ```
 
 - **Kong (API Gateway):** Es un componente de infraestructura de red a nivel de capa 7 (construido sobre NGINX/Envoy). Su foco es puramente técnico: *¿cómo enruto un paquete HTTP del cliente A al microservicio B?*. Carece de herramientas nativas para gobernanza corporativa, empaquetado de productos, autoservicio de proveedores o detección de anomalías por Machine Learning.
-- **Google Cloud Apigee:** Es una plataforma de gestión integral orientada al negocio. Trata a las APIs como **Productos Digitales**. Proporciona el ecosistema completo para diseñar, asegurar, gobernar, publicar y monetizar interfaces entre los sistemas de D1 y sus consumidores (internos y externos).
+- **Google Cloud Apigee:** Es una plataforma de gestión integral orientada al negocio. Trata a las APIs como **Productos Digitales**. Proporciona el ecosistema completo para diseñar, asegurar, gobernar, publicar y monetizar interfaces entre los sistemas de Retail y sus consumidores (internos y externos).
 
 ---
 
 ### B. Matriz Comparativa: Apigee (X/Hybrid) vs. Kong Gateway
 
-| Dimensión Técnica y de Negocio | Kong (API Gateway) | Google Cloud Apigee (API Manager) | Impacto Crítico para Tiendas D1 |
+| Dimensión Técnica y de Negocio | Kong (API Gateway) | Google Cloud Apigee (API Manager) | Impacto Crítico para Retail Enterprise |
 | :--- | :--- | :--- | :--- |
 | **Gobernanza y Ciclo de Vida** | Manual (requiere orquestación externa en CI/CD y plugins de terceros). | Ciclo completo nativo: Diseño OpenAPI, validación semántica, versionamiento, deprecación ordenada. | Auditoría y control de cambios sobre APIs críticas (Precios, Inventario, Nómina). |
-| **Portal de Desarrolladores** | Básico o dependiente de licencias Enterprise de alto costo con configuración ad-hoc. | **Developer Portal integrado de autoservicio** con gestión de credenciales, roles RBAC y documentación interactiva. | Los proveedores y aliados logísticos de D1 se autoservician llaves de API sin generar tickets a DevOps. |
-| **Seguridad con IA (Advanced API Security)** | Reglas estáticas WAF y rate limits por IP. Vulnerable a bots distribuidos. | **Modelos de Machine Learning entrenados por Google** que detectan abuso, *scraping* masivo de precios, y *credential stuffing*. | Protección del catálogo de precios de D1 frente a competidores y bots de extracción. |
-| **Control de Tráfico Granular** | Rate limiting simple basado en contadores en Redis. | **Separación nativa de `SpikeArrest` vs. `Quota`:** suavizado milisegundo a milisegundo anti-shock + cuotas contractuales. | Evita caídas en cadena (*cascading failures*) en cajas POS durante promociones masivas (Black Friday, Días D1). |
+| **Portal de Desarrolladores** | Básico o dependiente de licencias Enterprise de alto costo con configuración ad-hoc. | **Developer Portal integrado de autoservicio** con gestión de credenciales, roles RBAC y documentación interactiva. | Los proveedores y aliados logísticos de Retail se autoservician llaves de API sin generar tickets a DevOps. |
+| **Seguridad con IA (Advanced API Security)** | Reglas estáticas WAF y rate limits por IP. Vulnerable a bots distribuidos. | **Modelos de Machine Learning entrenados por Google** que detectan abuso, *scraping* masivo de precios, y *credential stuffing*. | Protección del catálogo de precios de Retail frente a competidores y bots de extracción. |
+| **Control de Tráfico Granular** | Rate limiting simple basado en contadores en Redis. | **Separación nativa de `SpikeArrest` vs. `Quota`:** suavizado milisegundo a milisegundo anti-shock + cuotas contractuales. | Evita caídas en cadena (*cascading failures*) en cajas POS durante promociones masivas (Black Friday, Días de Alta Promoción). |
 | **Empaquetado de APIs (API Products)** | No disponible de forma nativa. Solo mapeo URL $\to$ Upstream. | Creación de **API Products** que agrupan recursos de múltiples microservicios con cuotas y SLAs específicos. | Permite ofrecer una "API de Proveedores" con cuota de 50.000 req/mes y una "API de Cajas POS" ilimitada y prioritaria. |
 | **Mediación y Transformación** | Limitado a plugins de reescritura de cabeceras o scripts Lua complejos. | **Motor de Políticas Out-of-the-Box:** Transformación bidireccional XML $\leftrightarrow$ JSON, validación JSON Schema, SOAP $\to$ REST. | Interconexión inmediata con el ERP central heredado (SAP / AS400) sin reescribir microservicios en GKE. |
 | **Analítica y Métricas** | Métricas de red y transporte (códigos HTTP 200/500, latencias en Prometheus). | **Business Analytics:** Métricas de negocio correlacionadas (volumen transaccional por tienda, errores por tipo de producto, SLAs B2B). | Los gerentes de operaciones y tecnología ven en tiempo real el comportamiento comercial de las APIs. |
-| **Arquitectura Híbrida** | Kong Gateway local/K8s. | **Apigee Hybrid:** El plano de datos (runtime) corre en GKE privado o en datacenters de D1; el plano de control y analítica vive administrado en GCP. | Cumplimiento estricto de latencia ultrabaja en tiendas y soberanía de datos locales. |
+| **Arquitectura Híbrida** | Kong Gateway local/K8s. | **Apigee Hybrid:** El plano de datos (runtime) corre en GKE privado o en datacenters de Retail; el plano de control y analítica vive administrado en GCP. | Cumplimiento estricto de latencia ultrabaja en tiendas y soberanía de datos locales. |
 
 ---
 
-### C. Políticas Declarativas de Apigee para Tiendas D1 (Snippets XML de Producción)
+### C. Políticas Declarativas de Apigee para Retail Enterprise (Snippets XML de Producción)
 
 Apigee desacopla la seguridad de la lógica de código mediante políticas declarativas configurables en el proxy:
 
@@ -327,18 +327,18 @@ export function createRequestLogger(req: any) {
 
 ### Paso 1: Configurar el Repositorio Base
 ```bash
-git clone https://github.com/develasquez/gcp-back-end-example.git d1-backend
-cd d1-backend
+git clone https://github.com/develasquez/gcp-back-end-example.git retail-backend
+cd retail-backend
 npm install
 ```
 
 ### Paso 2: Inyectar Secretos de Cloud Secret Manager
 Demostramos el script de aprovisionamiento de `gcp-setup-example`:
 ```bash
-# Crear el secreto en Secret Manager para la base de datos de Tiendas D1
-gcloud secrets create d1-db-credentials \
+# Crear el secreto en Secret Manager para la base de datos de Retail Enterprise
+gcloud secrets create retail-db-credentials \
     --replication-policy="automatic" \
-    --data-file="<(echo -n '{\"user\":\"postgres\",\"password\":\"SuperSecretD1_2026\",\"host\":\"10.128.0.5\"}')"
+    --data-file="<(echo -n '{\"user\":\"postgres\",\"password\":\"SuperSecretRetail_2026\",\"host\":\"10.128.0.5\"}')"
 ```
 
 En la aplicación, se consume el secreto en el arranque sin persistirlo en disco:
@@ -349,7 +349,7 @@ const client = new SecretManagerServiceClient();
 
 export async function getDatabaseCredentials(): Promise<{ user: string; pass: string; host: string }> {
   const [version] = await client.accessSecretVersion({
-    name: 'projects/d1-prod/secrets/d1-db-credentials/versions/latest',
+    name: 'projects/d1-prod/secrets/retail-db-credentials/versions/latest',
   });
   const payload = version.payload?.data?.toString() || '{}';
   return JSON.parse(payload);

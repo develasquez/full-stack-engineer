@@ -1,11 +1,11 @@
 # 🚀 Workshop Hands-on: Modernización Cloud Native & AI-Assisted Engineering con GCP 2026
-## Formato Cloud Skills Boost / Qwiklabs — Tiendas D1 Bogotá
+## Formato Cloud Skills Boost / Qwiklabs — Caso de Uso: Arquitectura Retail Enterprise
 
 > **Duración estimada:** 4 Horas  
 > **Nivel:** Intermedio - Avanzado  
 > **Audiencia:** Desarrolladores Full-Stack, Arquitectos Cloud, Tech Leads, DevOps/SRE  
 > **Filosofía de Despliegue:** **GitOps Puro**. Queda prohibido el despliegue manual mediante Cloud SDK local (`gcloud run deploy` / `gcloud compute`). Todo cambio de código o infraestructura se define declarativamente y se despliega automáticamente mediante **Git -> Google Cloud Build -> GKE**.  
-> **Contrato de Gobernanza:** Antes de comenzar, familiarízate con [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md), el archivo maestro que define las reglas de arquitectura y previene alucinaciones en Antigravity.
+> **Contrato de Gobernanza:** Antes de comenzar, revisa [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md). Como todas las directivas técnicas ya están consolidadas allí, **los prompts para Antigravity no necesitan repetir especificaciones técnicas ni boilerplate**, sino únicamente la intención y requerimientos de negocio de cada ciclo.
 
 ---
 
@@ -19,9 +19,9 @@ flowchart TD
         AGY["🤖 Antigravity CLI (agy)<br/>Skills: SDD + Vanilla-Core + Material + RTK"]
         GitRepo["Git Repository (Local)"]
         
-        Dev -->|"Prompts Técnicos Paso a Paso"| AGY
-        AGENTS_MD -.->|"Contexto & Restricciones"| AGY
-        AGY -->|"Genera Código & Manifiestos"| GitRepo
+        Dev -->|"Prompts Técnicos Concisos (SDD)"| AGY
+        AGENTS_MD -.->|"Contexto & Arquitectura"| AGY
+        AGY -->|"Genera Dinámicamente Frontend, Backend & K8s"| GitRepo
     end
 
     subgraph GitHub["🐙 Control de Versiones"]
@@ -35,7 +35,7 @@ flowchart TD
         BuildFront["Step 2: Build Frontend Docker (waitFor: -)"]
         BuildBack["Step 3: Build Backend Docker (waitFor: test-backend)"]
         TrivyStep["Step 4 & 5: Aqua Trivy Security Scan"]
-        PushStep["Step 6: Push a Artifact Registry (d1-docker-repo)"]
+        PushStep["Step 6: Push a Artifact Registry (retail-docker-repo)"]
         DeployStep["Step 7 & 8: Deploy Declarativo a GKE (kubectl apply)"]
         
         RemoteGit -->|"Webhook Push"| Trigger
@@ -53,9 +53,9 @@ flowchart TD
             GKE_Ingress["Google Cloud Ingress (HTTP/S LB)<br/>Container-Native (NEG)"]
         end
         
-        subgraph Namespace["Namespace: tiendas-d1"]
-            FrontendSvc["d1-frontend-svc (Port 80)"]
-            BackendSvc["d1-backend-svc (Port 8080)"]
+        subgraph Namespace["Namespace: retail-store"]
+            FrontendSvc["retail-frontend-svc (Port 80)"]
+            BackendSvc["retail-backend-svc (Port 8080)"]
             
             FrontendPods["Pods Frontend (Vanilla-Core UI)<br/>Replicas: 2"]
             BackendPods["Pods Backend (Node.js/TS Clean Arch)<br/>Replicas: 2 a 10 (HPA)"]
@@ -87,185 +87,214 @@ flowchart TD
 
 ## 📑 Agenda del Workshop (4 Horas)
 
-| Módulo | Tema Clave | Entregable / Capacidad | Duración |
+| Módulo | Tema Clave | Ciclo / Entregable | Duración |
 | :--- | :--- | :--- | :--- |
-| **Lab 00** | Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK | Entorno listo con ahorro de tokens | 15 min |
-| **Lab 01** | Instalación de Skills Especializados 2026 (`sdd-skill`, `vanilla-core-ui`, `material-design`) | Habilidades de IA cargadas | 15 min |
-| **Lab 02** | Especificación Contractual con SDD (`/sdd-specify`) | `specs/d1-retail-platform.spec.md` | 25 min |
-| **Lab 03** | Generación Asistida del Backend (Clean Architecture, Structured Logger & Chaos Endpoint) | `backend/src/` completo | 30 min |
-| **Lab 04** | Pruebas Unitarias de Negocio y Caos con Vitest | `backend/tests/*.test.ts` pasando | 20 min |
-| **Lab 05** | Generación Asistida del Frontend (Vanilla-Core UI + Material Design 3) | `frontend/` sin dependencias pesadas | 30 min |
-| **Lab 06** | Contenerización Multi-Stage Segura (Dockerfiles Non-Root) | `Dockerfile` en backend y frontend | 20 min |
-| **Lab 07** | Pipeline DevSecOps en Cloud Build (DAG `waitFor` & Escaneo Aqua Trivy) | `cloudbuild.yaml` con orden de ejecución | 25 min |
-| **Lab 08** | Manifiestos Declarativos para GKE Private Cluster (NEG, Ingress, Probes, ConfigMap, Secret) | `k8s/*.yaml` listos | 25 min |
-| **Lab 09** | Escalabilidad Elástica con Horizontal Pod Autoscaler (HPA v2) | `k8s/hpa.yaml` con auto-tuning | 15 min |
-| **Lab 10** | Activación del Flujo GitOps (Push a GitHub -> Cloud Build -> GKE) | Despliegue automático sin Cloud SDK | 20 min |
-| **Lab 11** | Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting en Cloud Trace y Logging | Resiliencia en vivo y análisis forense | 20 min |
+| **Lab 00** | Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK | Setup del entorno y ahorro de tokens | 20 min |
+| **Lab 01** | Inicialización de Skills con `npx` y Antigravity | Carga de `sdd-skill`, `vanilla-core-ui`, `material-design` | 15 min |
+| **Lab 02** | Ciclo SDD 1: Frontend SPA (Vanilla-Core UI + Material Design 3) | Generación dinámica de `frontend/` mediante SDD | 35 min |
+| **Lab 03** | Ciclo SDD 2: Backend Microservicio (Clean Architecture, TS & Chaos) | Generación dinámica de `backend/` y tests unitarios | 40 min |
+| **Lab 04** | Ciclo SDD 3: DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s) | Generación dinámica de `cloudbuild.yaml`, Dockerfiles y `k8s/` | 35 min |
+| **Lab 05** | Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE) | Disparo del pipeline automatizado sin Cloud SDK local | 25 min |
+| **Lab 06** | Validación de Ingress L7 & Navegación en la Tienda Retail | Verificación de enrutamiento y compras en vivo | 20 min |
+| **Lab 07** | Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting | Resiliencia Kubelet, Google Cloud Logging y Cloud Trace | 30 min |
+| **Lab 08** | Retrospectiva de Adopción & Cierre | Encuesta y roadmap de ingeniería 2026 | 20 min |
 
 ---
 
-## 🛠️ Lab 00: Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK
+## 🛠️ Lab 00: Setup del Entorno, Gobernanza con `AGENTS.md` & Token Killer RTK
 
 ### 🎯 Objetivo
-Configurar el entorno con la herramienta oficial de pair programming de Google: **Antigravity CLI (`agy`)**, activar el optimizador de tokens **RTK (Rust Token Killer)** para no agotar la ventana de contexto de los modelos, y revisar el contrato maestro de gobernanza [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md).
+Configurar el entorno con la herramienta oficial de pair programming de Google: **Antigravity CLI (`agy`)**, activar el optimizador de tokens **RTK (Rust Token Killer)** para no saturar la ventana de contexto de los modelos, y verificar el contrato maestro de gobernanza [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md).
 
-### ⚡ RTK: Token Killer y Shim de Compatibilidad
-Para que cualquier usuario que clone este repositorio pueda ejecutar comandos sin fallos de terminal:
-- El repositorio incluye el shim transparente [`bin/rtk`](file:///Users/felipe/Desarrollo/full-stack-engineer/bin/rtk).
-- Si `rtk` binario oficial no está en la máquina, el shim ejecuta el comando nativo de forma transparente.
+### ⚡ RTK: Optimización de Tokens y Shim Portable
+El repositorio incluye el shim [`bin/rtk`](file:///Users/felipe/Desarrollo/full-stack-engineer/bin/rtk). Todo comando en terminal (`git`, `npm`, `kubectl`, etc.) debe ejecutarse con el prefijo `rtk` para reducir entre 60% y 90% el consumo de tokens.
 
 ```bash
-# 1. Verificar o instalar Antigravity CLI
+# 1. Instalar o verificar Antigravity CLI globalmente
 rtk npm install -g @google/antigravity-cli
 
 # 2. Validar versión de Antigravity CLI
 rtk agy --version
 
-# 3. Opcional: Instalar el binario oficial de RTK (macOS/Linux)
-# brew install rtk  (o curl -fsSL https://www.rtk-ai.app/install.sh | sh)
+# 3. Comprobar ahorro y estado de RTK
 rtk gain
 ```
 
-### 🤖 Prompt para Antigravity: Validación Inicial del Entorno
-Copia y pega este prompt en la sesión interactiva de Antigravity:
+### 🤖 Prompt para Antigravity: Validación del Contrato de Gobernanza
+Copia y pega este prompt en Antigravity:
 
 ```text
-Lee el archivo AGENTS.md en la raíz de este repositorio. Confirma que entiendes todos los principios de gobernanza del proyecto:
-1. Filosofía SDD para diseño de software antes de generar código.
-2. Despliegue exclusivamente mediante GitOps (cero comandos de despliegue local con Cloud SDK).
-3. Uso estricto del prefijo 'rtk' en comandos de terminal.
-4. Clean Architecture para backend con Node.js 20/TypeScript y observabilidad estructurada de Google Cloud.
-5. Vanilla-Core UI con Material Design 3 para frontend sin frameworks pesados.
-Dame un resumen ejecutivo confirmando tu preparación para asistir al equipo de Tiendas D1.
+Lee el archivo AGENTS.md en la raíz de este proyecto. Confirma que reconoces las directivas obligatorias de arquitectura para nuestro caso de uso de Retail Enterprise:
+- Especificación formal contractual previa (SDD) en cada capa.
+- Despliegue GitOps puro con Cloud Build (cero despliegues manuales desde Cloud SDK local).
+- Backend con Clean Architecture, observabilidad estructurada de Google Cloud y endpoint de Caos.
+- Frontend con Vanilla-Core UI (SSoT store.js, Pub/Sub, surgical rendering) y Material Design 3.
+- Manifiestos GKE con Container-Native Load Balancing (NEG) y ordenamiento DAG en Cloud Build.
+Confirma brevemente que estás listo para iniciar el primer ciclo SDD.
 ```
 
 ---
 
-## 📦 Lab 01: Instalación de Skills Especializados 2026
+## 📦 Lab 01: Inicialización de Skills con `npx` y Antigravity
 
 ### 🎯 Objetivo
-Cargar en Antigravity los skills necesarios para asistir al equipo de Tiendas D1 en desarrollo guiado por especificaciones (**SDD**) y diseño frontend ultraligero (**Vanilla-Core UI & Material Design 3**).
+Habilitar las capacidades avanzadas de Antigravity para desarrollo guiado por especificaciones (**SDD**) y renderizado frontend reactivo ultra ligero sin frameworks pesados (**Vanilla-Core UI & Material Design 3**).
 
 ### 💻 Comandos en Terminal
 ```bash
-# 1. Instalar el skill oficial de SDD
+# 1. Instalar el skill oficial de SDD en Antigravity
 rtk agy skill install https://github.com/develasquez/sdd-skill.git
 
-# 2. Instalar librerías de Vanilla-Core y Material Design 3
-rtk npm install vanilla-core-ui @develasquez/material-design
+# 2. Inicializar los skills de frontend mediante npx
+npx vanilla-core-ui --help
+npx @develasquez/material-design --help
 ```
 
-### 🤖 Prompt para Antigravity: Activación de Skills
+### 🤖 Prompt para Antigravity: Verificación de Skills
 ```text
-Verifica la disponibilidad de los siguientes skills en el workspace:
-- 'sdd-skill': Para gestionar comandos /sdd-specify, /sdd-clarify, /sdd-plan y /sdd-implement.
-- 'vanilla-core-ui': Para generar componentes basados en Single Source of Truth (store.js) y renderizado quirúrgico.
-- '@develasquez/material-design': Para aplicar tokens de diseño de Material Design 3 (M3).
-- 'rtk': Para optimización de terminal.
-Genera un checklist confirmando que los skills están listos para ser invocados en los siguientes laboratorios.
+Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-design' estén disponibles en el workspace. Confirma que podemos ejecutar comandos /sdd-specify para generar la arquitectura paso a paso.
 ```
 
 ---
 
-## 🧩 Lab 02: Especificación Contractual con SDD (`/sdd-specify`)
+## 🎨 Lab 02: Ciclo SDD 1 — Frontend SPA (Vanilla-Core UI + Material Design 3)
 
 ### 🎯 Objetivo
-Superar el "vibe coding" caótico. En el 2026 en Tiendas D1 definimos primero la especificación formal del sistema en [`specs/d1-retail-platform.spec.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/specs/d1-retail-platform.spec.md). Antigravity utiliza esta especificación como la verdad absoluta para construir la arquitectura sin supuestos inventados.
+Construir dinámicamente la aplicación web para los operadores de la tienda de Retail, aplicando el ciclo formal SDD de 5 pasos. La aplicación debe ser reactiva, accesible y libre de frameworks pesados (cero dependencias de React/Angular/Vue).
 
-### 🤖 Prompt para Antigravity: Generación de la Especificación Formal
-Copia y pega este comando/prompt en Antigravity:
-
-```text
-/sdd-specify Genera la especificación formal contractual en specs/d1-retail-platform.spec.md para la plataforma de inventario de Tiendas D1 Bogotá con dos proyectos desacoplados (backend/ y frontend/):
-
-Requerimientos Funcionales y No Funcionales:
-1. Backend (Microservicio Node.js 20 + TypeScript + Clean Architecture):
-   - Modelo de dominio 'Product' con SKU, nombre, categoría, precio, stock disponible y tienda ID.
-   - Caso de uso 'ReserveStockUseCase': decrementa el stock atómicamente si hay existencias; lanza 'InsufficientStockError' (HTTP 400) si el pedido supera el stock; lanza 'ProductNotFoundError' (HTTP 404) si el SKU no existe.
-   - Endpoint de Caos 'ChaosUseCase' en POST /api/v1/chaos/crash: emite un log estructurado con severidad EMERGENCY y stack trace en formato Google Cloud Logging, y ejecuta process.exit(1) para forzar la muerte del Pod y evaluar la auto-recuperación de GKE.
-   - Logger estructurado 'StructuredLogger' que exporte métodos info(), warn(), error() y emergency() inyectando el campo 'logging.googleapis.com/trace'.
-   - Suite de pruebas unitarias con Vitest.
-
-2. Frontend (Single Page Application Vanilla-Core UI + Material Design 3):
-   - Almacén reactivo store.js (SSoT) con patrón Pub/Sub.
-   - Mapeo de selectores en dom-elements.js y renderizado quirúrgico anti-thrashing en ui/renderer.js.
-   - Componentes: Header con badge de tienda D1, Catálogo con botones reactivos de reserva de stock, y Panel de Caos para detonar la falla fatal con feedback visual.
-   - Servidor estático Express en puerto 80 con endpoint /health.
-
-3. Restricciones de Despliegue:
-   - Todo desplegable debe correr en GKE Private Cluster con Container-Native Load Balancing (NEG).
-   - El pipeline CI/CD en Cloud Build debe validar tests, compilar imágenes multi-stage y escanear con Aqua Trivy antes de aplicar manifiestos.
-```
-
-### 🔍 Verificación
-Inspecciona el archivo formal generado en [`specs/d1-retail-platform.spec.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/specs/d1-retail-platform.spec.md).
+> 💡 **Nota de Gobernanza:** Como [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md) ya define la estructura de carpetas de `frontend/`, el patrón SSoT de `store.js`, el renderizado quirúrgico y el puerto 80 con `/health`, los prompts no repiten esas especificaciones técnicas.
 
 ---
 
-## ☕ Lab 03: Generación Asistida del Backend (Clean Architecture, Structured Logger & Chaos Endpoint)
+### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend)
+Pega el siguiente prompt en Antigravity:
 
-### 🎯 Objetivo
-Construir el microservicio de backend aplicando los principios de Clean Architecture y la integración nativa con Google Cloud Logging.
-
-### 🤖 Prompt para Antigravity: Implementación del Backend
 ```text
-Basándote estrictamente en specs/d1-retail-platform.spec.md y las directivas de AGENTS.md, genera el código del microservicio en backend/:
-
-1. src/domain/entities/product.entity.ts:
-   - Interface Product y tipo Category.
-2. src/domain/errors/inventory.errors.ts:
-   - Clases InsufficientStockError y ProductNotFoundError heredando de Error.
-3. src/domain/use-cases/reserve-stock.use-case.ts:
-   - Implementa ReserveStockUseCase validando stock, descontando la cantidad solicitada y emitiendo logs INFO o WARNING.
-4. src/domain/use-cases/chaos.use-case.ts:
-   - Implementa ChaosUseCase con método triggerFatalCrash(reason: string) que registre un log EMERGENCY con stack trace forense y llame a process.exit(1) tras 100ms.
-5. src/infrastructure/logger/structured-logger.ts:
-   - Clase StructuredLogger que formatee cada log en JSON con los campos estándar de Google Cloud: 'severity', 'message', 'timestamp', 'logging.googleapis.com/trace', 'serviceContext' y 'sourceLocation'.
-6. src/infrastructure/http/server.ts y src/index.ts:
-   - Servidor Express en puerto 8080 con endpoints GET /health, GET /ready, GET /api/v1/inventory, POST /api/v1/inventory/reserve y POST /api/v1/chaos/crash.
-   - Manejador global de excepciones que traduzca InsufficientStockError a 400 y ProductNotFoundError a 404.
-7. package.json y tsconfig.json con TypeScript 5.x, Express 4.x y Vitest.
+/sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise:
+- Header con nombre de la tienda, selector de sucursal (ej. Sucursal Norte Bogotá) y badge de estado.
+- Catálogo de productos con visualización en tiempo real de stock disponible, precios y botón reactivo para simular compra/reserva.
+- Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que llame al endpoint POST /api/v1/chaos/crash y muestre una alerta visual de desconexión.
+Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
 ```
 
-### 💻 Comandos en Terminal
+---
+
+### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-clarify Valida los contratos de estado del catálogo en store.js, asegurando que la actualización del inventario utilice renderizado quirúrgico anti-thrashing sin destruir el foco del usuario.
+```
+
+---
+
+### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-plan Genera el blueprint arquitectónico de frontend/ con sus componentes modulares (header, catalog, chaos-panel), store.js, dom-elements.js, ui/renderer.js y server.js en Express.
+```
+
+---
+
+### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-tasks Genera la lista de tareas ordenadas para la implementación de la aplicación frontend.
+```
+
+---
+
+### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-implement Construye el frontend completo en frontend/ según el blueprint y las directivas de AGENTS.md.
+```
+
+---
+
+### 💻 Verificación del Frontend en Terminal
 ```bash
-# Validar estructura y dependencias de backend
+# Navegar a la carpeta generada, instalar dependencias y probar
+cd frontend
+rtk npm install
+# Puedes probar el servidor con: node server.js (puerto 80 o puerto de desarrollo local)
+cd ..
+```
+
+---
+
+## ☕ Lab 03: Ciclo SDD 2 — Backend Microservicio (Clean Architecture, TS & Chaos)
+
+### 🎯 Objetivo
+Construir dinámicamente el microservicio de inventario de Retail aplicando Clean Architecture, observabilidad nativa para Google Cloud Logging y el endpoint de Caos para validar auto-recuperación en GKE.
+
+---
+
+### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-specify Diseña el microservicio de inventario de Retail en backend/ bajo Node.js 20 y TypeScript:
+- Modelo de dominio Product (SKU, nombre, categoría, precio, stock disponible, storeId).
+- Caso de uso ReserveStockUseCase: descuenta el stock atómicamente; si el pedido supera las existencias lanza InsufficientStockError (HTTP 400); si el SKU no existe lanza ProductNotFoundError (HTTP 404).
+- Endpoint de Caos POST /api/v1/chaos/crash: registra log estructurado con severidad EMERGENCY y stack trace en formato Google Cloud Logging, y ejecuta process.exit(1) para forzar la muerte del contenedor.
+- StructuredLogger nativo de GCP con severidades INFO, WARNING, EMERGENCY y correlación en logging.googleapis.com/trace.
+- Suite de pruebas unitarias con Vitest.
+Aplica los estándares de Clean Architecture estipulados en AGENTS.md.
+```
+
+---
+
+### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Excepciones y Trazas)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-clarify Resuelve la estructura de excepciones de dominio para mapear códigos HTTP 400 y 404 en Express, y el formato de inyección del Trace ID para Google Cloud Trace.
+```
+
+---
+
+### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Clean Architecture)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-plan Diseña el blueprint de carpetas en backend/ (src/domain/entities, src/domain/errors, src/domain/use-cases, src/infrastructure/logger, src/infrastructure/http) y tests/ con Vitest.
+```
+
+---
+
+### 4️⃣ Paso 4: `/sdd-tasks` (Checklist TDD)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-tasks Genera la lista de tareas ordenada por desarrollo guiado por pruebas (TDD) para validar reserva exitosa, inventario insuficiente, producto inexistente y disparo de caos.
+```
+
+---
+
+### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código & Tests)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-implement Implementa el microservicio backend en backend/ con todas sus entidades, casos de uso, logger de Google Cloud, servidor Express y la suite de tests en tests/.
+```
+
+---
+
+### 💻 Verificación del Backend & Pruebas Unitarias en Terminal
+```bash
 cd backend
 rtk npm install
-rtk npm run build
-```
-
----
-
-## 🧪 Lab 04: Pruebas Unitarias de Negocio y Caos con Vitest
-
-### 🎯 Objetivo
-Garantizar la estabilidad y calidad de código del backend antes de cualquier compilación de contenedor, validando tanto los casos de éxito y fallo en reservas como el comportamiento del endpoint de caos.
-
-### 🤖 Prompt para Antigravity: Generación de Pruebas Unitarias
-```text
-Genera la suite de pruebas unitarias exhaustiva para el backend en backend/tests/:
-
-1. backend/tests/reserve-stock.test.ts:
-   - Test 1: Debe reservar stock exitosamente cuando hay suficiente inventario disponible.
-   - Test 2: Debe lanzar InsufficientStockError cuando la cantidad solicitada supera el stock.
-   - Test 3: Debe lanzar ProductNotFoundError cuando el SKU solicitado no existe.
-
-2. backend/tests/chaos.test.ts:
-   - Test 1: Debe emitir un log estructurado EMERGENCY y programar el apagado del proceso cuando se invoca triggerFatalCrash(). Mockea process.exit para que no mate la suite de tests.
-
-Asegúrate de que los tests corran con Vitest y no tengan advertencias de tipos en TypeScript.
-```
-
-### 💻 Comandos en Terminal
-```bash
-# Ejecutar los tests con el proxy RTK
 rtk npm test
 ```
 
-### 🔍 Salida Esperada
+#### 🔍 Salida Esperada:
 ```text
 ✓ tests/reserve-stock.test.ts (3 tests)
+{"severity":"EMERGENCY","message":"[CHAOS SIMULATION] Pod terminando de forma forzada: ..."}
 ✓ tests/chaos.test.ts (1 test)
 Test Files  2 passed (2)
      Tests  4 passed (4)
@@ -273,248 +302,180 @@ Test Files  2 passed (2)
 
 ---
 
-## 🎨 Lab 05: Generación Asistida del Frontend (Vanilla-Core UI + Material Design 3)
+## ⚡ Lab 04: Ciclo SDD 3 — DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s)
 
 ### 🎯 Objetivo
-Construir una aplicación web moderna, accesible y ultrarrápida para los colaboradores de Tiendas D1, sin la sobrecarga ni vulnerabilidades de frameworks gigantes (cero dependencias de React, Angular o Vue).
+Generar los Dockerfiles multi-stage con usuario no root, el pipeline de Google Cloud Build con ordenamiento DAG (`waitFor`) y escaneo de vulnerabilidades con Aqua Trivy, y los manifiestos declarativos para Google Kubernetes Engine (GKE) bajo el namespace `retail-store`.
 
-### 🤖 Prompt para Antigravity: Implementación del Frontend
+---
+
+### 1️⃣ Paso 1: `/sdd-specify` (Especificación de DevSecOps & K8s)
+Pega el siguiente prompt en Antigravity:
+
 ```text
-Siguiendo las especificaciones de AGENTS.md y usando el skill 'vanilla-core-ui' con '@develasquez/material-design', genera la Single Page Application en frontend/:
-
-1. frontend/store.js:
-   - Almacén central (SSoT) con estado: { products, storeId: 'D1-BOG-001', storeName: 'Tienda D1 Calle 72 Bogotá', lastAction, chaosTriggered }.
-   - Funciones exportadas: subscribe(callback) y setState(delta).
-2. frontend/dom-elements.js:
-   - Mapeo de elementos clave del DOM para evitar layout thrashing.
-3. frontend/components/header/ (header.html, header.js):
-   - Encabezado con branding Tiendas D1, badge de la tienda y estado de conexión.
-4. frontend/components/catalog/ (catalog.html, catalog.js):
-   - Listado en vivo de productos con botones para simular compras y reservas de inventario.
-5. frontend/components/chaos-panel/ (chaos-panel.html, chaos-panel.js):
-   - Panel de control de resiliencia con botón rojo '💥 Provocar Fatal Crash en Backend'. Al presionarlo, hace POST a /api/v1/chaos/crash y muestra alerta visual de desconexión.
-6. frontend/ui/renderer.js:
-   - Renderizador quirúrgico que actualice exclusivamente los valores numéricos y badges sin repintar el DOM activo.
-7. frontend/server.js:
-   - Servidor estático Express en puerto 80 con health check en GET /health.
-8. frontend/index.html y frontend/style.css:
-   - App Shell estilizado con Tailwind CSS y paleta de colores Material Design 3.
+/sdd-specify Diseña la infraestructura declarativa y el pipeline de entrega continua para la plataforma de Retail:
+- Dockerfiles multi-stage con base node:20-alpine y USER node para backend/ y frontend/.
+- cloudbuild.yaml con ordenamiento DAG (waitFor):
+  * Paso test-backend (waitFor: -)
+  * Paso build-frontend (waitFor: -)
+  * Paso build-backend (waitFor: test-backend)
+  * Pasos de escaneo con aquasec/trivy:latest para ambas imágenes
+  * Paso de push a Artifact Registry (retail-docker-repo)
+  * Paso de sustitución de variables y despliegue declarativo a GKE con kubectl apply.
+- Manifiestos en k8s/ bajo namespace retail-store:
+  * namespace.yaml, configmap.yaml, secret.yaml.
+  * backend-deployment.yaml con livenessProbe y readinessProbe.
+  * backend-service.yaml con anotación Container-Native NEG cloud.google.com/neg: '{"ingress": true}'.
+  * frontend-deployment.yaml y frontend-service.yaml (NEG).
+  * ingress.yaml enrutando /api/* al backend y /* al frontend.
+  * hpa.yaml (autoscaling/v2 de 2 a 10 réplicas al 70% CPU).
+Aplica los estándares de AGENTS.md.
 ```
 
-### 💻 Comandos en Terminal
+---
+
+### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Variables de Sustitución)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-clarify Valida las variables de sustitución de Cloud Build (_CLUSTER_NAME, _CLUSTER_LOCATION, _REPO_NAME) y los umbrales de severidad de Trivy (HIGH,CRITICAL).
+```
+
+---
+
+### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Manifiestos y Pipeline)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-plan Diseña el blueprint de los archivos de contenerización (backend/Dockerfile, frontend/Dockerfile), el archivo cloudbuild.yaml y la suite de manifiestos en k8s/.
+```
+
+---
+
+### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Infraestructura)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-tasks Genera la lista de tareas para la creación de los Dockerfiles, el pipeline de Cloud Build y los manifiestos de Kubernetes.
+```
+
+---
+
+### 5️⃣ Paso 5: `/sdd-implement` (Generación de Artefactos de Infraestructura)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-implement Genera backend/Dockerfile, frontend/Dockerfile, cloudbuild.yaml y todos los manifiestos en k8s/ respetando estrictamente las directivas de AGENTS.md.
+```
+
+---
+
+### 💻 Verificación de Manifiestos en Terminal
 ```bash
-# Probar el frontend localmente
-cd ../frontend
-rtk npm install
-# Para previsualizar: node server.js (puerto 80 o puerto de desarrollo)
-```
-
----
-
-## 🐳 Lab 06: Contenerización Multi-Stage Segura (Dockerfiles Non-Root)
-
-### 🎯 Objetivo
-Empaquetar ambas aplicaciones en imágenes Docker ultraligeras y blindadas contra escalamiento de privilegios en Kubernetes.
-
-### 🤖 Prompt para Antigravity: Generación de Dockerfiles
-```text
-Genera los archivos de contenerización multi-stage seguros para backend/ y frontend/:
-
-1. backend/Dockerfile:
-   - Stage 1 ('builder'): Imagen node:20-alpine, instala dependencias completas, compila TypeScript con 'npm run build'.
-   - Stage 2 ('runner'): Imagen node:20-alpine, instala solo dependencias de producción ('npm ci --omit=dev'), copia el compilado dist/, expone puerto 8080.
-   - Seguridad: Usa 'USER node' (UID 1000). Jamás correr como root.
-2. frontend/Dockerfile:
-   - Imagen node:20-alpine, instala dependencias de producción, corre server.js como 'USER node' en puerto 80.
-3. backend/.dockerignore y frontend/.dockerignore:
-   - Excluir node_modules, .git, dist, logs, archivos temporales.
-```
-
----
-
-## ⚡ Lab 07: Pipeline DevSecOps en Cloud Build (DAG `waitFor` & Aqua Trivy Scan)
-
-### 🎯 Objetivo
-Configurar el pipeline automatizado de integración y despliegue continuo en `cloudbuild.yaml` siguiendo la documentación oficial de Google Cloud Build sobre el orden de ejecución con `waitFor` y escaneo de CVEs con Aqua Trivy.
-
-### 💡 Arquitectura del DAG en Cloud Build
-```text
-Paso 1: test-backend  (waitFor: ['-'])  ───┐
-                                          ├──> Paso 3: build-backend (waitFor: ['test-backend']) ──> Paso 4: scan-backend (Trivy) ──┐
-Paso 2: build-frontend (waitFor: ['-']) ───────────────────────────────────────────────────────────> Paso 5: scan-frontend (Trivy) ─┼──> Paso 6: Push a Artifact Registry ──> Paso 7 & 8: Deploy Declarativo a GKE
-```
-
-### 🤖 Prompt para Antigravity: Generación de `cloudbuild.yaml`
-```text
-Genera el archivo cloudbuild.yaml en la raíz del proyecto para orquestar el flujo DevSecOps completo en Google Cloud:
-
-1. Paso 'test-backend':
-   - Ejecuta 'npm test' en la carpeta backend/. Configura waitFor: ['-'].
-2. Paso 'build-frontend':
-   - Ejecuta 'docker build' para frontend. Configura waitFor: ['-'].
-3. Paso 'build-backend':
-   - Ejecuta 'docker build' para backend. Configura waitFor: ['test-backend'] (bloquea el build si los tests fallan).
-4. Pasos 'scan-backend' y 'scan-frontend':
-   - Usa la imagen oficial 'aquasec/trivy:latest'.
-   - Escanea con: image --no-progress --severity HIGH,CRITICAL --exit-code 0 <IMAGEN>.
-   - Configura waitFor correspondientes a sus respectivos builds.
-5. Paso 'push-images':
-   - Sube ambas imágenes a Google Artifact Registry ('d1-docker-repo').
-6. Paso 'prepare-k8s':
-   - Usa sed para reemplazar ${PROJECT_ID}, ${_REPO_NAME} y ${SHORT_SHA} en los archivos de k8s/.
-7. Paso 'deploy-gke':
-   - Obtiene credenciales del clúster con 'gcloud container clusters get-credentials ${_CLUSTER_NAME} --zone ${_CLUSTER_LOCATION}'.
-   - Aplica los manifiestos con 'kubectl apply -f k8s/'.
-8. Sustituciones por defecto:
-   - _CLUSTER_NAME: 'd1-private-cluster'
-   - _CLUSTER_LOCATION: 'us-central1-a'
-   - _REPO_NAME: 'd1-docker-repo'
-```
-
-### 🔍 Verificación
-Examina el archivo [cloudbuild.yaml](file:///Users/felipe/Desarrollo/full-stack-engineer/cloudbuild.yaml) resultante.
-
----
-
-## ☸️ Lab 08: Manifiestos Declarativos para GKE Private Cluster
-
-### 🎯 Objetivo
-Definir toda la infraestructura de la aplicación en manifiestos YAML en `k8s/`, habilitando Container-Native Load Balancing con Network Endpoint Groups (NEG) y desacoplando secretos y configuración.
-
-### 🤖 Prompt para Antigravity: Generación de Manifiestos de Kubernetes
-```text
-Genera los manifiestos declarativos de Kubernetes en la carpeta k8s/ bajo el namespace 'tiendas-d1':
-
-1. k8s/namespace.yaml:
-   - Namespace 'tiendas-d1'.
-2. k8s/configmap.yaml:
-   - ConfigMap 'tiendas-d1-config' con NODE_ENV, PORT, DEFAULT_STORE_ID, LOG_LEVEL.
-3. k8s/secret.yaml:
-   - Secret 'tiendas-d1-secrets' con DB_PASSWORD y API_SIGNING_KEY codificados en base64.
-4. k8s/backend-deployment.yaml:
-   - Deployment 'd1-backend' con 2 réplicas.
-   - Sondas livenessProbe en /health y readinessProbe en /ready.
-   - Recursos: requests (100m CPU, 128Mi RAM), limits (300m CPU, 256Mi RAM).
-   - Inyección de variables desde el ConfigMap y Secret.
-5. k8s/backend-service.yaml:
-   - Service ClusterIP en puerto 8080 con anotación obligatoria:
-     cloud.google.com/neg: '{"ingress": true}'
-6. k8s/frontend-deployment.yaml y k8s/frontend-service.yaml:
-   - Deployment 'd1-frontend' con 2 réplicas y Service ClusterIP con anotación NEG en puerto 80.
-7. k8s/ingress.yaml:
-   - Ingress GKE enrutando:
-     - Path '/api/*' hacia d1-backend-svc:8080.
-     - Path '/*' hacia d1-frontend-svc:80.
-```
-
-### 💻 Comandos en Terminal
-```bash
-# Validar la sintaxis de todos los manifiestos
+# Validar los archivos generados
 rtk ls -la k8s/
+rtk cat cloudbuild.yaml
 ```
 
 ---
 
-## 📈 Lab 09: Escalabilidad Elástica con Horizontal Pod Autoscaler (HPA v2)
+## 🐙 Lab 05: Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE)
 
 ### 🎯 Objetivo
-Configurar el auto-escalado horizontal de Pods para soportar variaciones súbitas de tráfico en Tiendas D1 durante jornadas de promociones especiales.
-
-### 🤖 Prompt para Antigravity: Generación de HPA
-```text
-Crea el manifiesto k8s/hpa.yaml para autoescalar el microservicio d1-backend:
-- API: autoscaling/v2.
-- Target: Deployment d1-backend en el namespace tiendas-d1.
-- Mínimo de réplicas: 2.
-- Máximo de réplicas: 10.
-- Métrica: Utilización promedio de CPU al 70%.
-Explica cómo el Horizontal Pod Autoscaler interactúa con los 'requests' definidos en el deployment.
-```
-
----
-
-## 🐙 Lab 10: Activación del Flujo GitOps (Push a GitHub -> Cloud Build -> GKE)
-
-### 🎯 Objetivo
-Verificar la filosofía GitOps en la práctica: **los desarrolladores nunca ejecutan `gcloud deploy` localmente**. Todo cambio confirmado en Git dispara el pipeline automatizado.
+Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de despliegue local de Cloud SDK (`gcloud run deploy`, `gcloud compute`). El único canal autorizado es Git.
 
 ### 📋 Pasos de Configuración en Google Cloud Console
 1. Accede a **Google Cloud Console** > **Cloud Build** > **Activadores (Triggers)**.
-2. Selecciona **Crear activador**.
-3. Conecta el repositorio de GitHub de Tiendas D1.
-4. En **Evento**, elige **Enviar a una rama** (Push to a branch) sobre `^main$`.
+2. Haz clic en **Crear activador**.
+3. Conecta el repositorio de GitHub de la plataforma de Retail.
+4. En **Evento**, selecciona **Enviar a una rama** (Push to a branch) sobre `^main$`.
 5. En **Configuración**, selecciona **Archivo de configuración de Cloud Build** y apunta a `/cloudbuild.yaml`.
-6. Guarda el activador.
+6. Verifica las sustituciones:
+   - `_CLUSTER_NAME`: `retail-private-cluster`
+   - `_CLUSTER_LOCATION`: `us-central1-a`
+   - `_REPO_NAME`: `retail-docker-repo`
+7. Guarda el activador.
 
 ### 💻 Disparo del Despliegue con Git y RTK
 ```bash
-# 1. Comprobar estado del repositorio local con RTK
+# 1. Verificar estado del árbol de trabajo
 rtk git status
 
-# 2. Agregar cambios y realizar commit
+# 2. Agregar los componentes generados dinámicamente y hacer commit
 rtk git add .
-rtk git commit -m "feat: plataforma completa de inventario D1 con SDD, Trivy y GKE GitOps"
+rtk git commit -m "feat: plataforma completa de retail con frontend, backend, trivy y manifiestos GKE"
 
 # 3. Empujar cambios a GitHub para iniciar el build automático
 rtk git push origin main
 ```
 
-### 🔍 Qué sucede en Google Cloud:
-1. Cloud Build detecta el webhook de GitHub.
-2. Corre la suite de tests unitarios de Vitest.
-3. Compila las imágenes Docker multi-stage.
-4. Aqua Trivy inspecciona las imágenes buscando vulnerabilidades `HIGH` o `CRITICAL`.
-5. Se publican las imágenes en Google Artifact Registry.
-6. Se aplican los manifiestos en GKE actualizando los Pods con Zero-Downtime Rolling Updates.
+---
+
+## 🌐 Lab 06: Validación de Ingress L7 & Navegación en la Tienda Retail
+
+### 🎯 Objetivo
+Validar que el **Cloud HTTP(S) Load Balancer** enrute el tráfico correctamente gracias a los **Network Endpoint Groups (NEG)**.
+
+### 💻 Comandos en Terminal
+```bash
+# Obtener la IP pública asignada por Google Cloud Ingress
+rtk kubectl get ingress retail-ingress -n retail-store
+```
+
+### 🖱️ Validación en el Navegador
+1. Abre en tu navegador `http://<INGRESS_IP>/`.
+2. Observa la interfaz estilizada con Material Design 3.
+3. Simula la reserva de productos en el catálogo y comprueba la actualización reactiva del stock.
 
 ---
 
-## 💥 Lab 11: Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting con Cloud Trace y Cloud Logging
+## 💥 Lab 07: Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting
 
 ### 🎯 Objetivo
-Comprobar en vivo la alta disponibilidad y resiliencia de la plataforma:
-1. Provocar un fallo catastrófico en un Pod de backend invocando el endpoint de caos (`process.exit(1)`).
-2. Observar cómo el controlador de GKE detecta la muerte del proceso y crea inmediatamente un Pod de reemplazo sin interrumpir el servicio.
+Demostrar en vivo la alta disponibilidad y resiliencia de la plataforma:
+1. Provocar un fallo catastrófico intencional en el Pod de backend invocando el endpoint de caos (`process.exit(1)`).
+2. Observar cómo el controlador de GKE detecta la muerte del proceso y regenera el Pod en segundos.
 3. Realizar el diagnóstico forense en **Google Cloud Logging** y **Google Cloud Trace**.
 
 ---
 
-### 🖱️ 1. Detonación del Fallo Catastrófico
-Tienes dos alternativas para provocar la caída:
-- **Desde la UI:** Abre el portal web en tu navegador y haz clic en el botón rojo:
+### 🖱️ 1. Provocación del Crash Fatal
+Tienes dos opciones:
+- **Desde la UI:** En el panel de control de resiliencia del frontend, presiona:
   ```text
   💥 Provocar Fatal Crash en Backend
   ```
-- **Desde la consola (Curl):**
+- **Desde la Terminal con Curl:**
   ```bash
   curl -X POST http://<INGRESS_IP_O_LOCALHOST:8080>/api/v1/chaos/crash \
     -H "Content-Type: application/json" \
-    -d '{"reason": "Simulación de falla fatal en vivo Workshop Tiendas D1"}'
+    -d '{"reason": "Simulación de falla fatal en vivo Workshop Retail"}'
   ```
 
 ---
 
 ### 👁️ 2. Monitoreo en Vivo de la Auto-Sanación en GKE
-En una ventana de terminal con acceso a `kubectl`, ejecuta la observación continua:
+En una ventana de terminal con acceso a `kubectl`, ejecuta:
+
 ```bash
-rtk kubectl get pods -n tiendas-d1 -w
+rtk kubectl get pods -n retail-store -w
 ```
 
-#### 🔍 Secuencia de Eventos Observada en Consola:
+#### 🔍 Secuencia de Eventos Observada:
 ```text
-NAME                          READY   STATUS    RESTARTS   AGE
-d1-backend-7bf69799fd-4x92m   1/1     Running   0          5m
-d1-backend-7bf69799fd-k8s21   1/1     Running   0          5m
+NAME                              READY   STATUS    RESTARTS   AGE
+retail-backend-7bf69799fd-4x92m   1/1     Running   0          5m
+retail-backend-7bf69799fd-k8s21   1/1     Running   0          5m
 
 # Al detonar el caos:
-d1-backend-7bf69799fd-4x92m   0/1     Error     0          5m12s
-d1-backend-7bf69799fd-4x92m   0/1     CrashLoopBackOff   1          5m14s
-d1-backend-7bf69799fd-8wplq   0/1     Pending   0          1s
-d1-backend-7bf69799fd-8wplq   0/1     ContainerCreating   0          2s
-d1-backend-7bf69799fd-8wplq   1/1     Running   0          4s
+retail-backend-7bf69799fd-4x92m   0/1     Error     0          5m12s
+retail-backend-7bf69799fd-4x92m   0/1     CrashLoopBackOff   1          5m14s
+retail-backend-7bf69799fd-8wplq   0/1     Pending   0          1s
+retail-backend-7bf69799fd-8wplq   0/1     ContainerCreating   0          2s
+retail-backend-7bf69799fd-8wplq   1/1     Running   0          4s
 ```
-> **Lección de Arquitectura para el equipo D1:**  
-> Gracias a los **Health Checks directos por NEG** y el controlador de **ReplicaSet de Kubernetes**, la caída de un Pod no genera caída del servicio para los usuarios de la tienda; el balanceador de carga redirige el tráfico a la réplica sana en milisegundos mientras el nuevo Pod completa su ciclo de inicialización.
+> **Lección de Resiliencia:**  
+> Gracias a los **Health Checks directos por NEG** y el controlador de **ReplicaSet de Kubernetes**, la caída de un Pod no genera caída del servicio para los compradores; el balanceador de carga redirige el tráfico a la réplica sana en milisegundos mientras el nuevo Pod completa su ciclo de inicialización.
 
 ---
 
@@ -523,7 +484,7 @@ Abre **Google Cloud Console** > **Logging** > **Explorador de registros** y ejec
 
 ```sql
 resource.type="k8s_container"
-resource.labels.namespace_name="tiendas-d1"
+resource.labels.namespace_name="retail-store"
 severity="EMERGENCY"
 jsonPayload.sourceLocation.function="ChaosUseCase.triggerFatalCrash"
 ```
@@ -540,20 +501,20 @@ jsonPayload.sourceLocation.function="ChaosUseCase.triggerFatalCrash"
 2. Filtra por la URI `/api/v1/chaos/crash` o código HTTP `500`.
 3. Haz clic sobre la traza del evento:
    - Visualiza el tiempo exacto que tardó la solicitud desde el balanceador L7 hasta el backend.
-   - Observa la interrupción de la conexión socket provocada intencionalmente.
-   - Da clic directo en el enlace a Cloud Logging para ver el log de emergencia asociado a esa traza específica sin buscar manualmente.
+   - Observa la interrupción de la conexión TCP provocada deliberadamente.
+   - Da clic directo en el enlace a Cloud Logging para ver el log de emergencia asociado a esa traza sin búsquedas manuales.
 
 ---
 
-## 🏆 Resumen de Capacidades Adquiridas
+## 🏆 Lab 08: Resumen de Capacidades Adquiridas & Cierre
 
-Al completar este workshop, los ingenieros de **Tiendas D1** dominan:
-1. **Asistencia con Antigravity & SDD:** Creación de especificaciones formales y código predecible y sin alucinaciones guiado por `AGENTS.md`.
-2. **Eficiencia de Contexto:** Reducción de costos de tokens con RTK en flujos de terminal.
-3. **Frontend Moderno y Ligero:** Aplicaciones reactivas de alto rendimiento con Vanilla-Core UI y Material Design 3 sin frameworks pesados.
+Al completar este workshop de 4 horas, el equipo técnico domina:
+1. **Asistencia con Antigravity & SDD:** Generación de especificaciones formales y código limpio guiado por el contrato de gobernanza `AGENTS.md`.
+2. **Eficiencia en Terminal con RTK:** Reducción de costos y uso óptimo de tokens en flujos de CLI.
+3. **Frontend Ultraligero:** Single Page Application con Vanilla-Core UI y Material Design 3 (`npx vanilla-core-ui`, `npx @develasquez/material-design`).
 4. **DevSecOps en GCP:** Automatización de tests con Vitest, construcción paralela con `waitFor` y escaneo con Aqua Trivy en Google Cloud Build.
 5. **Infraestructura Cloud Native:** Despliegue GitOps en GKE Private Cluster con Container-Native Load Balancing (NEG) y autoscaling elástico con HPA.
 6. **Resiliencia & Observabilidad:** Diagnóstico forense en menos de dos minutos con Google Cloud Logging y Google Cloud Trace ante fallos críticos de pods.
 
 ---
-*Material preparado para el Workshop Técnico Tiendas D1 — Google Cloud Colombia 2026.*
+*Material preparado para el Workshop Técnico Cloud Native & AI-Assisted Engineering — Google Cloud Colombia 2026.*

@@ -1,4 +1,4 @@
-# Gaps Técnicos y Laboratorios Complementarios: Tiendas D1
+# Gaps Técnicos y Laboratorios Complementarios: Retail Enterprise
 
 Este documento recopila el código fuente complementario, manifiestos y políticas de infraestructura requeridos para cubrir al 100% los requerimientos de la agenda que no estaban empaquetados en los repositorios base.
 
@@ -49,12 +49,12 @@ Política WAF y de mitigación DDoS a nivel de borde de Google Cloud:
 
 ```bash
 # Crear política de seguridad Cloud Armor
-gcloud compute security-policies create d1-edge-armor-policy \
-    --description="Politica Cloud Armor para APIs de Tiendas D1"
+gcloud compute security-policies create retail-edge-armor-policy \
+    --description="Politica Cloud Armor para APIs de Retail Enterprise"
 
 # Regla 1: Rate limiting perimetral (Máximo 500 req/min por IP origen)
 gcloud compute security-policies rules create 1000 \
-    --security-policy=d1-edge-armor-policy \
+    --security-policy=retail-edge-armor-policy \
     --expression="true" \
     --action="rate-based-ban" \
     --rate-limit-threshold-count=500 \
@@ -66,7 +66,7 @@ gcloud compute security-policies rules create 1000 \
 
 # Regla 2: Mitigación de inyecciones SQL (SQLi) preconfigurada por Google
 gcloud compute security-policies rules create 2000 \
-    --security-policy=d1-edge-armor-policy \
+    --security-policy=retail-edge-armor-policy \
     --expression="evaluatePreconfiguredExpr('sqli-v33-stable')" \
     --action="deny(403)" \
     --description="Bloqueo automatico de SQL Injection"
@@ -83,7 +83,7 @@ Para que GKE Ingress redirija automáticamente el tráfico HTTP a HTTPS y vincul
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
-  name: d1-frontend-config
+  name: retail-frontend-config
   namespace: default
 spec:
   redirectToHttps:
@@ -98,11 +98,11 @@ spec:
 apiVersion: networking.gke.io/v1beta1
 kind: BackendConfig
 metadata:
-  name: d1-backend-config
+  name: retail-backend-config
   namespace: default
 spec:
   securityPolicy:
-    name: "d1-edge-armor-policy" # Vinculación con Cloud Armor
+    name: "retail-edge-armor-policy" # Vinculación con Cloud Armor
   timeoutSec: 30
   connectionDraining:
     drainingTimeoutSec: 60
@@ -123,14 +123,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: d1-inventory-svc
+  name: retail-inventory-svc
   namespace: default
   annotations:
-    beta.cloud.google.com/backend-config: '{"default": "d1-backend-config"}'
+    beta.cloud.google.com/backend-config: '{"default": "retail-backend-config"}'
 spec:
   type: ClusterIP
   selector:
-    app: d1-inventory
+    app: retail-inventory
   ports:
     - port: 8080
       targetPort: 8080
@@ -138,12 +138,12 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: d1-inventory-ingress
+  name: retail-inventory-ingress
   namespace: default
   annotations:
     kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: "d1-inventory-cert"
-    networking.gke.io/v1beta1.FrontendConfig: "d1-frontend-config"
+    networking.gke.io/managed-certificates: "retail-inventory-cert"
+    networking.gke.io/v1beta1.FrontendConfig: "retail-frontend-config"
 spec:
   rules:
     - host: api-inventario.tiendasd1.com
@@ -153,7 +153,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: d1-inventory-svc
+                name: retail-inventory-svc
                 port:
                   number: 8080
 ```

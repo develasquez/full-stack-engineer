@@ -1,7 +1,7 @@
 # Guía Práctica de Sesión 3: DevOps en GCP con Cloud Build y Artifact Registry
 
 **Duración:** 60 Minutos (11:00 - 12:00)  
-**Audiencia:** Tech Leads, Ingenieros DevOps, Desarrolladores Backend/Frontend de Tiendas D1  
+**Audiencia:** Tech Leads, Ingenieros DevOps, Desarrolladores Backend/Frontend de Retail Enterprise  
 **Instructor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 **Insumos Base:**
 - Repositorio Backend GCP: [github.com/develasquez/gcp-back-end-example](https://github.com/develasquez/gcp-back-end-example) (Dockerfile & cloudbuild.yaml)
@@ -12,7 +12,7 @@
 
 ## 1. Objetivos de Aprendizaje
 
-Al finalizar esta sesión, el equipo de Tiendas D1 dominará:
+Al finalizar esta sesión, el equipo de Retail Enterprise dominará:
 1. **Construir imágenes OCI hiperoptimizadas y seguras mediante Dockerfiles Multi-Stage**, reduciendo el tamaño de la imagen final en más del 80% y eliminando compiladores/herramientas de build en el runtime.
 2. **Eliminar los riesgos de ejecución con privilegios de root**, configurando usuarios de sistema sin privilegios (`USER node` / `USER 10001`) y sistemas de archivos de sólo lectura.
 3. **Orquestar pipelines de integración y entrega continua (CI/CD) con Cloud Build**, ejecutando tests automatizados, builds paralelos y análisis de calidad antes de generar artefactos.
@@ -25,7 +25,7 @@ Al finalizar esta sesión, el equipo de Tiendas D1 dominará:
 
 ```mermaid
 flowchart LR
-    A["Desarrollador D1\n(Git Push main/develop)"] --> B["GitHub Webhook\n(Triggers Cloud Build)"]
+    A["Desarrollador Retail\n(Git Push main/develop)"] --> B["GitHub Webhook\n(Triggers Cloud Build)"]
     subgraph CloudBuild ["Pipeline Automatizado Cloud Build"]
         C["Paso 1: Tests Unitarios\n(npm test / coverage)"] --> D["Paso 2: Build Multi-Stage\n(node:20-alpine)"]
         D --> E["Paso 3: Vulnerability Scan\n(Container Analysis)"]
@@ -92,7 +92,7 @@ EXPOSE 8080
 CMD ["node", "dist/index.js"]
 ```
 
-### Por qué esta arquitectura marca la diferencia para D1:
+### Por qué esta arquitectura marca la diferencia para Retail:
 - **Reducción de Superficie de Ataque:** No existen herramientas como `npm`, `git`, `python`, ni `gcc` en la imagen final. Si un atacante compromete la aplicación, no tiene compiladores para descargar ni armar exploits en memoria.
 - **Tamaño de Imagen:** Una imagen típica `node:20` estándar pesa ~1.1 GB. Esta imagen en Alpine pesa ~90 MB, acelerando el arranque en frío (*cold start*) de los Pods en GKE de 45 segundos a menos de 4 segundos.
 
@@ -103,7 +103,7 @@ CMD ["node", "dist/index.js"]
 El archivo de configuración de Cloud Build orquesta todo el proceso sin necesidad de mantener servidores Jenkins o GitLab runners dedicados:
 
 ```yaml
-# cloudbuild.yaml (Producción Tiendas D1)
+# cloudbuild.yaml (Producción Retail Enterprise)
 steps:
   # -------------------------------------------------------------
   # Paso 1: Ejecutar Pruebas Unitarias y Validación de Calidad
@@ -147,7 +147,7 @@ steps:
 # Variables de sustitución parametrizadas
 substitutions:
   _LOCATION: 'us-east1'
-  _REPOSITORY: 'd1-apps'
+  _REPOSITORY: 'retail-apps'
   _IMAGE_NAME: 'inventory-service'
 
 # Configuración de recursos de compilación para alta velocidad
@@ -174,10 +174,10 @@ gcloud services enable \
     containerscanning.googleapis.com
 
 # Crear el repositorio privado regional en us-east1
-gcloud artifacts repositories create d1-apps \
+gcloud artifacts repositories create retail-apps \
     --repository-format=docker \
     --location=us-east1 \
-    --description="Repositorio Docker de Microservicios Tiendas D1" \
+    --description="Repositorio Docker de Microservicios Retail Enterprise" \
     --immutable-tags
 ```
 > **Nota de Seguridad:** El flag `--immutable-tags` impide que un tag publicado (como `v1.0.4` o `$SHORT_SHA`) sea sobreescrito maliciosamente o por error humano.
@@ -205,7 +205,7 @@ gcloud builds submit --config=cloudbuild.yaml .
 Una vez finalizado, inspeccionamos el escaneo automático de vulnerabilidades (CVEs):
 ```bash
 gcloud artifacts docker images list-vulnerabilities \
-    us-east1-docker.pkg.dev/$(gcloud config get-value project)/d1-apps/inventory-service:$SHORT_SHA
+    us-east1-docker.pkg.dev/$(gcloud config get-value project)/retail-apps/inventory-service:$SHORT_SHA
 ```
 
 ---

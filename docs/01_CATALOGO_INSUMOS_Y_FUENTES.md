@@ -55,7 +55,7 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
   - `/sdd-tasks`: Descomposición en tareas atómicas priorizadas según historias de usuario (MVP P1 first).
   - `/sdd-checklist`: Listas de control de calidad para inglés y requisitos funcionales ("Unit Tests for English").
   - `/sdd-implement` & `/sdd-converge`: Ejecución secuencial y reconciliación continua entre especificación y código.
-* **Alineación con la Agenda:** Es el motor práctico de la **Sesión 1**, enseñando a D1 a no generar código "a ciegas" sino a gobernar a la IA mediante contratos formales.
+* **Alineación con la Agenda:** Es el motor práctico de la **Sesión 1**, enseñando a Retail a no generar código "a ciegas" sino a gobernar a la IA mediante contratos formales.
 
 ---
 
@@ -156,7 +156,7 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
 ### 10. Artículo: "Introducción a Kubernetes" (LinkedIn Pulse)
 * **Fuente:** LinkedIn Pulse — [`felipe-andres-velasquez-castro`](https://www.linkedin.com/pulse/introducci%C3%B3n-kubernetes-felipe-andres-velasquez-castro/)
 * **Contenido:** Basado en la charla técnica impartida para el GDG Santiago en las oficinas de Globant. Expone la nivelación teórica de computación distribuida, desacoplamiento y orquestación de contenedores para equipos de desarrollo.
-* **Alineación con la Agenda:** Material de lectura complementaria previa para la convocatoria de **D1**.
+* **Alineación con la Agenda:** Material de lectura complementaria previa para la convocatoria de **Retail**.
 
 ---
 

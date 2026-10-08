@@ -1,6 +1,6 @@
 # Guía Maestra de Prompts y Gobernanza de Agentes con Google Antigravity
 
-**Entregable Oficial del Workshop:** Tiendas D1  
+**Entregable Oficial del Workshop:** Retail Enterprise  
 **Autor:** Felipe Andrés Velásquez Castro (AI Architecture Lead, Axmos)  
 **Versión:** 2026.1 - Producción  
 
@@ -8,7 +8,7 @@
 
 ## 1. Filosofía de Ingeniería: De la "Charla con la IA" al "Contrato con el Agente"
 
-En Tiendas D1, la inteligencia artificial no se utiliza como un autocompletador de texto ("vibe coding"). Se utiliza como un **par de arquitectura y desarrollo autónomo supervisado (Pair Programmer & Tech Lead)**.
+En Retail Enterprise, la inteligencia artificial no se utiliza como un autocompletador de texto ("vibe coding"). Se utiliza como un **par de arquitectura y desarrollo autónomo supervisado (Pair Programmer & Tech Lead)**.
 
 Para lograr determinismo, reproducibilidad y calidad empresarial, la interacción con Google Antigravity se estructura en tres capas:
 1. **Reglas Globales de Repositorio (`AGENTS.md`):** Leyes inmutables de código, arquitectura y seguridad que el agente no puede quebrantar.
@@ -17,15 +17,15 @@ Para lograr determinismo, reproducibilidad y calidad empresarial, la interacció
 
 ---
 
-## 2. Plantilla Maestra: `AGENTS.md` para Repositorios de Tiendas D1
+## 2. Plantilla Maestra: `AGENTS.md` para Repositorios de Retail Enterprise
 
-Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Tiendas D1:
+Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Retail Enterprise:
 
 ```markdown
-# AGENTS.md - Reglas de Arquitectura e Ingeniería para Tiendas D1
+# AGENTS.md - Reglas de Arquitectura e Ingeniería para Retail Enterprise
 
 ## 1. Rol y Comportamiento del Agente
-- Actúa como un Tech Lead Senior y Arquitecto de Software para Tiendas D1.
+- Actúa como un Tech Lead Senior y Arquitecto de Software para Retail Enterprise.
 - No realices cambios especulativos. Aplica estrictamente los principios de minimalismo (YAGNI): el mejor código es el que no se escribe.
 - Si un requerimiento es ambiguo o incompleto, formula preguntas clarificadoras antes de generar código.
 - Nunca rompas contratos de API existentes ni elimines pruebas previas sin autorización expresa.
@@ -51,14 +51,14 @@ Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Ti
 
 ---
 
-## 3. Catálogo de Prompts Canónicos para el Ciclo de Vida D1
+## 3. Catálogo de Prompts Canónicos para el Ciclo de Vida Retail
 
 ### Fase 1: Especificación Formal de Requerimiento (SDD)
 > **Objetivo:** Convertir una historia de usuario de Jira en una especificación ejecutable antes de tirar código.
 
 #### Prompt Canónico Full-Stack SDD (Backend + Frontend Desacoplado)
 ```text
-/sdd-specify Diseña la plataforma de inventario para Tiendas D1 en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
+/sdd-specify Diseña la plataforma de inventario para Retail Enterprise en dos proyectos desacoplados (backend/ y frontend/) con las siguientes capacidades:
 
 1. backend/: Microservicio Node.js 20 con TypeScript y Clean Architecture.
    - Entidad e inventario de productos (SKU, nombre, categoría, precio, stock).
@@ -69,13 +69,13 @@ Copiar este archivo en la raíz de cualquier repositorio nuevo o existente de Ti
 
 2. frontend/: Single Page Application con Vanilla-Core UI y Material Design 3 (@develasquez/material-design).
    - Store central reactivo en store.js (SSoT + Pub/Sub) con renderizado quirúrgico anti-thrashing en ui/renderer.js.
-   - Header con branding D1 y badge de tienda, tabla de inventario en vivo con botones de reserva, y panel interactivo para detonar el fallo fatal de Caos.
+   - Header con branding Retail y badge de tienda, tabla de inventario en vivo con botones de reserva, y panel interactivo para detonar el fallo fatal de Caos.
    - Servidor estático Express sobre el puerto 80 con health check en /health.
 ```
 
 #### Prompt para Especificación Específica de Casos de Uso
 ```text
-/sdd-specify Crear la especificación formal del microservicio de "Descuentos y Promociones Dinámicas" para tiendas D1.
+/sdd-specify Crear la especificación formal del microservicio de "Descuentos y Promociones Dinámicas" para Retail Enterprise.
 Contexto:
 - Cada tienda física puede tener promociones regionales según su StoreID.
 - Se debe validar el carrito completo de compras (array de SKUs y cantidades).
@@ -148,7 +148,7 @@ Genera el paquete completo de despliegue para el microservicio "d1-discounts-ser
 
 ---
 
-## 4. Configuración Recomendada de Subagentes Antigravity en D1
+## 4. Configuración Recomendada de Subagentes Antigravity en Retail
 
 Para proyectos de gran escala, se recomienda configurar subagentes especializados dentro de `.gemini/` en el proyecto:
 
@@ -161,7 +161,7 @@ Para proyectos de gran escala, se recomienda configurar subagentes especializado
 
 ---
 
-## 5. Regla de Oro para el Ingeniero de Tiendas D1
+## 5. Regla de Oro para el Ingeniero de Retail Enterprise
 
 > *"Si no puedes escribir una especificación clara en Markdown de lo que esperas que haga tu microservicio, ningún modelo de lenguaje del mundo construirá el sistema que tu negocio necesita."*  
 > — **Felipe Andrés Velásquez Castro**
