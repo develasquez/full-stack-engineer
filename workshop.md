@@ -187,7 +187,6 @@ Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise:
-- Header con nombre de la tienda, selector de sucursal (ej. Sucursal Norte Bogotá) y badge de estado.
 - Catálogo de productos con visualización en tiempo real de stock disponible, precios y botón reactivo para simular compra/reserva.
 - Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que llame al endpoint POST /api/v1/chaos/crash y muestre una alerta visual de desconexión.
 Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
