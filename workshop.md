@@ -90,15 +90,14 @@ flowchart TD
 
 | Módulo | Tema Clave | Ciclo / Entregable | Duración |
 | :--- | :--- | :--- | :--- |
-| **Lab 00** | Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK | Setup del entorno y ahorro de tokens | 20 min |
-| **Lab 01** | Inicialización de Skills con `npx` y Antigravity | Carga de `sdd-skill`, `vanilla-core-ui`, `material-design` | 15 min |
-| **Lab 02** | Ciclo SDD 1: Frontend SPA (Vanilla-Core UI + Material Design 3) | Generación dinámica de `frontend/` mediante SDD | 35 min |
-| **Lab 03** | Ciclo SDD 2: Backend Microservicio (Clean Architecture, TS & Chaos) | Generación dinámica de `backend/` y tests unitarios | 40 min |
-| **Lab 04** | Ciclo SDD 3: DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s) | Generación dinámica de `cloudbuild.yaml`, Dockerfiles y `k8s/` | 35 min |
-| **Lab 05** | Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE) | Disparo del pipeline automatizado sin Cloud SDK local | 25 min |
-| **Lab 06** | Validación de Ingress L7 & Navegación en la Tienda Retail | Verificación de enrutamiento y compras en vivo | 20 min |
-| **Lab 07** | Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting | Resiliencia Kubelet, Google Cloud Logging y Cloud Trace | 30 min |
-| **Lab 08** | Retrospectiva de Adopción & Cierre | Encuesta y roadmap de ingeniería 2026 | 20 min |
+| **Lab 00** | Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK | Setup del entorno y ahorro de tokens | 15 min |
+| **Lab 01** | Inicialización de Skills con `npx` y Antigravity | Carga de `sdd-skill`, `vanilla-core-ui`, `material-design` | 10 min |
+| **Lab 02** | Ciclo SDD Full-Stack Rápido: Frontend SPA & Backend Microservicio | Generación dinámica de `frontend/` y `backend/` con SDD | 20 min |
+| **Lab 03** | Ciclo SDD DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s) | Generación dinámica de `cloudbuild.yaml`, Dockerfiles y `k8s/` | 45 min |
+| **Lab 04** | Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE) | Disparo del pipeline automatizado sin Cloud SDK local | 35 min |
+| **Lab 05** | Validación de Ingress L7 & Navegación en la Tienda Retail | Verificación de enrutamiento y compras en vivo | 30 min |
+| **Lab 06** | Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting | Resiliencia Kubelet, Google Cloud Logging y Cloud Trace | 65 min |
+| **Lab 07** | Resumen de Capacidades Adquiridas & Cierre | Encuesta y roadmap de ingeniería 2026 | 20 min |
 
 ---
 
@@ -166,16 +165,19 @@ Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-
 
 ---
 
-## 🎨 Lab 02: Ciclo SDD 1 — Frontend SPA (Vanilla-Core UI + Material Design 3)
+## 🚀 Lab 02: Ciclo SDD Full-Stack Rápido — Frontend SPA & Backend Microservicio
 
 ### 🎯 Objetivo
-Construir dinámicamente la aplicación web para los operadores de la tienda de Retail, aplicando el ciclo formal SDD de 5 pasos. La aplicación debe ser reactiva, accesible y libre de frameworks pesados (cero dependencias de React/Angular/Vue).
+Construir de forma ágil y asistida por IA tanto la aplicación web (`frontend/`) como el microservicio de inventario (`backend/`) en dos sprints rápidos de 10 minutos cada uno (máximo 20 minutos en total).
 
-> 💡 **Nota de Gobernanza:** Como [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md) ya define la estructura de carpetas de `frontend/`, el patrón SSoT de `store.js`, el renderizado quirúrgico y el puerto 80 con `/health`, los prompts no repiten esas especificaciones técnicas.
+> ⏱️ **Timeboxing Estricto (20 min en total):**  
+> Como [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md) ya contiene las especificaciones técnicas completas (Vanilla-Core UI, Material Design 3, SSoT, Clean Architecture, logger estructurado de GCP y endpoint de caos), los prompts son directos y permiten ejecutar las 5 fases de SDD velozmente. El mayor tiempo del workshop está enfocado en **DevOps (Cloud Build DAG & Trivy)** y **GKE en Producción**.
 
 ---
 
-### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend)
+### 🎨 Sprint A (10 min): Frontend SPA (Vanilla-Core UI + Material Design 3)
+
+#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -186,63 +188,47 @@ Pega el siguiente prompt en Antigravity:
 Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
 ```
 
----
-
-### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado)
+#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-clarify Valida los contratos de estado del catálogo en store.js, asegurando que la actualización del inventario utilice renderizado quirúrgico anti-thrashing sin destruir el foco del usuario.
 ```
 
----
-
-### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
+#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-plan Genera el blueprint arquitectónico de frontend/ con sus componentes modulares (header, catalog, chaos-panel), store.js, dom-elements.js, ui/renderer.js y server.js en Express.
 ```
 
----
-
-### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
+#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-tasks Genera la lista de tareas ordenadas para la implementación de la aplicación frontend.
 ```
 
----
-
-### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
+#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-implement Construye el frontend completo en frontend/ según el blueprint y las directivas de AGENTS.md.
 ```
 
----
-
-### 💻 Verificación del Frontend en Terminal
+#### 💻 Verificación del Frontend en Terminal
 ```bash
-# Navegar a la carpeta generada, instalar dependencias y probar
+# Navegar a frontend, instalar dependencias y verificar
 cd frontend
 rtk npm install
-# Puedes probar el servidor con: node server.js (puerto 80 o puerto de desarrollo local)
 cd ..
 ```
 
 ---
 
-## ☕ Lab 03: Ciclo SDD 2 — Backend Microservicio (Clean Architecture, TS & Chaos)
+### ☕ Sprint B (10 min): Backend Microservicio (Clean Architecture, TS & Chaos)
 
-### 🎯 Objetivo
-Construir dinámicamente el microservicio de inventario de Retail aplicando Clean Architecture, observabilidad nativa para Google Cloud Logging y el endpoint de Caos para validar auto-recuperación en GKE.
-
----
-
-### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend)
+#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend)
 Pega el siguiente prompt en Antigravity:
 
 ```text
@@ -255,52 +241,43 @@ Pega el siguiente prompt en Antigravity:
 Aplica los estándares de Clean Architecture estipulados en AGENTS.md.
 ```
 
----
-
-### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Excepciones y Trazas)
+#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Excepciones y Trazas)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-clarify Resuelve la estructura de excepciones de dominio para mapear códigos HTTP 400 y 404 en Express, y el formato de inyección del Trace ID para Google Cloud Trace.
 ```
 
----
-
-### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Clean Architecture)
+#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint de Clean Architecture)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-plan Diseña el blueprint de carpetas en backend/ (src/domain/entities, src/domain/errors, src/domain/use-cases, src/infrastructure/logger, src/infrastructure/http) y tests/ con Vitest.
 ```
 
----
-
-### 4️⃣ Paso 4: `/sdd-tasks` (Checklist TDD)
+#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist TDD)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-tasks Genera la lista de tareas ordenada por desarrollo guiado por pruebas (TDD) para validar reserva exitosa, inventario insuficiente, producto inexistente y disparo de caos.
 ```
 
----
-
-### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código & Tests)
+#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código & Tests)
 Pega el siguiente prompt en Antigravity:
 
 ```text
 /sdd-implement Implementa el microservicio backend en backend/ con todas sus entidades, casos de uso, logger de Google Cloud, servidor Express y la suite de tests en tests/.
 ```
 
----
-
-### 💻 Verificación del Backend & Pruebas Unitarias en Terminal
+#### 💻 Verificación del Backend & Pruebas Unitarias en Terminal
 ```bash
 cd backend
 rtk npm install
 rtk npm test
+cd ..
 ```
 
-#### 🔍 Salida Esperada:
+##### 🔍 Salida Esperada:
 ```text
 ✓ tests/reserve-stock.test.ts (3 tests)
 {"severity":"EMERGENCY","message":"[CHAOS SIMULATION] Pod terminando de forma forzada: ..."}
@@ -311,7 +288,7 @@ Test Files  2 passed (2)
 
 ---
 
-## ⚡ Lab 04: Ciclo SDD 3 — DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s)
+## ⚡ Lab 03: Ciclo SDD — DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s)
 
 ### 🎯 Objetivo
 Generar los Dockerfiles multi-stage con usuario no root, el pipeline de Google Cloud Build con ordenamiento DAG (`waitFor`) y escaneo de vulnerabilidades con Aqua Trivy, y los manifiestos declarativos para Google Kubernetes Engine (GKE) bajo el namespace `retail-store`.
@@ -388,7 +365,7 @@ rtk cat cloudbuild.yaml
 
 ---
 
-## 🐙 Lab 05: Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE)
+## 🐙 Lab 04: Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE)
 
 ### 🎯 Objetivo
 Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de despliegue local de Cloud SDK (`gcloud run deploy`, `gcloud compute`). El único canal autorizado es Git.
@@ -420,7 +397,7 @@ rtk git push origin main
 
 ---
 
-## 🌐 Lab 06: Validación de Ingress L7 & Navegación en la Tienda Retail
+## 🌐 Lab 05: Validación de Ingress L7 & Navegación en la Tienda Retail
 
 ### 🎯 Objetivo
 Validar que el **Cloud HTTP(S) Load Balancer** enrute el tráfico correctamente gracias a los **Network Endpoint Groups (NEG)**.
@@ -438,7 +415,7 @@ rtk kubectl get ingress retail-ingress -n retail-store
 
 ---
 
-## 💥 Lab 07: Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting
+## 💥 Lab 06: Inyección de Caos (Chaos Testing), Auto-Sanación de GKE & Troubleshooting
 
 ### 🎯 Objetivo
 Demostrar en vivo la alta disponibilidad y resiliencia de la plataforma:
@@ -515,7 +492,7 @@ jsonPayload.sourceLocation.function="ChaosUseCase.triggerFatalCrash"
 
 ---
 
-## 🏆 Lab 08: Resumen de Capacidades Adquiridas & Cierre
+## 🏆 Lab 07: Resumen de Capacidades Adquiridas & Cierre
 
 Al completar este workshop de 4 horas, el equipo técnico domina:
 1. **Asistencia con Antigravity & SDD:** Generación de especificaciones formales y código limpio guiado por el contrato de gobernanza `AGENTS.md`.
