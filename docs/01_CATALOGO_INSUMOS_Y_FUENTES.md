@@ -28,7 +28,7 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
 ## 🔍 Análisis Detallado de Cada Insumo
 
 ### 1. Presentación: "¡Bienvenido, Gravi! El Nuevo Integrante AXMOS // ANTIGRAVITY"
-* **Fuente:** Google Slides — [`17ZVpe-sGWTjUsyu3_DcUV15sXWfiJfAxdp6w8KNHay0`](https://docs.google.com/presentation/d/17ZVpe-sGWTjUsyu3_DcUV15sXWfiJfAxdp6w8KNHay0/edit?slide=id.p5#slide=id.p5)
+* **Fuente:** Google Slides — [`ver`](https://docs.google.com/presentation/d/17ZVpe-sGWTjUsyu3_DcUV15sXWfiJfAxdp6w8KNHay0/edit?slide=id.p5#slide=id.p5)
 * **Temática Central:** Cómo evolucionar y liderar un copiloto y célula de agentes de IA en el desarrollo empresarial.
 * **Metáfora Pedagógica ("La Historia de Gravi"):** Gravi ingresa como un pasante brillante pero sin contexto (`Digital Engineering Intern`). A través de 4 fases madura hasta convertirse en Líder Técnico (`Tech Lead Orchestrator`).
 * **Conceptos Clave para el Workshop:**
@@ -140,7 +140,7 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
 ---
 
 ### 9. Presentación: "Se el Rey de los piratas con Kubernetes - NIVELACIÓN"
-* **Fuente:** Google Slides — [`1z1AW6JPWl381OLqKR2f9Sr8_lVQiufjjzWbEsK5pZMM`](https://docs.google.com/presentation/d/1z1AW6JPWl381OLqKR2f9Sr8_lVQiufjjzWbEsK5pZMM/edit?slide=id.g3a1f43bda7_8_43#slide=id.g3a1f43bda7_8_43)
+* **Fuente:** Google Slides — [`Ver`](https://docs.google.com/presentation/d/1z1AW6JPWl381OLqKR2f9Sr8_lVQiufjjzWbEsK5pZMM/edit?slide=id.g3a1f43bda7_8_43#slide=id.g3a1f43bda7_8_43)
 * **Temario:**
   - De la infraestructura física (servidor dedicado, single point of failure, sobredimensionamiento, soporte obsoleto) a Máquinas Virtuales (hypervisor, emulación pesada).
   - El salto a Contenedores (reutilización del Kernel del host, aislamiento liviano, arranque en milisegundos).
@@ -154,7 +154,7 @@ Este documento cataloga y analiza cada una de las 13 fuentes técnicas provistas
 ---
 
 ### 10. Artículo: "Introducción a Kubernetes" (LinkedIn Pulse)
-* **Fuente:** LinkedIn Pulse — [`felipe-andres-velasquez-castro`](https://www.linkedin.com/pulse/introducci%C3%B3n-kubernetes-felipe-andres-velasquez-castro/)
+* **Fuente:** LinkedIn Pulse — [`Leer`](https://www.linkedin.com/pulse/introducci%C3%B3n-kubernetes-felipe-andres-velasquez-castro/)
 * **Contenido:** Basado en la charla técnica impartida para el GDG Santiago en las oficinas de Globant. Expone la nivelación teórica de computación distribuida, desacoplamiento y orquestación de contenedores para equipos de desarrollo.
 * **Alineación con la Agenda:** Material de lectura complementaria previa para la convocatoria de **Retail**.
 
