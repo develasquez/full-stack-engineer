@@ -26,15 +26,13 @@ full-stack-engineer/
 ├── README.md               # Este documento de bienvenida y mapa general
 ├── AGENTS.md               # Contrato maestro de gobernanza y directivas de arquitectura para Antigravity
 ├── workshop.md             # Guía interactiva paso a paso estilo Cloud Skills Boost / Qwiklabs
-├── docs/                   # Documentación teórica, comparativas de arquitectura y encuestas
+├── docs/                   # Documentación teórica, comparativas de arquitectura y guías técnicas
 │   ├── 01_CATALOGO_INSUMOS_Y_FUENTES.md
 │   ├── 02_S1_DESARROLLO_IA_Y_SDD.md
 │   ├── 03_S2_GESTION_Y_SEGURIDAD_APIS.md
 │   ├── 04_S3_DEVOPS_EN_GCP.md
 │   ├── 05_S4_KUBERNETES_EN_PRODUCCION.md
-│   ├── 06_GAPS_Y_LABS_COMPLEMENTARIOS.md
-│   ├── 07_GUIA_PROMPTS_AGENTES.md
-│   └── 08_ENCUESTA_Y_EVALUACION_ADOPCION.md
+│   └── 06_GAPS_Y_LABS_COMPLEMENTARIOS.md
 ```
 
 > 💡 **Componentes Generados Dinámicamente Durante el Workshop:**  
@@ -72,8 +70,6 @@ Cada ciclo SDD y laboratorio incluye:
 | **04. Sesión 3: DevOps en GCP** | [`docs/04_S3_DEVOPS_EN_GCP.md`](./docs/04_S3_DEVOPS_EN_GCP.md) | Dockerfiles multi-stage, Artifact Registry regional y pipelines de `cloudbuild.yaml`. |
 | **05. Sesión 4: Kubernetes en Producción** | [`docs/05_S4_KUBERNETES_EN_PRODUCCION.md`](./docs/05_S4_KUBERNETES_EN_PRODUCCION.md) | Arquitectura K8s, GKE Private Cluster, Workload Identity y HPA. |
 | **06. Gaps & Labs Complementarios** | [`docs/06_GAPS_Y_LABS_COMPLEMENTARIOS.md`](./docs/06_GAPS_Y_LABS_COMPLEMENTARIOS.md) | Manifiestos de Workload Identity, Cloud NAT y Multi-Cluster Ingress. |
-| **07. Guía de Prompts y Agentes** | [`docs/07_GUIA_PROMPTS_AGENTES.md`](./docs/07_GUIA_PROMPTS_AGENTES.md) | Recetas operativas de prompts para equipos de desarrollo en Retail Enterprise. |
-| **08. Encuesta y Plan de Adopción** | [`docs/08_ENCUESTA_Y_EVALUACION_ADOPCION.md`](./docs/08_ENCUESTA_Y_EVALUACION_ADOPCION.md) | Instrumento de medición pre/post workshop y hoja de ruta de adopción a 30 días. |
 
 ---
 

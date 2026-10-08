@@ -73,10 +73,10 @@ Para cumplir con políticas organizacionales restrictivas (`constraints/compute.
 
 ```bash
 # 1. Crear la red VPC en caso de no existir
-rtk gcloud compute networks create wakanda-vpc --subnet-mode=custom --project=$PROJECT_ID
+gcloud compute networks create wakanda-vpc --subnet-mode=custom --project=$PROJECT_ID
 
 # 2. Crear la subred con rangos secundarios dedicados para GKE en la región permitida (us-east1)
-rtk gcloud compute networks subnets create wakanda-subnet \
+gcloud compute networks subnets create wakanda-subnet \
     --network=wakanda-vpc \
     --region=us-east1 \
     --range=10.0.0.0/20 \
@@ -85,12 +85,12 @@ rtk gcloud compute networks subnets create wakanda-subnet \
     --project=$PROJECT_ID
 
 # 3. Crear Cloud Router y Cloud NAT para salida segura a internet de nodos privados
-rtk gcloud compute routers create wakanda-router \
+gcloud compute routers create wakanda-router \
     --network=wakanda-vpc \
     --region=us-east1 \
     --project=$PROJECT_ID
 
-rtk gcloud compute routers nats create wakanda-nat \
+gcloud compute routers nats create wakanda-nat \
     --router=wakanda-router \
     --region=us-east1 \
     --auto-allocate-nat-external-ips \
@@ -105,7 +105,7 @@ rtk gcloud compute routers nats create wakanda-nat \
 El comando de creación define nodos privados, rangos alias IP para VPC nativa y asignación del bloque CIDR del plano de control (`master-ipv4-cidr`):
 
 ```bash
-rtk gcloud container clusters create retail-private-cluster \
+gcloud container clusters create retail-private-cluster \
     --zone=us-east1-b \
     --network=wakanda-vpc \
     --subnetwork=wakanda-subnet \
@@ -124,7 +124,7 @@ rtk gcloud container clusters create retail-private-cluster \
 > `error validating data: failed to download openapi: Get "https://<MASTER_IP>/openapi/v2": dial tcp <MASTER_IP>:443: i/o timeout`  
 > **Comando de Solución Obligatorio:**
 > ```bash
-> rtk gcloud container clusters update retail-private-cluster \
+> gcloud container clusters update retail-private-cluster \
 >     --zone=us-east1-b \
 >     --no-enable-master-authorized-networks \
 >     --project=$PROJECT_ID
