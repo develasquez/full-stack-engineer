@@ -270,7 +270,7 @@ export const inventoryRateLimiter = rateLimit({
 ---
 
 ### D. Observabilidad de Nivel Producción con `google-cloud-structured-logs`
-Los logs en texto plano son el enemigo de la depuración en producción. Usando el paquete `google-cloud-structured-logs` de Felipe Velásquez, cada log emitido por la app es un objeto JSON enriquecido con las claves canónicas de Google Cloud:
+Los logs en texto plano son el enemigo de la depuración en producción. Usando el paquete `google-cloud-structured-logs`, cada log emitido por la app es un objeto JSON enriquecido con las claves canónicas de Google Cloud:
 
 ```typescript
 // src/infrastructure/logging/gcp-logger.ts

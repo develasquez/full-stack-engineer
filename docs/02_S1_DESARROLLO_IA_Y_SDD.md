@@ -40,7 +40,7 @@ En 2026, los LLMs son capaces de generar miles de líneas de código en segundos
 - **Deuda técnica oculta:** Código que "parece funcionar" pero carece de validaciones de frontera o manejo de errores de concurrencia.
 - **Falta de trazabilidad:** Ningún miembro del equipo sabe qué criterios de negocio exactos rigen la lógica generada.
 
-**La Solución SDD de Felipe Velásquez (`sdd-skill`):**  
+**La Solución SDD (`sdd-skill`):**  
 Invertir el paradigma. La especificación formal en Markdown (`spec.md`) es el código fuente fundamental; el código TypeScript o Go es una consecuencia determinista de dicha especificación.
 
 ---
@@ -85,7 +85,7 @@ Vamos a construir y especificar el microservicio **`retail-inventory-service`**:
 ---
 
 ### Paso 1: Inicialización del Entorno con Antigravity CLI y SDD Skill
-Desde la terminal, el desarrollador activa el skill oficial de Felipe Velásquez:
+Desde la terminal, el desarrollador activa el skill:
 
 ```bash
 # 1. Clonar e inicializar el skill en el workspace

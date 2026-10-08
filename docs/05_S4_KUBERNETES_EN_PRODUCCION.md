@@ -9,7 +9,7 @@
 - Presentación Sé el Rey de los Piratas: [Google Slides Kubernetes](https://docs.google.com/presentation/d/1z1AW6JPWl381OLqKR2f9Sr8_lVQiufjjzWbEsK5pZMM/edit)
 - Repositorio Clúster Privado GKE: [github.com/develasquez/gke-private-cluster](https://github.com/develasquez/gke-private-cluster)
 - Repositorio Multi-Cluster Ingress: [github.com/develasquez/multi-cluster-ingress](https://github.com/develasquez/multi-cluster-ingress)
-- Artículo LinkedIn: [Introducción a Kubernetes por Felipe Velásquez](https://www.linkedin.com/pulse/introducci%C3%B3n-kubernetes-felipe-andres-velasquez-castro/)
+- Artículo LinkedIn: [Introducción a Kubernetes](https://www.linkedin.com/pulse/introducci%C3%B3n-kubernetes-felipe-andres-velasquez-castro/)
 
 ---
 
@@ -67,7 +67,7 @@ flowchart TD
 
 En arquitecturas tradicionales obsoletas, los desarrolladores descargaban llaves privadas JSON (`credentials.json`) y las montaban como secretos en Kubernetes. Esto representaba el riesgo #1 de exfiltración de datos.
 
-Con **Workload Identity** (demostrado en el repositorio de Felipe Velásquez `workload-identity-gke`):
+Con **Workload Identity** (demostrado en el repositorio `workload-identity-gke`):
 1. El contenedor del Pod consulta la API de metadatos local de GKE (`http://metadata.google.internal`).
 2. GKE intercepta la petición y federada el token OpenID Connect (OIDC) del Pod con Google Cloud IAM.
 3. Google IAM genera dinámicamente un token de acceso OAuth2 temporal de corta duración (1 hora) con los roles asignados a la GSA.

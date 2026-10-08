@@ -40,7 +40,7 @@ flowchart LR
 
 ## 3. Anatomía de un Dockerfile Multi-Stage de Producción
 
-En `gcp-back-end-example`, Felipe Velásquez implementa el patrón de dos etapas para separar de manera tajante el entorno de compilación del artefacto de ejecución:
+En `gcp-back-end-example`, se implementa el patrón de dos etapas para separar de manera tajante el entorno de compilación del artefacto de ejecución:
 
 ```dockerfile
 # ==========================================

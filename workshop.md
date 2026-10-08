@@ -5,7 +5,7 @@
 > **Nivel:** Intermedio - Avanzado  
 > **Audiencia:** Desarrolladores Full-Stack, Arquitectos Cloud, Tech Leads, DevOps/SRE  
 > **Filosofía de Despliegue:** **GitOps Puro**. Queda prohibido el despliegue manual mediante Cloud SDK local (`gcloud run deploy` / `gcloud compute`). Todo cambio de código o infraestructura se define declarativamente y se despliega automáticamente mediante **Git -> Google Cloud Build -> GKE**.  
-> **Contrato de Gobernanza:** Antes de comenzar, revisa [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md). Como todas las directivas técnicas ya están consolidadas allí, **los prompts para Antigravity no necesitan repetir especificaciones técnicas ni boilerplate**, sino únicamente la intención y requerimientos de negocio de cada ciclo.
+> **Contrato de Gobernanza:** Antes de comenzar, revisa [`AGENTS.md`](./AGENTS.md). Como todas las directivas técnicas ya están consolidadas allí, **los prompts para Antigravity no necesitan repetir especificaciones técnicas ni boilerplate**, sino únicamente la intención y requerimientos de negocio de cada ciclo.
 
 ---
 
@@ -104,7 +104,7 @@ flowchart TD
 ## 🛠️ Lab 00: Setup del Entorno, Gobernanza con `AGENTS.md` & Token Killer RTK
 
 ### 🎯 Objetivo
-Configurar el entorno con la herramienta oficial de pair programming de Google: **Antigravity CLI (`agy`)**, activar el optimizador de tokens **RTK (Rust Token Killer)** para no saturar la ventana de contexto de los modelos, y verificar el contrato maestro de gobernanza [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md).
+Configurar el entorno con la herramienta oficial de pair programming de Google: **Antigravity CLI (`agy`)**, activar el optimizador de tokens **RTK (Rust Token Killer)** para no saturar la ventana de contexto de los modelos, y verificar el contrato maestro de gobernanza [`AGENTS.md`](./AGENTS.md).
 
 ### ⚡ RTK (Rust Token Killer): Optimización de Tokens en Terminal
 **RTK** es un proxy CLI de alto rendimiento que filtra y sintetiza las salidas de terminal (`git`, `npm`, `docker`, `kubectl`, `vitest`), ahorrando entre el 60% y 90% de los tokens en la ventana de contexto de los modelos de IA.
@@ -119,13 +119,18 @@ Una vez instalado, todo comando en terminal en los laboratorios se ejecuta con e
 
 ```bash
 # 1. Instalar o verificar Antigravity CLI globalmente
-rtk npm install -g @google/antigravity-cli
+
+#Mac o Linux
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+#windows
+irm https://antigravity.google/cli/install.ps1 | iex
+
+
 
 # 2. Validar versión de Antigravity CLI
-rtk agy --version
+agy --version
 
-# 3. Comprobar ahorro y métricas de RTK
-rtk gain
 ```
 
 ### 🤖 Prompt para Antigravity: Validación del Contrato de Gobernanza
@@ -151,7 +156,7 @@ Habilitar las capacidades avanzadas de Antigravity para desarrollo guiado por es
 ### 💻 Comandos en Terminal
 ```bash
 # 1. Instalar el skill oficial de SDD en Antigravity
-rtk agy skill install https://github.com/develasquez/sdd-skill.git
+agy skill install https://github.com/develasquez/sdd-skill.git
 
 # 2. Inicializar los skills de frontend mediante npx
 npx vanilla-core-ui --help
@@ -171,7 +176,7 @@ Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-
 Construir de forma ágil y asistida por IA tanto la aplicación web (`frontend/`) como el microservicio de inventario (`backend/`) en dos sprints rápidos de 10 minutos cada uno (máximo 20 minutos en total).
 
 > ⏱️ **Timeboxing Estricto (20 min en total):**  
-> Como [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md) ya contiene las especificaciones técnicas completas (Vanilla-Core UI, Material Design 3, SSoT, Clean Architecture, logger estructurado de GCP y endpoint de caos), los prompts son directos y permiten ejecutar las 5 fases de SDD velozmente. El mayor tiempo del workshop está enfocado en **DevOps (Cloud Build DAG & Trivy)** y **GKE en Producción**.
+> Como [`AGENTS.md`](./AGENTS.md) ya contiene las especificaciones técnicas completas (Vanilla-Core UI, Material Design 3, SSoT, Clean Architecture, logger estructurado de GCP y endpoint de caos), los prompts son directos y permiten ejecutar las 5 fases de SDD velozmente. El mayor tiempo del workshop está enfocado en **DevOps (Cloud Build DAG & Trivy)** y **GKE en Producción**.
 
 ---
 
