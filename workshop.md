@@ -235,8 +235,8 @@ Pega el siguiente prompt en Antigravity:
 #### 💻 Verificación del Backend & Pruebas Unitarias en Terminal
 ```bash
 cd backend
-rtk npm install
-rtk npm test
+npm install
+npm test
 cd ..
 ```
 
@@ -294,7 +294,7 @@ Pega el siguiente prompt en Antigravity:
 ```bash
 # Navegar a frontend, instalar dependencias y verificar
 cd frontend
-rtk npm install
+npm install
 cd ..
 ```
 
@@ -404,14 +404,14 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
 ### 💻 Disparo del Despliegue con Git
 ```bash
 # 1. Verificar estado del árbol de trabajo
-rtk git status
+git status
 
 # 2. Agregar los componentes generados dinámicamente y hacer commit
-rtk git add .
-rtk git commit -m "feat: plataforma completa de retail con frontend, backend, trivy y manifiestos GKE"
+git add .
+git commit -m "feat: plataforma completa de retail con frontend, backend, trivy y manifiestos GKE"
 
 # 3. Empujar cambios a GitHub para iniciar el build automático
-rtk git push origin main
+git push origin main
 ```
 
 ---
@@ -424,7 +424,7 @@ Validar que el **Cloud HTTP(S) Load Balancer** enrute el tráfico correctamente 
 ### 💻 Comandos en Terminal
 ```bash
 # Obtener la IP pública asignada por Google Cloud Ingress
-rtk kubectl get ingress retail-ingress -n retail-store
+kubectl get ingress retail-ingress -n retail-store
 ```
 
 ### 🖱️ Validación en el Navegador
@@ -463,7 +463,7 @@ Tienes dos opciones:
 En una ventana de terminal con acceso a `kubectl`, ejecuta:
 
 ```bash
-rtk kubectl get pods -n retail-store -w
+kubectl get pods -n retail-store -w
 ```
 
 #### 🔍 Secuencia de Eventos Observada:
