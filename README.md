@@ -26,9 +26,6 @@ full-stack-engineer/
 ├── README.md               # Este documento de bienvenida y mapa general
 ├── AGENTS.md               # Contrato maestro de gobernanza y directivas de arquitectura para Antigravity
 ├── workshop.md             # Guía interactiva paso a paso estilo Cloud Skills Boost / Qwiklabs
-├── bin/                    # Shim transparente y portable de RTK (Rust Token Killer)
-│   └── rtk
-├── .agents/                # Reglas y skills de Antigravity
 ├── docs/                   # Documentación teórica, comparativas de arquitectura y encuestas
 │   ├── 01_CATALOGO_INSUMOS_Y_FUENTES.md
 │   ├── 02_S1_DESARROLLO_IA_Y_SDD.md

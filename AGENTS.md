@@ -22,7 +22,7 @@
 
 | Skill | Ejecución / Paquete | Rol en el Proyecto |
 | :--- | :--- | :--- |
-| **RTK (Rust Token Killer)** | `.agents/skills/rtk/SKILL.md` / `bin/rtk` | Proxy CLI obligatorio para filtrar salidas de consola y reducir consumo de tokens en prompts y subagentes. Fallback automático a binario local si no está instalado globalmente. |
+| **RTK (Rust Token Killer)** | Instalación de sistema (`brew install rtk` / Cargo / binario según OS) | Proxy CLI obligatorio para filtrar salidas de consola y reducir consumo de tokens en prompts y subagentes (60% a 90% de ahorro en la ventana de contexto). |
 | **SDD Skill** | `github.com/develasquez/sdd-skill` | Orquestador del ciclo de vida de especificaciones formales (`/sdd-specify`, `/sdd-clarify`, `/sdd-plan`, `/sdd-tasks`, `/sdd-implement`). |
 | **Vanilla-Core UI** | `npx vanilla-core-ui` | Arquitectura frontend reactiva sin frameworks pesados basada en Single Source of Truth (`store.js`), Pub/Sub desacoplado y renderizado quirúrgico anti-thrashing. |
 | **Material Design 3** | `npx @develasquez/material-design` | Tokens de diseño, sistema de color HCT, elevación, tipografía y componentes accesibles bajo lineamientos de Material You 2026. |

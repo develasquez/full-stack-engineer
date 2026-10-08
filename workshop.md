@@ -106,8 +106,16 @@ flowchart TD
 ### 🎯 Objetivo
 Configurar el entorno con la herramienta oficial de pair programming de Google: **Antigravity CLI (`agy`)**, activar el optimizador de tokens **RTK (Rust Token Killer)** para no saturar la ventana de contexto de los modelos, y verificar el contrato maestro de gobernanza [`AGENTS.md`](file:///Users/felipe/Desarrollo/full-stack-engineer/AGENTS.md).
 
-### ⚡ RTK: Optimización de Tokens y Shim Portable
-El repositorio incluye el shim [`bin/rtk`](file:///Users/felipe/Desarrollo/full-stack-engineer/bin/rtk). Todo comando en terminal (`git`, `npm`, `kubectl`, etc.) debe ejecutarse con el prefijo `rtk` para reducir entre 60% y 90% el consumo de tokens.
+### ⚡ RTK (Rust Token Killer): Optimización de Tokens en Terminal
+**RTK** es un proxy CLI de alto rendimiento que filtra y sintetiza las salidas de terminal (`git`, `npm`, `docker`, `kubectl`, `vitest`), ahorrando entre el 60% y 90% de los tokens en la ventana de contexto de los modelos de IA.
+
+Cada participante debe instalar RTK en su entorno según su sistema operativo:
+- **macOS:** `brew install rtk`
+- **Linux / WSL:** `cargo install rtk-cli` o binario desde releases oficiales
+- **Windows:** `winget install rtk` o vía Cargo
+- **Inicializar integración con asistentes/Antigravity:** `rtk init --agent antigravity`
+
+Una vez instalado, todo comando en terminal en los laboratorios se ejecuta con el prefijo `rtk`:
 
 ```bash
 # 1. Instalar o verificar Antigravity CLI globalmente
@@ -116,7 +124,7 @@ rtk npm install -g @google/antigravity-cli
 # 2. Validar versión de Antigravity CLI
 rtk agy --version
 
-# 3. Comprobar ahorro y estado de RTK
+# 3. Comprobar ahorro y métricas de RTK
 rtk gain
 ```
 
