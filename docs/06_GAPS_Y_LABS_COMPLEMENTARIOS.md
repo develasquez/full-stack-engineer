@@ -23,7 +23,7 @@ const redisClient = createClient({
 redisClient.on('error', (err) => console.error('Redis Client Error', err));
 redisClient.connect().catch(console.error);
 
-export const d1ApiRateLimiter = rateLimit({
+export const retailApiRateLimiter = rateLimit({
   windowMs: 60 * 1000, // Ventana de 1 minuto
   max: 150, // 150 peticiones por minuto por tienda / IP
   standardHeaders: true,
@@ -31,7 +31,7 @@ export const d1ApiRateLimiter = rateLimit({
   // Almacén distribuido respaldado en Redis
   store: new RedisStore({
     sendCommand: (...args: string[]) => redisClient.sendCommand(args),
-    prefix: 'rl:d1:',
+    prefix: 'rl:retail:',
   }),
   message: {
     status: 429,
@@ -146,7 +146,7 @@ metadata:
     networking.gke.io/v1beta1.FrontendConfig: "retail-frontend-config"
 spec:
   rules:
-    - host: api-inventario.tiendasd1.com
+    - host: api-inventario.retailstore.com
       http:
         paths:
           - path: /*

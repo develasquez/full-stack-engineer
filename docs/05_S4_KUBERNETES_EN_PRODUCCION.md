@@ -34,14 +34,14 @@ flowchart TD
         Ingress["GKE Ingress Controller\n(ManagedCertificate SSL)"] -->|ClusterIP| Svc["Kubernetes Service\n(retail-inventory-svc:8080)"]
         
         subgraph PodGroup ["ReplicaSet: Pods de Microservicio"]
-            Pod1["Pod 1: Inventory Container\n(KSA: ksa-retail-inventory)"]
-            Pod2["Pod 2: Inventory Container\n(KSA: ksa-retail-inventory)"]
-            Pod3["Pod N: Inventory Container\n(Autoescalado por HPA)"]
+            PodAlpha["Pod Alpha: Inventory Container\n(KSA: ksa-retail-inventory)"]
+            PodBeta["Pod Beta: Inventory Container\n(KSA: ksa-retail-inventory)"]
+            PodN["Pod N: Inventory Container\n(Autoescalado por HPA)"]
         end
         
-        Svc --> Pod1
-        Svc --> Pod2
-        Svc --> Pod3
+        Svc --> PodAlpha
+        Svc --> PodBeta
+        Svc --> PodN
         
         HPA["Horizontal Pod Autoscaler (HPA)\n(Min: 2, Max: 10, Target CPU: 70%)"] -.->|Escala Replicas| PodGroup
     end
@@ -55,7 +55,7 @@ flowchart TD
         GCS["Cloud Storage\n(Backups / Documentos)"]
     end
 
-    Pod1 -.->|Workload Identity Federation\niam.gke.io/gcp-service-account| GSA
+    PodAlpha -.->|Workload Identity Federation\niam.gke.io/gcp-service-account| GSA
     GSA -->|roles/secretmanager.secretAccessor| SecretMgr
     GSA -->|roles/cloudsql.client| CloudSQL
     GSA -->|roles/storage.objectViewer| GCS
@@ -177,7 +177,7 @@ metadata:
   namespace: default
 spec:
   domains:
-    - api-inventario.tiendasd1.com
+    - api-inventario.retailstore.com
 ---
 apiVersion: v1
 kind: Service
@@ -202,7 +202,7 @@ metadata:
     networking.gke.io/managed-certificates: "retail-inventory-cert"
 spec:
   rules:
-    - host: api-inventario.tiendasd1.com
+    - host: api-inventario.retailstore.com
       http:
         paths:
           - path: /*
@@ -265,7 +265,7 @@ spec:
 ### Paso 1: Conectar a GKE y Desplegar Manifiestos
 ```bash
 # Obtener credenciales del clúster privado
-gcloud container clusters get-credentials d1-cluster-prod --region us-east1
+gcloud container clusters get-credentials retail-cluster-prod --region us-east1
 
 # Aplicar los manifiestos en orden
 kubectl apply -f serviceaccount.yaml

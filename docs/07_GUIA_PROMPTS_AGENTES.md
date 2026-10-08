@@ -136,13 +136,13 @@ Presenta los hallazgos en una tabla con: Archivo, Líneas, Qué eliminar, Qué u
 > **Objetivo:** Crear la infraestructura como código lista para producción en GKE.
 
 ```text
-Genera el paquete completo de despliegue para el microservicio "d1-discounts-service":
+Genera el paquete completo de despliegue para el microservicio "retail-discounts-service":
 1. Dockerfile Multi-Stage basado en node:20-alpine ejecutando bajo usuario sin privilegios 'USER node'.
 2. Manifiesto deployment.yaml con:
    - RollingUpdate seguro (maxSurge: 1, maxUnavailable: 0).
    - Requests: 100m CPU / 128Mi RAM; Limits: 500m CPU / 512Mi RAM.
    - Liveness Probe en /health y Readiness Probe en /ready.
-   - Vinculación a ServiceAccount de Kubernetes ksa-d1-discounts con anotación de Workload Identity para la GSA de producción.
+   - Vinculación a ServiceAccount de Kubernetes ksa-retail-discounts con anotación de Workload Identity para la GSA de producción.
 3. Manifiesto hpa.yaml con escalado de 2 a 12 réplicas al superar el 70% de CPU con ventana de estabilización para scaleDown de 300 segundos.
 ```
 
@@ -154,10 +154,10 @@ Para proyectos de gran escala, se recomienda configurar subagentes especializado
 
 | Nombre Subagente | Rol Principal | Herramientas Asignadas |
 | :--- | :--- | :--- |
-| `d1-spec-architect` | Conducción del ciclo SDD (`spec.md`, `plan.md`) | Read-only, `sdd-skill` |
-| `d1-db-specialist` | Migraciones Cloud SQL, índices y queries | MCP PostgreSQL (solo lectura en staging) |
-| `d1-qa-automator` | Generación de pruebas E2E y unitarias con alta cobertura | Ejecución de tests locales (`npm test`) |
-| `d1-sec-auditor` | Auditoría de dependencias (CVEs) y políticas IAM/GKE | Read-only de manifiestos y `package-lock.json` |
+| `retail-spec-architect` | Conducción del ciclo SDD (`spec.md`, `plan.md`) | Read-only, `sdd-skill` |
+| `retail-db-specialist` | Migraciones Cloud SQL, índices y queries | MCP PostgreSQL (solo lectura en staging) |
+| `retail-qa-automator` | Generación de pruebas E2E y unitarias con alta cobertura | Ejecución de tests locales (`npm test`) |
+| `retail-sec-auditor` | Auditoría de dependencias (CVEs) y políticas IAM/GKE | Read-only de manifiestos y `package-lock.json` |
 
 ---
 

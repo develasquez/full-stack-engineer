@@ -129,8 +129,8 @@ Descarga criptográfica de la validación del token antes de que la petición to
         <!-- Clave pública oficial de Google Identity Platform / Firebase -->
         <JWKS uri="https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"/>
     </PublicKey>
-    <Issuer>https://securetoken.google.com/d1-prod</Issuer>
-    <Audience>d1-prod</Audience>
+    <Issuer>https://securetoken.google.com/retail-enterprise-prod</Issuer>
+    <Audience>retail-enterprise-prod</Audience>
     <AdditionalClaims>
         <!-- Requerir obligatoriamente el claim del rol del usuario -->
         <Claim name="role" type="string"/>
@@ -276,7 +276,7 @@ Los logs en texto plano son el enemigo de la depuración en producción. Usando 
 // src/infrastructure/logging/gcp-logger.ts
 import { Logger } from 'google-cloud-structured-logs';
 
-const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || 'd1-ecommerce-prod';
+const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || 'retail-enterprise-prod';
 
 export function createRequestLogger(req: any) {
   // Extraer el trace de Google Cloud pasado por Cloud Load Balancing o API Gateway
@@ -349,7 +349,7 @@ const client = new SecretManagerServiceClient();
 
 export async function getDatabaseCredentials(): Promise<{ user: string; pass: string; host: string }> {
   const [version] = await client.accessSecretVersion({
-    name: 'projects/d1-prod/secrets/retail-db-credentials/versions/latest',
+    name: 'projects/retail-enterprise-prod/secrets/retail-db-credentials/versions/latest',
   });
   const payload = version.payload?.data?.toString() || '{}';
   return JSON.parse(payload);
