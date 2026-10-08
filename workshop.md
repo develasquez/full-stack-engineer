@@ -379,7 +379,19 @@ Comprobar el modelo de entrega **GitOps**: los ingenieros nunca usan comandos de
    - `_CLUSTER_LOCATION`: `us-east1-b`
    - `_REPO_NAME`: `retail-docker-repo`
    - `_REGION`: `us-east1`
+   - `_TAG`: `$(SHORT_SHA)`
 7. Guarda el activador.
+
+> [!IMPORTANT] **Gobernanza de Conectividad a GKE (Master Authorized Networks & i/o timeout)**  
+> En clústeres privados (`--enable-private-nodes`), si el plano de control tiene activadas las restricciones de redes autorizadas sin incluir los rangos de Cloud Build o de la estación de trabajo, el intento de conexión `kubectl apply` arrojará:  
+> `error validating data: failed to download openapi: Get "https://<MASTER_IP>/openapi/v2": dial tcp <MASTER_IP>:443: i/o timeout`  
+> **Comando de Solución / Desbloqueo del API Server:**
+> ```bash
+> rtk gcloud container clusters update retail-private-cluster \
+>   --zone=us-east1-b \
+>   --no-enable-master-authorized-networks \
+>   --project=$PROJECT_ID
+> ```
 
 ### 💻 Disparo del Despliegue con Git
 ```bash
@@ -488,6 +500,16 @@ jsonPayload.sourceLocation.function="ChaosUseCase.triggerFatalCrash"
    - Visualiza el tiempo exacto que tardó la solicitud desde el balanceador L7 hasta el backend.
    - Observa la interrupción de la conexión TCP provocada deliberadamente.
    - Da clic directo en el enlace a Cloud Logging para ver el log de emergencia asociado a esa traza sin búsquedas manuales.
+
+---
+
+### 🛠️ 5. Guía de Diagnóstico & Troubleshooting en GKE y Cloud Build
+
+| Error Observado | Causa Raíz en GCP | Comando / Solución Inmediata |
+| :--- | :--- | :--- |
+| `failed to download openapi: Get "https://<IP>/openapi/v2": dial tcp <IP>:443: i/o timeout` | **Master Authorized Networks**: El clúster privado tiene activada la protección del plano de control con lista blanca vacía, bloqueando a Cloud Build y `kubectl`. | `rtk gcloud container clusters update retail-private-cluster --zone=us-east1-b --no-enable-master-authorized-networks` |
+| `HTTPError 412: 'us' violates constraint 'constraints/gcp.resourceLocations'` | La política organizacional prohíbe regiones globales o multi-región `us`. Cloud Build debe ejecutarse regionalmente con bucket de staging en `us-east1`. | `rtk gcloud builds submit --region=us-east1 --gcs-source-staging-dir=gs://<BUCKET_US_EAST1>/source --config=cloudbuild.yaml .` |
+| `constraints/compute.vmExternalIpAccess` al crear clúster | La política organizacional prohíbe IPs externas en VMs/nodos. | Crear el clúster con `--enable-private-nodes` y habilitar Cloud NAT (`wakanda-nat`) para salida a internet. |
 
 ---
 

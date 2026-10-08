@@ -6,6 +6,7 @@ substitutions:
   _CLUSTER_LOCATION: "us-east1-b"
   _REPO_NAME: "retail-docker-repo"
   _REGION: "us-east1"
+  _TAG: "latest"
 
 steps:
   # =========================================================================
@@ -27,7 +28,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:latest'
       - './frontend'
@@ -41,7 +42,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${_TAG}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:latest'
       - './backend'
@@ -59,7 +60,7 @@ steps:
       - 'HIGH,CRITICAL'
       - '--exit-code'
       - '0'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-backend:${_TAG}'
     waitFor: ['build-backend']
 
   - name: 'aquasec/trivy:latest'
@@ -71,7 +72,7 @@ steps:
       - 'HIGH,CRITICAL'
       - '--exit-code'
       - '0'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/retail-frontend:${_TAG}'
     waitFor: ['build-frontend']
 
   # =========================================================================
@@ -102,9 +103,9 @@ steps:
     args:
       - '-c'
       - |
-        echo "🔄 Inyectando tag ${SHORT_SHA} en manifiestos de Kubernetes..."
-        sed -i 's|image: .*/retail-backend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-backend:${SHORT_SHA}|g' k8s/backend-deployment.yaml
-        sed -i 's|image: .*/retail-frontend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-frontend:${SHORT_SHA}|g' k8s/frontend-deployment.yaml
+        echo "🔄 Inyectando tag ${_TAG} en manifiestos de Kubernetes..."
+        sed -i 's|image: .*/retail-backend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-backend:${_TAG}|g' k8s/backend-deployment.yaml
+        sed -i 's|image: .*/retail-frontend:.*|image: ${_REGION}-docker.pkg.dev/'$PROJECT_ID'/${_REPO_NAME}/retail-frontend:${_TAG}|g' k8s/frontend-deployment.yaml
         sed -i 's|GCP_PROJECT_ID: ".*"|GCP_PROJECT_ID: "'$PROJECT_ID'"|g' k8s/configmap.yaml
 
         echo "🚀 Conectando y aplicando manifiestos a GKE (${_CLUSTER_NAME})..."
