@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: d1-ingress
+  namespace: tiendas-d1
+  labels:
+    app.kubernetes.io/name: d1-ingress
+    app.kubernetes.io/part-of: tiendas-d1
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: d1-backend-svc
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: d1-frontend-svc
+                port:
+                  number: 80

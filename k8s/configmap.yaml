@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tiendas-d1-config
+  namespace: tiendas-d1
+  labels:
+    app.kubernetes.io/name: tiendas-d1
+data:
+  NODE_ENV: "production"
+  PORT: "8080"
+  DEFAULT_STORE_ID: "STORE-BOG-001"
+  LOG_LEVEL: "INFO"
