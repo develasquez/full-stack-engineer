@@ -92,7 +92,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | **Lab 00** | Configuración de Antigravity CLI, Gobernanza con `AGENTS.md` & Token Killer RTK | Setup del entorno y ahorro de tokens | 15 min |
 | **Lab 01** | Inicialización de Skills con `npx` y Antigravity | Carga de `sdd-skill`, `vanilla-core-ui`, `material-design` | 10 min |
-| **Lab 02** | Ciclo SDD Full-Stack Rápido: Frontend SPA & Backend Microservicio | Generación dinámica de `frontend/` y `backend/` con SDD | 20 min |
+| **Lab 02** | Ciclo SDD Full-Stack Rápido: Backend Microservicio & Frontend SPA | Generación dinámica de `backend/` y `frontend/` con SDD | 20 min |
 | **Lab 03** | Ciclo SDD DevSecOps & Manifiestos GKE (Cloud Build DAG & K8s) | Generación dinámica de `cloudbuild.yaml`, Dockerfiles y `k8s/` | 45 min |
 | **Lab 04** | Activación GitOps Puro (Push to GitHub -> Cloud Build -> GKE) | Disparo del pipeline automatizado sin Cloud SDK local | 35 min |
 | **Lab 05** | Validación de Ingress L7 & Navegación en la Tienda Retail | Verificación de enrutamiento y compras en vivo | 30 min |
@@ -170,75 +170,25 @@ Verifica que los skills 'sdd-skill', 'vanilla-core-ui' y '@develasquez/material-
 
 ---
 
-## 🚀 Lab 02: Ciclo SDD Full-Stack Rápido — Frontend SPA & Backend Microservicio
+## 🚀 Lab 02: Ciclo SDD Full-Stack Rápido — Backend Microservicio & Frontend SPA
 
 ### 🎯 Objetivo
-Construir de forma ágil y asistida por IA tanto la aplicación web (`frontend/`) como el microservicio de inventario (`backend/`) en dos sprints rápidos de 10 minutos cada uno (máximo 20 minutos en total).
+Construir de forma ágil y asistida por IA primero el microservicio de inventario (`backend/`) para formalizar los contratos de dominio y endpoints de la API REST, y posteriormente la aplicación web (`frontend/`) consumiendo dichos contratos en dos sprints rápidos de 10 minutos cada uno (máximo 20 minutos en total).
 
 > ⏱️ **Timeboxing Estricto (20 min en total):**  
-> Como [`AGENTS.md`](./AGENTS.md) ya contiene las especificaciones técnicas completas (Vanilla-Core UI, Material Design 3, SSoT, Clean Architecture, logger estructurado de GCP y endpoint de caos), los prompts son directos y permiten ejecutar las 5 fases de SDD velozmente. El mayor tiempo del workshop está enfocado en **DevOps (Cloud Build DAG & Trivy)** y **GKE en Producción**.
+> Como [`AGENTS.md`](./AGENTS.md) ya contiene las especificaciones técnicas completas (Clean Architecture, contratos REST, logger estructurado de GCP, endpoint de caos, Vanilla-Core UI y Material Design 3), los prompts son directos y permiten ejecutar las 5 fases de SDD velozmente. El mayor tiempo del workshop está enfocado en **DevOps (Cloud Build DAG & Trivy)** y **GKE en Producción**.
 
 ---
 
-### 🎨 Sprint A (10 min): Frontend SPA (Vanilla-Core UI + Material Design 3)
+### ☕ Sprint A (10 min): Backend Microservicio (Clean Architecture, TS & Chaos)
 
-#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend)
+#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend & Contratos API)
 Pega el siguiente prompt en Antigravity:
 
 ```text
-/sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise:
-- Catálogo de productos con visualización en tiempo real de stock disponible, precios y botón reactivo para simular compra/reserva.
-- Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que llame al endpoint POST /api/v1/chaos/crash y muestre una alerta visual de desconexión.
-Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
-```
-
-#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado)
-Pega el siguiente prompt en Antigravity:
-
-```text
-/sdd-clarify Valida los contratos de estado del catálogo en store.js, asegurando que la actualización del inventario utilice renderizado quirúrgico anti-thrashing sin destruir el foco del usuario.
-```
-
-#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
-Pega el siguiente prompt en Antigravity:
-
-```text
-/sdd-plan Genera el blueprint arquitectónico de frontend/ con sus componentes modulares (header, catalog, chaos-panel), store.js, dom-elements.js, ui/renderer.js y server.js en Express.
-```
-
-#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
-Pega el siguiente prompt en Antigravity:
-
-```text
-/sdd-tasks Genera la lista de tareas ordenadas para la implementación de la aplicación frontend.
-```
-
-#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
-Pega el siguiente prompt en Antigravity:
-
-```text
-/sdd-implement Construye el frontend completo en frontend/ según el blueprint y las directivas de AGENTS.md.
-```
-
-#### 💻 Verificación del Frontend en Terminal
-```bash
-# Navegar a frontend, instalar dependencias y verificar
-cd frontend
-rtk npm install
-cd ..
-```
-
----
-
-### ☕ Sprint B (10 min): Backend Microservicio (Clean Architecture, TS & Chaos)
-
-#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Backend)
-Pega el siguiente prompt en Antigravity:
-
-```text
-/sdd-specify Diseña el microservicio de inventario de Retail en backend/ bajo Node.js 20 y TypeScript:
+/sdd-specify Diseña el microservicio de inventario de Retail en backend/ bajo Node.js 20 y TypeScript formalizando los contratos de API:
 - Modelo de dominio Product (SKU, nombre, categoría, precio, stock disponible, storeId).
-- Caso de uso ReserveStockUseCase: descuenta el stock atómicamente; si el pedido supera las existencias lanza InsufficientStockError (HTTP 400); si el SKU no existe lanza ProductNotFoundError (HTTP 404).
+- Endpoints REST: GET /api/v1/products para consultar el inventario, POST /api/v1/products/:sku/reserve para descontar stock de forma atómica; si el pedido supera las existencias lanza InsufficientStockError (HTTP 400); si el SKU no existe lanza ProductNotFoundError (HTTP 404).
 - Endpoint de Caos POST /api/v1/chaos/crash: registra log estructurado con severidad EMERGENCY y stack trace en formato Google Cloud Logging, y ejecuta process.exit(1) para forzar la muerte del contenedor.
 - StructuredLogger nativo de GCP con severidades INFO, WARNING, EMERGENCY y correlación en logging.googleapis.com/trace.
 - Suite de pruebas unitarias con Vitest.
@@ -288,6 +238,56 @@ cd ..
 ✓ tests/chaos.test.ts (1 test)
 Test Files  2 passed (2)
      Tests  4 passed (4)
+```
+
+---
+
+### 🎨 Sprint B (10 min): Frontend SPA (Vanilla-Core UI + Material Design 3)
+
+#### 1️⃣ Paso 1: `/sdd-specify` (Especificación del Frontend basada en Contratos Backend)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-specify Diseña la interfaz web Single Page Application para nuestra plataforma de Retail Enterprise consumiendo los contratos del microservicio backend:
+- Catálogo de productos que consume GET /api/v1/products con visualización en tiempo real de stock disponible, precios y botón reactivo para invocar la reserva en POST /api/v1/products/:sku/reserve.
+- Panel interactivo de Chaos Testing con botón rojo '💥 Provocar Fatal Crash en Backend' que invoca POST /api/v1/chaos/crash y gestiona la notificación visual de desconexión.
+Aplica los estándares de Vanilla-Core UI y Material Design 3 estipulados en AGENTS.md.
+```
+
+#### 2️⃣ Paso 2: `/sdd-clarify` (Aclaración de Fronteras de Estado y Renderizado Quirúrgico)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-clarify Valida los contratos de estado del catálogo en store.js, asegurando la sincronización reactiva del stock con el backend y que la actualización utilice renderizado quirúrgico anti-thrashing sin destruir el foco del usuario.
+```
+
+#### 3️⃣ Paso 3: `/sdd-plan` (Blueprint Arquitectónico del Frontend)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-plan Genera el blueprint arquitectónico de frontend/ con sus componentes modulares (header, catalog, chaos-panel), store.js, dom-elements.js, ui/renderer.js y server.js en Express.
+```
+
+#### 4️⃣ Paso 4: `/sdd-tasks` (Checklist de Implementación)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-tasks Genera la lista de tareas ordenadas para la implementación de la aplicación frontend.
+```
+
+#### 5️⃣ Paso 5: `/sdd-implement` (Generación de Código)
+Pega el siguiente prompt en Antigravity:
+
+```text
+/sdd-implement Construye el frontend completo en frontend/ según el blueprint y las directivas de AGENTS.md conectando los endpoints del backend.
+```
+
+#### 💻 Verificación del Frontend en Terminal
+```bash
+# Navegar a frontend, instalar dependencias y verificar
+cd frontend
+rtk npm install
+cd ..
 ```
 
 ---

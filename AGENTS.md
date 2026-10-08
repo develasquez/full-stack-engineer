@@ -31,7 +31,7 @@
 
 ## 📐 3. Ciclo de Vida SDD por Dominio (Specification-Driven Development)
 
-Para cada componente del sistema (Frontend, Backend, Infraestructura/DevSecOps), se sigue la secuencia estricta de 5 fases:
+Para cada componente del sistema (Backend, Frontend, Infraestructura/DevSecOps), se sigue la secuencia estricta de 5 fases:
 
 ```mermaid
 flowchart LR

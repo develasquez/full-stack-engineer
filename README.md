@@ -40,8 +40,8 @@ full-stack-engineer/
 > 💡 **Componentes Generados Dinámicamente Durante el Workshop:**  
 > A medida que avances en [`workshop.md`](./workshop.md), Antigravity generará de forma asistida:
 > - `specs/`: Especificaciones formales contractuales generadas por `/sdd-specify`.
-> - `frontend/`: Single Page Application reactiva creada con Vanilla-Core UI y Material Design 3 (`store.js`, componentes, renderizado quirúrgico y servidor Express en puerto 80).
 > - `backend/`: Microservicio Node.js 20 / TypeScript con Clean Architecture, `StructuredLogger` para GCP y endpoint de Caos (`POST /api/v1/chaos/crash`), validado con Vitest.
+> - `frontend/`: Single Page Application reactiva creada con Vanilla-Core UI y Material Design 3 (`store.js`, componentes, renderizado quirúrgico y servidor Express en puerto 80).
 > - `cloudbuild.yaml`: Pipeline CI/CD DevSecOps con ordenamiento DAG (`waitFor`) y escaneo Aqua Trivy.
 > - `k8s/`: Manifiestos declarativos para GKE (Namespace, ConfigMap, Secret, Deployments, Services NEG Container-Native, Ingress y HPA v2).
 
